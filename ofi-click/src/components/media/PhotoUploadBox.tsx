@@ -57,7 +57,7 @@ export const PhotoUploadBox: React.FC<PhotoUploadBoxProps> = ({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between gap-2">
-        <label htmlFor={inputId} className="block text-xs font-semibold text-[#252A27] dark:text-[#F5F1E8]">
+        <label htmlFor={inputId} className="block text-xs font-semibold text-[#1D252C] dark:text-[#F7F3EA]">
           {label}
           {required && <span className="text-red-600 ml-0.5">*</span>}
         </label>
@@ -67,14 +67,14 @@ export const PhotoUploadBox: React.FC<PhotoUploadBoxProps> = ({
       </div>
 
       <div
-        className={`rounded-xl border border-[#DDD5C8] dark:border-white/15 bg-[#EAE3D6]/55 dark:bg-[#1C211E] ${
+        className={`rounded-xl border border-[#DBD4C6] dark:border-white/15 bg-[#ECE7DC]/55 dark:bg-[#161C22] ${
           compact ? 'p-3' : 'p-4'
         } flex flex-col sm:flex-row items-center gap-4`}
       >
         <div
           className={`${
             compact ? 'w-16 h-16' : 'w-20 h-20'
-          } rounded-full overflow-hidden shrink-0 border-2 border-[#B96F50]/60 bg-[#FFFCF7] dark:bg-[#222825] flex items-center justify-center`}
+          } rounded-full overflow-hidden shrink-0 border-2 border-[#C7582B]/60 bg-[#FFFDFA] dark:bg-[#1A2128] flex items-center justify-center`}
         >
           {value ? (
             <img
@@ -89,7 +89,7 @@ export const PhotoUploadBox: React.FC<PhotoUploadBoxProps> = ({
 
         <div className="flex-1 min-w-0 space-y-2 text-center sm:text-left">
           {frontalFaceGuidance && (
-            <p className="text-xs text-[#252A27]/85 dark:text-[#F5F1E8]/85 leading-snug">
+            <p className="text-xs text-[#1D252C]/85 dark:text-[#F7F3EA]/85 leading-snug">
               Usa una fotografía frontal donde tu rostro se vea completo, centrado y bien iluminado.
             </p>
           )}
@@ -102,7 +102,7 @@ export const PhotoUploadBox: React.FC<PhotoUploadBoxProps> = ({
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-0.5">
             <label
               htmlFor={inputId}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] dark:text-white text-xs font-semibold cursor-pointer transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#A8431B] dark:text-white text-xs font-semibold cursor-pointer transition-colors"
             >
               {value ? (
                 <>

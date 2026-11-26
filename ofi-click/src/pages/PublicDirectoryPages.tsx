@@ -14,6 +14,7 @@ import { CategoryIcon } from '../components/CategoryIcon';
 import { ProfessionalCard } from '../components/ProfessionalCard';
 import { filterAndSortProfessionals } from '../utils/marketplace';
 import type { SearchFilters } from '../types/oficlick';
+import { ALL_IZCALLI_COLONIAS } from '../data/izcalliLocations';
 
 const EMPTY_FILTERS: SearchFilters = {
   query: '',
@@ -62,14 +63,14 @@ export const CategoriesPage: React.FC = () => {
   );
 
   return (
-    <main className="bg-[#F5F1E8] dark:bg-[#171B19] min-h-[80vh]">
+    <main className="bg-[#F7F3EA] dark:bg-[#12171C] min-h-[80vh]">
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-6">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold text-[#304B3E] dark:text-[#9CB08D] uppercase tracking-wider">
+            <p className="text-xs font-semibold text-[#214438] dark:text-[#9CB08D] uppercase tracking-wider">
               Catálogo oficial de oficios y servicios
             </p>
-            <h1 className="font-display font-bold text-3xl text-[#252A27] dark:text-[#F5F1E8] mt-1">
+            <h1 className="font-display font-bold text-3xl text-[#1D252C] dark:text-[#F7F3EA] mt-1">
               Categorías en OFI CLICK
             </h1>
             <p className="text-sm text-[#73766F] dark:text-[#A3A89F] mt-1 max-w-2xl">
@@ -84,7 +85,7 @@ export const CategoriesPage: React.FC = () => {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Buscar categoría o subcategoría..."
-              className="w-full pl-10 pr-3.5 py-2.5 text-sm rounded-xl border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#222825]"
+              className="w-full pl-10 pr-3.5 py-2.5 text-sm rounded-xl border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#1A2128]"
             />
           </div>
         </div>
@@ -98,14 +99,14 @@ export const CategoriesPage: React.FC = () => {
             return (
               <article
                 key={cat.id}
-                className="rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/10 p-5 flex flex-col justify-between gap-4 shadow-xs"
+                className="rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/10 p-5 flex flex-col justify-between gap-4 shadow-xs"
               >
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[#EAE3D6] dark:bg-white/10 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-xl bg-[#ECE7DC] dark:bg-white/10 flex items-center justify-center">
                       <CategoryIcon
                         name={cat.iconName}
-                        className="w-5 h-5 text-[#304B3E] dark:text-[#B96F50]"
+                        className="w-5 h-5 text-[#214438] dark:text-[#C7582B]"
                       />
                     </div>
                     <span className="text-xs font-mono-num text-[#73766F] dark:text-[#A3A89F]">
@@ -114,7 +115,7 @@ export const CategoriesPage: React.FC = () => {
                   </div>
 
                   <div>
-                    <h2 className="font-display font-bold text-base text-[#252A27] dark:text-[#F5F1E8]">
+                    <h2 className="font-display font-bold text-base text-[#1D252C] dark:text-[#F7F3EA]">
                       {cat.name}
                     </h2>
                     <p className="text-xs text-[#73766F] dark:text-[#A3A89F] mt-1 leading-relaxed">
@@ -127,7 +128,7 @@ export const CategoriesPage: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setExpandedCatId(expanded ? null : cat.id)}
-                        className="text-xs font-semibold text-[#304B3E] dark:text-[#B96F50] hover:underline"
+                        className="text-xs font-semibold text-[#214438] dark:text-[#C7582B] hover:underline"
                       >
                         {expanded
                           ? 'Ocultar subcategorías'
@@ -146,7 +147,7 @@ export const CategoriesPage: React.FC = () => {
                                   query: sub.name,
                                 })
                               }
-                              className="px-2.5 py-1 rounded-lg bg-[#EAE3D6]/70 dark:bg-white/8 text-[11px] font-medium hover:bg-[#B96F50]/20 text-left"
+                              className="px-2.5 py-1 rounded-lg bg-[#ECE7DC]/70 dark:bg-white/8 text-[11px] font-medium hover:bg-[#C7582B]/20 text-left"
                             >
                               {sub.name}
                             </button>
@@ -157,11 +158,11 @@ export const CategoriesPage: React.FC = () => {
                   )}
                 </div>
 
-                <div className="pt-3 border-t border-[#DDD5C8] dark:border-white/10 flex items-center justify-between gap-2">
+                <div className="pt-3 border-t border-[#DBD4C6] dark:border-white/10 flex items-center justify-between gap-2">
                   <button
                     type="button"
                     onClick={() => navigate({ page: 'explore', categoryId: cat.id })}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#304B3E] dark:text-[#B96F50] hover:underline"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#214438] dark:text-[#C7582B] hover:underline"
                   >
                     Explorar especialistas
                     <ChevronRight className="w-3.5 h-3.5" />
@@ -169,7 +170,7 @@ export const CategoriesPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => navigate({ page: 'request-new', preselectedCategoryId: cat.id })}
-                    className="px-3 py-1.5 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-xs font-semibold transition-colors"
+                    className="px-3 py-1.5 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-xs font-semibold transition-colors"
                   >
                     Solicitar
                   </button>
@@ -187,13 +188,13 @@ export const HowItWorksPage: React.FC = () => {
   const { navigate, openAuthModal, requireAuth } = useOfiClick();
 
   return (
-    <main className="bg-[#F5F1E8] dark:bg-[#171B19] min-h-[80vh]">
+    <main className="bg-[#F7F3EA] dark:bg-[#12171C] min-h-[80vh]">
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 space-y-10">
         <div className="space-y-3">
-          <p className="text-xs font-semibold text-[#304B3E] dark:text-[#9CB08D] uppercase tracking-wider">
+          <p className="text-xs font-semibold text-[#214438] dark:text-[#9CB08D] uppercase tracking-wider">
             Guía de uso para clientes y freelancers
           </p>
-          <h1 className="font-display font-bold text-3xl sm:text-4xl text-[#252A27] dark:text-[#F5F1E8]">
+          <h1 className="font-display font-bold text-3xl sm:text-4xl text-[#1D252C] dark:text-[#F7F3EA]">
             Cómo funciona OFI CLICK
           </h1>
           <p className="text-base text-[#73766F] dark:text-[#A3A89F] max-w-2xl leading-relaxed">
@@ -221,10 +222,10 @@ export const HowItWorksPage: React.FC = () => {
           ].map((item) => (
             <div
               key={item.step}
-              className="rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/10 p-6 space-y-2.5 shadow-xs"
+              className="rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/10 p-6 space-y-2.5 shadow-xs"
             >
-              <span className="font-mono-num text-2xl font-bold text-[#B96F50]">{item.step}</span>
-              <h2 className="font-display font-bold text-lg text-[#252A27] dark:text-[#F5F1E8]">
+              <span className="font-mono-num text-2xl font-bold text-[#C7582B]">{item.step}</span>
+              <h2 className="font-display font-bold text-lg text-[#1D252C] dark:text-[#F7F3EA]">
                 {item.title}
               </h2>
               <p className="text-sm text-[#73766F] dark:text-[#A3A89F] leading-relaxed">
@@ -235,9 +236,9 @@ export const HowItWorksPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/10 p-6 space-y-3 shadow-xs">
-            <h2 className="font-display font-bold text-lg flex items-center gap-2 text-[#252A27] dark:text-[#F5F1E8]">
-              <ShieldCheck className="w-5 h-5 text-[#304B3E] dark:text-[#9CB08D]" />
+          <div className="rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/10 p-6 space-y-3 shadow-xs">
+            <h2 className="font-display font-bold text-lg flex items-center gap-2 text-[#1D252C] dark:text-[#F7F3EA]">
+              <ShieldCheck className="w-5 h-5 text-[#214438] dark:text-[#9CB08D]" />
               Niveles de verificación transparentes
             </h2>
             <ul className="space-y-2 text-sm text-[#73766F] dark:text-[#A3A89F]">
@@ -256,28 +257,28 @@ export const HowItWorksPage: React.FC = () => {
             </ul>
           </div>
 
-          <div className="rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/10 p-6 space-y-3 shadow-xs">
-            <h2 className="font-display font-bold text-lg flex items-center gap-2 text-[#252A27] dark:text-[#F5F1E8]">
-              <MapPin className="w-5 h-5 text-[#304B3E] dark:text-[#9CB08D]" />
+          <div className="rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/10 p-6 space-y-3 shadow-xs">
+            <h2 className="font-display font-bold text-lg flex items-center gap-2 text-[#1D252C] dark:text-[#F7F3EA]">
+              <MapPin className="w-5 h-5 text-[#214438] dark:text-[#9CB08D]" />
               Privacidad de ubicación y acuerdos directos
             </h2>
             <ul className="space-y-2 text-sm text-[#73766F] dark:text-[#A3A89F]">
               <li className="flex items-start gap-2">
-                <Star className="w-4 h-4 text-[#B96F50] shrink-0 mt-0.5" />
+                <Star className="w-4 h-4 text-[#C7582B] shrink-0 mt-0.5" />
                 <span>Los perfiles muestran colonias y radios aproximados, nunca domicilios privados.</span>
               </li>
               <li className="flex items-start gap-2">
-                <UserCheck className="w-4 h-4 text-[#B96F50] shrink-0 mt-0.5" />
+                <UserCheck className="w-4 h-4 text-[#C7582B] shrink-0 mt-0.5" />
                 <span>Dirección exacta compartida únicamente tras aceptar una cotización formal.</span>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="rounded-2xl bg-[#304B3E] text-[#FFFCF7] p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
+        <div className="rounded-2xl bg-[#214438] text-[#FFFDFA] p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
           <div>
             <h2 className="font-display font-bold text-xl">¿Listo para comenzar en OFI CLICK?</h2>
-            <p className="text-sm text-[#F5F1E8]/85 mt-1">
+            <p className="text-sm text-[#F7F3EA]/85 mt-1">
               Solicita un servicio hoy mismo o publica tu perfil profesional independiente.
             </p>
           </div>
@@ -287,14 +288,14 @@ export const HowItWorksPage: React.FC = () => {
               onClick={() =>
                 requireAuth('crear una solicitud', () => navigate({ page: 'request-new' }))
               }
-              className="px-4 py-2.5 rounded-xl bg-[#FFFCF7] text-[#304B3E] text-xs font-bold hover:bg-[#EAE3D6] transition-colors"
+              className="px-4 py-2.5 rounded-xl bg-[#FFFDFA] text-[#214438] text-xs font-bold hover:bg-[#ECE7DC] transition-colors"
             >
               Solicitar servicio
             </button>
             <button
               type="button"
               onClick={() => openAuthModal('register')}
-              className="px-4 py-2.5 rounded-xl bg-[#B96F50] text-white text-xs font-bold hover:bg-[#a65e41] transition-colors"
+              className="px-4 py-2.5 rounded-xl bg-[#C7582B] text-white text-xs font-bold hover:bg-[#AC4921] transition-colors"
             >
               Registrarme como freelancer
             </button>
@@ -315,6 +316,10 @@ export const ProfessionalsDirectoryPage: React.FC<{
   const [colonia, setColonia] = useState('');
 
   const activeRegion = db.regions.find((r) => r.active) || db.regions[0];
+  const izcalliColonias = useMemo(
+    () => (activeRegion?.colonias?.length ? activeRegion.colonias : ALL_IZCALLI_COLONIAS),
+    [activeRegion]
+  );
   const activeCategories = db.categories.filter((c) => c.active);
 
   const pros = useMemo(
@@ -334,14 +339,14 @@ export const ProfessionalsDirectoryPage: React.FC<{
   );
 
   return (
-    <main className="bg-[#F5F1E8] dark:bg-[#171B19] min-h-[80vh]">
+    <main className="bg-[#F7F3EA] dark:bg-[#12171C] min-h-[80vh]">
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold text-[#304B3E] dark:text-[#9CB08D] uppercase tracking-wider">
+            <p className="text-xs font-semibold text-[#214438] dark:text-[#9CB08D] uppercase tracking-wider">
               Directorio verificado de talento local
             </p>
-            <h1 className="font-display font-bold text-3xl text-[#252A27] dark:text-[#F5F1E8] mt-1">
+            <h1 className="font-display font-bold text-3xl text-[#1D252C] dark:text-[#F7F3EA] mt-1">
               Freelancers en OFI CLICK
             </h1>
             <p className="text-sm text-[#73766F] dark:text-[#A3A89F] mt-1">
@@ -353,7 +358,7 @@ export const ProfessionalsDirectoryPage: React.FC<{
             <button
               type="button"
               onClick={() => navigate({ page: 'explore' })}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#222825] text-xs font-semibold hover:border-[#304B3E]"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#1A2128] text-xs font-semibold hover:border-[#214438]"
             >
               Ver en mapa interactivo
               <ArrowRight className="w-3.5 h-3.5" />
@@ -361,25 +366,25 @@ export const ProfessionalsDirectoryPage: React.FC<{
             <button
               type="button"
               onClick={() => openAuthModal('register')}
-              className="px-4 py-2 rounded-xl bg-[#B96F50] hover:bg-[#a65e41] text-white text-xs font-bold transition-colors"
+              className="px-4 py-2 rounded-xl bg-[#C7582B] hover:bg-[#AC4921] text-white text-xs font-bold transition-colors"
             >
               Ofrecer mis servicios
             </button>
           </div>
         </div>
 
-        <div className="rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/10 p-4 grid grid-cols-1 md:grid-cols-3 gap-3 shadow-xs">
+        <div className="rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/10 p-4 grid grid-cols-1 md:grid-cols-3 gap-3 shadow-xs">
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Buscar por nombre, oficio o servicio..."
-            className="px-3.5 py-2 text-sm rounded-xl border border-[#DDD5C8] dark:border-white/15 bg-[#F5F1E8]/60 dark:bg-black/20"
+            className="px-3.5 py-2 text-sm rounded-xl border border-[#DBD4C6] dark:border-white/15 bg-[#F7F3EA]/60 dark:bg-black/20"
           />
           <select
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
-            className="px-3.5 py-2 text-sm rounded-xl border border-[#DDD5C8] dark:border-white/15 bg-[#F5F1E8]/60 dark:bg-black/20"
+            className="px-3.5 py-2 text-sm rounded-xl border border-[#DBD4C6] dark:border-white/15 bg-[#F7F3EA]/60 dark:bg-black/20"
           >
             <option value="">Todas las categorías</option>
             {activeCategories.map((c) => (
@@ -391,10 +396,10 @@ export const ProfessionalsDirectoryPage: React.FC<{
           <select
             value={colonia}
             onChange={(e) => setColonia(e.target.value)}
-            className="px-3.5 py-2 text-sm rounded-xl border border-[#DDD5C8] dark:border-white/15 bg-[#F5F1E8]/60 dark:bg-black/20"
+            className="px-3.5 py-2 text-sm rounded-xl border border-[#DBD4C6] dark:border-white/15 bg-[#F7F3EA]/60 dark:bg-black/20"
           >
-            <option value="">Todas las colonias</option>
-            {activeRegion.colonias.map((col) => (
+            <option value="">Todas las colonias ({izcalliColonias.length})</option>
+            {izcalliColonias.map((col) => (
               <option key={col} value={col}>
                 {col}
               </option>
@@ -404,8 +409,8 @@ export const ProfessionalsDirectoryPage: React.FC<{
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {pros.length === 0 ? (
-            <div className="lg:col-span-2 rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/10 p-10 text-center">
-              <p className="font-display font-bold text-lg text-[#252A27] dark:text-[#F5F1E8]">
+            <div className="lg:col-span-2 rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/10 p-10 text-center">
+              <p className="font-display font-bold text-lg text-[#1D252C] dark:text-[#F7F3EA]">
                 No encontramos freelancers con esos criterios
               </p>
               <button
@@ -415,7 +420,7 @@ export const ProfessionalsDirectoryPage: React.FC<{
                   setCategoryId('');
                   setColonia('');
                 }}
-                className="mt-3 px-4 py-2 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-xs font-semibold"
+                className="mt-3 px-4 py-2 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-xs font-semibold"
               >
                 Limpiar búsqueda
               </button>

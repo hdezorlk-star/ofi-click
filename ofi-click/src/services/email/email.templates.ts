@@ -12,19 +12,23 @@ function escapeHtml(value: string): string {
 function wrapBrandedEmailHtml(title: string, bodyParagraphsHtml: string, footerNote: string): string {
   return `<!doctype html>
 <html lang="es-MX">
-  <body style="margin:0;padding:24px;background-color:#F5F1E8;font-family:Arial,Helvetica,sans-serif;color:#252A27;">
-    <div style="max-width:560px;margin:0 auto;background-color:#FFFCF7;border:1px solid #DDD5C8;border-radius:16px;overflow:hidden;">
-      <div style="background-color:#304B3E;padding:20px 24px;display:flex;align-items:center;gap:12px;">
-        <span style="display:inline-block;padding:6px 10px;border:1px dashed #B96F50;border-radius:8px;color:#F5F1E8;font-size:11px;font-weight:700;letter-spacing:0.06em;">LOGO</span>
-        <span style="color:#F5F1E8;font-size:18px;font-weight:700;letter-spacing:-0.01em;">OFI CLICK</span>
+  <body style="margin:0;padding:24px;background-color:#F7F3EA;font-family:Arial,Helvetica,sans-serif;color:#1D252C;">
+    <div style="max-width:560px;margin:0 auto;background-color:#FFFDFA;border:1px solid #DBD4C6;border-radius:16px;overflow:hidden;">
+      <div style="background-color:#1D252C;padding:20px 24px;">
+        <div style="font-size:19px;font-weight:800;letter-spacing:-0.02em;">
+          <span style="color:#F7F3EA;">OFI </span><span style="color:#C7582B;">CLICK</span>
+        </div>
+        <div style="margin-top:2px;font-size:10px;font-weight:700;letter-spacing:0.16em;color:#F7F3EA;opacity:0.78;">
+          PORTAFOLIO DE OFICIOS · CUAUTITLÁN IZCALLI
+        </div>
       </div>
       <div style="padding:28px 24px;">
-        <h1 style="margin:0 0 16px;font-size:20px;line-height:1.3;color:#252A27;">${escapeHtml(title)}</h1>
-        <div style="font-size:14px;line-height:1.65;color:#252A27;">
+        <h1 style="margin:0 0 16px;font-size:20px;line-height:1.3;color:#1D252C;">${escapeHtml(title)}</h1>
+        <div style="font-size:14px;line-height:1.65;color:#1D252C;">
           ${bodyParagraphsHtml}
         </div>
       </div>
-      <div style="padding:16px 24px;background-color:#EAE3D6;border-top:1px solid #DDD5C8;font-size:12px;line-height:1.5;color:#73766F;">
+      <div style="padding:16px 24px;background-color:#ECE7DC;border-top:1px solid #DBD4C6;font-size:12px;line-height:1.5;color:#5B636B;">
         ${escapeHtml(footerNote)}
       </div>
     </div>

@@ -10,6 +10,7 @@ import { authService } from '../services/auth.service';
 import { profilesService } from '../services/profiles.service';
 import { getDefaultRouteForRole, isRoutePageAllowedForUser } from '../utils/marketplace';
 import { getSupabaseClient } from '../lib/supabase/client';
+import { emailService } from '../services/email/email.service';
 
 export type AppRoute =
   | { page: 'landing' }
@@ -148,6 +149,8 @@ interface PendingAuthAction {
 
 interface OfiClickContextValue {
   db: AppDatabaseState;
+  dataMode: 'local' | 'supabase';
+  configWarning: string | null;
   currentUser: Profile | null;
   route: AppRoute;
   theme: ThemePreference;
@@ -156,6 +159,7 @@ interface OfiClickContextValue {
   toasts: ToastItem[];
   authModalOpen: boolean;
   authModalMode: 'login' | 'register' | 'recovery' | 'admin';
+  passwordRecoveryReady: boolean;
   pendingActionLabel: string | null;
   navigate: (next: AppRoute) => void;
   setTheme: (pref: ThemePreference) => void;
@@ -166,6 +170,7 @@ interface OfiClickContextValue {
   requireAuth: (label: string, onAuthenticated: (profile: Profile) => void) => void;
   openAuthModal: (mode?: 'login' | 'register' | 'recovery' | 'admin') => void;
   closeAuthModal: () => void;
+  clearPasswordRecoveryReady: () => void;
   completeAuthSuccess: (profile: Profile) => void;
   switchWorkspaceRole: (role: UserRoleType) => void;
   signOut: () => void;
@@ -179,7 +184,10 @@ const OfiClickContext = createContext<OfiClickContextValue | null>(null);
 const THEME_KEY = 'oficlick_theme_pref_v1';
 
 export const OfiClickProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [db, setDb] = useState<AppDatabaseState>(() => getDataProvider().getSnapshot());
+  const provider = getDataProvider();
+  const [db, setDb] = useState<AppDatabaseState>(() => provider.getSnapshot());
+  const [dataMode] = useState<'local' | 'supabase'>(() => provider.mode);
+  const [configWarning] = useState<string | null>(() => provider.getConfigWarning?.() || null);
   const [currentUser, setCurrentUser] = useState<Profile | null>(() =>
     authService.getCurrentProfile()
   );
@@ -194,6 +202,7 @@ export const OfiClickProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [toasts, setToasts] = useState<ToastItem[]>([]);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState<'login' | 'register' | 'recovery' | 'admin'>('login');
+  const [passwordRecoveryReady, setPasswordRecoveryReady] = useState(false);
   const [pendingAction, setPendingAction] = useState<PendingAuthAction | null>(null);
 
   const notify = useCallback((message: string, type: ToastItem['type'] = 'info') => {
@@ -201,7 +210,7 @@ export const OfiClickProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setToasts((prev) => [...prev, { id, type, message }]);
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 4500);
+    }, 5200);
   }, []);
 
   const dismissToast = useCallback((id: string) => {
@@ -215,6 +224,25 @@ export const OfiClickProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
+
+  // Surface any OAuth error returned in URL query/hash and strip transient auth params once read
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const searchParams = new URLSearchParams(window.location.search);
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+    const oauthErr =
+      searchParams.get('error_description') ||
+      hashParams.get('error_description') ||
+      searchParams.get('error') ||
+      hashParams.get('error');
+
+    if (oauthErr) {
+      notify(`No se pudo completar el acceso con Google: ${oauthErr}`, 'error');
+      window.history.replaceState({}, '', window.location.pathname || '/');
+    }
+
+    emailService.checkServerEmailStatus().catch(() => {});
+  }, [notify]);
 
   useEffect(() => {
     const applyTheme = () => {
@@ -243,34 +271,15 @@ export const OfiClickProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, []);
 
   useEffect(() => {
-    const provider = getDataProvider();
-    if (typeof (provider as any).onStateChange === 'function') {
-      const unsub = (provider as any).onStateChange(() => {
-        setDb({ ...provider.getSnapshot() });
+    const activeProvider = getDataProvider();
+    if (typeof (activeProvider as any).onStateChange === 'function') {
+      const unsub = (activeProvider as any).onStateChange(() => {
+        setDb({ ...activeProvider.getSnapshot() });
         setCurrentUser(authService.getCurrentProfile());
       });
       return unsub;
     }
   }, []);
-
-  useEffect(() => {
-    const client = getSupabaseClient();
-    if (!client) return;
-
-    const {
-      data: { subscription },
-    } = client.auth.onAuthStateChange(async (event, session) => {
-      const provider = getDataProvider();
-      if (typeof (provider as any).syncWithSession === 'function') {
-        await (provider as any).syncWithSession(session);
-      }
-      refreshDb();
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [refreshDb]);
 
   const navigate = useCallback((next: AppRoute) => {
     const activeUser = authService.getCurrentProfile();
@@ -289,6 +298,52 @@ export const OfiClickProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, []);
 
   useEffect(() => {
+    const client = getSupabaseClient();
+    if (!client) return;
+
+    const {
+      data: { subscription },
+    } = client.auth.onAuthStateChange(async (event, session) => {
+      const activeProvider = getDataProvider();
+      if (typeof (activeProvider as any).syncWithSession === 'function') {
+        await (activeProvider as any).syncWithSession(session);
+      }
+      refreshDb();
+
+      if (event === 'PASSWORD_RECOVERY') {
+        setPasswordRecoveryReady(true);
+        setAuthModalMode('recovery');
+        setAuthModalOpen(true);
+        notify('Enlace verificado. Define tu nueva contraseña para completar la recuperación.', 'info');
+        if (typeof window !== 'undefined' && window.location.hash) {
+          window.history.replaceState({}, '', window.location.pathname || '/');
+        }
+        return;
+      }
+
+      if (event === 'SIGNED_IN' && session?.user) {
+        setAuthModalOpen(false);
+        const profile = authService.getCurrentProfile();
+        if (typeof window !== 'undefined') {
+          const qs = new URLSearchParams(window.location.search);
+          if (qs.has('code') || window.location.hash.includes('access_token')) {
+            window.history.replaceState({}, '', window.location.pathname || '/');
+          }
+        }
+        if (profile) {
+          if (profile.primaryRole !== 'client') {
+            navigate(getDefaultRouteForRole(profile.primaryRole));
+          }
+        }
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [navigate, notify, refreshDb]);
+
+  useEffect(() => {
     if (!currentUser) return;
     if (!isRoutePageAllowedForUser(currentUser, route.page)) {
       const safeRoute = getDefaultRouteForRole(currentUser.primaryRole);
@@ -302,13 +357,17 @@ export const OfiClickProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const resetLocalWorkspace = useCallback(() => {
     const fresh = getDataProvider().resetWorkspaceData();
     setDb(fresh);
-    setCurrentUser(null);
+    setCurrentUser(authService.getCurrentProfile());
     setCompareIds([]);
-    setRoute({ page: 'landing' });
-    if (typeof window !== 'undefined') {
-      window.history.replaceState({}, '', '/');
+    if (getDataProvider().mode === 'local') {
+      setRoute({ page: 'landing' });
+      if (typeof window !== 'undefined') {
+        window.history.replaceState({}, '', '/');
+      }
+      notify('Datos locales iniciales restablecidos.', 'success');
+    } else {
+      notify('Datos sincronizados con Supabase.', 'success');
     }
-    notify('Datos locales iniciales restablecidos.', 'success');
   }, [notify]);
 
   const openAuthModal = useCallback(
@@ -322,6 +381,10 @@ export const OfiClickProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const closeAuthModal = useCallback(() => {
     setAuthModalOpen(false);
     setPendingAction(null);
+  }, []);
+
+  const clearPasswordRecoveryReady = useCallback(() => {
+    setPasswordRecoveryReady(false);
   }, []);
 
   const completeAuthSuccess = useCallback(
@@ -418,6 +481,8 @@ export const OfiClickProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     <OfiClickContext.Provider
       value={{
         db,
+        dataMode,
+        configWarning,
         currentUser,
         route,
         theme,
@@ -426,6 +491,7 @@ export const OfiClickProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         toasts,
         authModalOpen,
         authModalMode,
+        passwordRecoveryReady,
         pendingActionLabel: pendingAction?.label || null,
         navigate,
         setTheme,
@@ -436,6 +502,7 @@ export const OfiClickProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         requireAuth,
         openAuthModal,
         closeAuthModal,
+        clearPasswordRecoveryReady,
         completeAuthSuccess,
         switchWorkspaceRole,
         signOut,

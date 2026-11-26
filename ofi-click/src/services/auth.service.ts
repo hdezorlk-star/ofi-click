@@ -26,6 +26,10 @@ export const authService = {
     getDataProvider().validatePasswordRecoveryCode(email, codeAttempt),
   completePasswordReset: (email: string, codeAttempt: string, newPassword: string) =>
     getDataProvider().completePasswordReset(email, codeAttempt, newPassword),
+  resendSignupConfirmation: (email: string) =>
+    getDataProvider().resendSignupConfirmation
+      ? getDataProvider().resendSignupConfirmation!(email)
+      : Promise.resolve({ sent: false, message: 'No disponible en modo local.' }),
   signOut: () => getDataProvider().signOut(),
   deleteAccount: (profileId: string) => getDataProvider().deleteAccount(profileId),
 };

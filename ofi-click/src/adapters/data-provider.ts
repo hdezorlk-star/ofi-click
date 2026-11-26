@@ -51,8 +51,14 @@ export interface DataProvider {
     commercialName?: string;
     categoryId?: string;
   }):
-    | { profile: Profile; welcomeEmail: PreparedEmailRecord }
-    | Promise<{ profile: Profile; welcomeEmail: PreparedEmailRecord }>;
+    | { profile: Profile; welcomeEmail: PreparedEmailRecord; requiresEmailConfirmation?: boolean }
+    | Promise<{
+        profile: Profile;
+        welcomeEmail: PreparedEmailRecord;
+        requiresEmailConfirmation?: boolean;
+      }>;
+  resendSignupConfirmation?: (email: string) => Promise<{ sent: boolean; message: string }>;
+  getConfigWarning?: () => string | null;
   submitAdminAccessRequest(input: {
     fullName: string;
     email: string;

@@ -20,6 +20,7 @@ import {
   User,
 } from 'lucide-react';
 import { useOfiClick } from '../context/OfiClickContext';
+import { ALL_IZCALLI_COLONIAS } from '../data/izcalliLocations';
 import { DashboardShell, type DashboardNavItem } from '../components/workspace/DashboardShell';
 import { BookingCard } from '../components/workspace/BookingCard';
 import { BookingDetailModal } from '../components/workspace/BookingDetailModal';
@@ -98,15 +99,15 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
     }
   }, [currentUser?.id, currentUser?.fullName, currentUser?.colonia, currentUser?.avatarUrl]);
 
-  const izcalliColonias = useMemo(
-    () => db.regions.find((r) => r.id === (currentUser?.regionId || 'reg-izcalli'))?.colonias || [],
-    [db.regions, currentUser?.regionId]
-  );
+  const izcalliColonias = useMemo(() => {
+    const reg = db.regions.find((r) => r.id === (currentUser?.regionId || 'reg-izcalli'));
+    return reg && reg.colonias.length > 0 ? reg.colonias : ALL_IZCALLI_COLONIAS;
+  }, [db.regions, currentUser?.regionId]);
 
   if (!currentUser || !canAccessWorkspaceRoute(currentUser, 'client-panel')) {
     return (
       <div className="max-w-xl mx-auto px-4 py-16 text-center space-y-4">
-        <h1 className="text-2xl font-bold text-[#252A27] dark:text-[#F5F1E8]">
+        <h1 className="text-2xl font-bold text-[#1D252C] dark:text-[#F7F3EA]">
           {!currentUser
             ? 'Inicia sesión para ver tu panel de cliente'
             : 'Acceso reservado para cuentas de cliente'}
@@ -119,14 +120,14 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
           <button
             type="button"
             onClick={() => openAuthModal('login')}
-            className="px-5 py-2.5 rounded-xl bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] dark:text-[#FFFCF7] text-sm font-semibold transition-colors"
+            className="px-5 py-2.5 rounded-xl bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] dark:text-[#FFFDFA] text-sm font-semibold transition-colors"
           >
             Iniciar sesión
           </button>
           <button
             type="button"
             onClick={() => navigate({ page: 'landing' })}
-            className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl border border-[#DDD5C8] dark:border-white/15 text-[#252A27] dark:text-[#F5F1E8] hover:bg-[#EAE3D6]/50 dark:hover:bg-white/5 text-sm font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl border border-[#DBD4C6] dark:border-white/15 text-[#1D252C] dark:text-[#F7F3EA] hover:bg-[#ECE7DC]/50 dark:hover:bg-white/5 text-sm font-semibold transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Volver al marketplace
@@ -310,7 +311,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
           <button
             type="button"
             onClick={() => navigate({ page: 'request-new' })}
-            className="px-4 py-2 rounded-xl bg-[#304B3E] hover:bg-[#243A30] text-white text-xs font-semibold whitespace-nowrap transition-colors"
+            className="px-4 py-2 rounded-xl bg-[#214438] hover:bg-[#183329] text-white text-xs font-semibold whitespace-nowrap transition-colors"
           >
             + Nueva solicitud
           </button>
@@ -375,22 +376,22 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                   type="button"
                   data-testid={`client-stat-${stat.id}`}
                   onClick={() => handleSelectTab(stat.tab)}
-                  className="group text-left rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4 hover:border-[#304B3E] dark:hover:border-[#75836A] hover:shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-[#304B3E]"
+                  className="group text-left rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4 hover:border-[#214438] dark:hover:border-[#75836A] hover:shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer focus-visible:outline-2 focus-visible:outline-[#214438]"
                 >
                   <div className="flex items-center justify-between gap-2 text-xs text-[#73766F] dark:text-[#A3A89F]">
                     <span className="inline-flex items-center gap-1.5 font-medium">
-                      <span className="text-[#304B3E] dark:text-[#75836A]">{stat.icon}</span>
+                      <span className="text-[#214438] dark:text-[#75836A]">{stat.icon}</span>
                       <span>{stat.label}</span>
                     </span>
                     <ArrowUpRight
-                      className="w-3.5 h-3.5 text-[#73766F] group-hover:text-[#304B3E] dark:group-hover:text-[#75836A] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0"
+                      className="w-3.5 h-3.5 text-[#73766F] group-hover:text-[#214438] dark:group-hover:text-[#75836A] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0"
                       aria-hidden="true"
                     />
                   </div>
-                  <p className="font-mono-num text-2xl font-bold text-[#252A27] dark:text-[#F5F1E8] mt-1.5">
+                  <p className="font-mono-num text-2xl font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-1.5">
                     {stat.value}
                   </p>
-                  <p className="text-[11px] text-[#304B3E] dark:text-[#75836A] font-medium mt-1">
+                  <p className="text-[11px] text-[#214438] dark:text-[#75836A] font-medium mt-1">
                     {stat.hint}
                   </p>
                 </button>
@@ -398,9 +399,9 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
             </div>
 
             {myQuotes.some((q) => q.status === 'sent' || q.status === 'revised') && (
-              <div className="rounded-xl border border-[#B96F50]/45 bg-[#EAE3D6]/75 dark:bg-[#222825] p-5 flex flex-wrap items-center justify-between gap-4">
+              <div className="rounded-xl border border-[#C7582B]/45 bg-[#ECE7DC]/75 dark:bg-[#1A2128] p-5 flex flex-wrap items-center justify-between gap-4">
                 <div>
-                  <h3 className="font-bold text-sm text-[#252A27] dark:text-[#F5F1E8]">
+                  <h3 className="font-bold text-sm text-[#1D252C] dark:text-[#F7F3EA]">
                     Tienes cotizaciones listas para revisar y comparar
                   </h3>
                   <p className="text-xs text-[#73766F] dark:text-[#A3A89F] mt-0.5">
@@ -410,7 +411,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                 <button
                   type="button"
                   onClick={() => handleSelectTab('solicitudes')}
-                  className="px-4 py-2 rounded-xl bg-[#304B3E] hover:bg-[#243A30] text-white text-xs font-semibold whitespace-nowrap transition-colors"
+                  className="px-4 py-2 rounded-xl bg-[#214438] hover:bg-[#183329] text-white text-xs font-semibold whitespace-nowrap transition-colors"
                 >
                   Comparar cotizaciones
                 </button>
@@ -447,13 +448,13 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                 value={reqFilterQuery}
                 onChange={(e) => setReqFilterQuery(e.target.value)}
                 placeholder="Buscar en tus solicitudes por título o colonia..."
-                className="w-full pl-9 pr-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#222825] text-xs text-[#252A27] dark:text-[#F5F1E8]"
+                className="w-full pl-9 pr-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#1A2128] text-xs text-[#1D252C] dark:text-[#F7F3EA]"
               />
             </div>
             <select
               value={reqFilterStatus}
               onChange={(e) => setReqFilterStatus(e.target.value)}
-              className="px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#222825] text-xs text-[#252A27] dark:text-[#F5F1E8]"
+              className="px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#1A2128] text-xs text-[#1D252C] dark:text-[#F7F3EA]"
             >
               <option value="all">Todos los estados</option>
               <option value="sent">Enviadas</option>
@@ -464,8 +465,8 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
           </div>
 
           {filteredRequests.length === 0 ? (
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-8 text-center space-y-3">
-              <p className="text-sm font-semibold text-[#252A27] dark:text-[#F5F1E8]">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-8 text-center space-y-3">
+              <p className="text-sm font-semibold text-[#1D252C] dark:text-[#F7F3EA]">
                 {myRequests.length === 0
                   ? 'Aún no has enviado solicitudes de servicio.'
                   : 'No hay solicitudes que coincidan con el filtro.'}
@@ -473,7 +474,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
               <button
                 type="button"
                 onClick={() => navigate({ page: 'request-new' })}
-                className="px-4 py-2 rounded-xl bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] dark:text-[#FFFCF7] text-xs font-semibold transition-colors"
+                className="px-4 py-2 rounded-xl bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] dark:text-[#FFFDFA] text-xs font-semibold transition-colors"
               >
                 Crear solicitud
               </button>
@@ -485,11 +486,11 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
               return (
                 <div
                   key={req.id}
-                  className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-4"
+                  className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-4"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
-                      <div className="text-xs font-semibold uppercase text-[#304B3E] dark:text-[#75836A]">
+                      <div className="text-xs font-semibold uppercase text-[#214438] dark:text-[#75836A]">
                         {cat?.name || 'Servicio'} · Col. {req.colonia} · Estado:{' '}
                         {(
                           {
@@ -501,7 +502,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                           } as Record<string, string>
                         )[req.status] || req.status}
                       </div>
-                      <h3 className="text-lg font-bold text-[#252A27] dark:text-[#F5F1E8] mt-0.5">
+                      <h3 className="text-lg font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-0.5">
                         {req.title}
                       </h3>
                       <p className="text-xs text-[#73766F] dark:text-[#A3A89F] mt-1">
@@ -530,8 +531,8 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                   </div>
 
                   {reqQuotes.length > 0 ? (
-                    <div className="space-y-2 pt-2 border-t border-[#DDD5C8] dark:border-white/10">
-                      <p className="text-xs font-semibold text-[#252A27] dark:text-[#F5F1E8]">
+                    <div className="space-y-2 pt-2 border-t border-[#DBD4C6] dark:border-white/10">
+                      <p className="text-xs font-semibold text-[#1D252C] dark:text-[#F7F3EA]">
                         Cotizaciones recibidas ({reqQuotes.length})
                       </p>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -543,7 +544,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                           return (
                             <div
                               key={quote.id}
-                              className="p-4 rounded-xl border border-[#DDD5C8] dark:border-white/15 bg-[#EAE3D6]/50 dark:bg-[#1C211E] space-y-2.5 text-xs"
+                              className="p-4 rounded-xl border border-[#DBD4C6] dark:border-white/15 bg-[#ECE7DC]/50 dark:bg-[#161C22] space-y-2.5 text-xs"
                             >
                               <div className="flex items-start justify-between gap-2">
                                 <div className="flex items-center gap-2.5 min-w-0">
@@ -553,7 +554,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                                     sizeClass="w-8 h-8"
                                   />
                                   <div className="min-w-0">
-                                    <span className="font-bold text-sm text-[#252A27] dark:text-[#F5F1E8] block truncate">
+                                    <span className="font-bold text-sm text-[#1D252C] dark:text-[#F7F3EA] block truncate">
                                       {pro?.commercialName || pro?.displayName || 'Freelancer'}
                                     </span>
                                   <p className="text-[#73766F] dark:text-[#A3A89F]">
@@ -570,7 +571,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                                     </p>
                                   </div>
                                 </div>
-                                <span className="font-mono-num text-base font-bold text-[#304B3E] dark:text-[#B96F50]">
+                                <span className="font-mono-num text-base font-bold text-[#214438] dark:text-[#C7582B]">
                                   {formatMXN(latest.totalAmount)}
                                 </span>
                               </div>
@@ -580,7 +581,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                                 <span>Cargos extra: {formatMXN(latest.additionalCharges)}</span>
                                 <span>Descuento: -{formatMXN(latest.discountAmount)}</span>
                               </div>
-                              <p className="text-[#252A27] dark:text-[#F5F1E8]">
+                              <p className="text-[#1D252C] dark:text-[#F7F3EA]">
                                 Propuesta: {latest.proposedDate} · {latest.proposedTime} (
                                 {latest.estimatedDuration})
                               </p>
@@ -590,7 +591,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                                   <button
                                     type="button"
                                     onClick={() => handleOpenChatWithPro(pro.profileId, req.id)}
-                                    className="px-3 py-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#222825] text-[#252A27] dark:text-[#F5F1E8] font-medium"
+                                    className="px-3 py-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#1A2128] text-[#1D252C] dark:text-[#F7F3EA] font-medium"
                                   >
                                     Chatear
                                   </button>
@@ -600,7 +601,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                                     <button
                                       type="button"
                                       onClick={() => handleAcceptQuote(quote.id)}
-                                      className="px-3 py-1.5 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] dark:text-[#FFFCF7] font-semibold transition-colors"
+                                      className="px-3 py-1.5 rounded-lg bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] dark:text-[#FFFDFA] font-semibold transition-colors"
                                     >
                                       Aceptar y agendar
                                     </button>
@@ -620,7 +621,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                       </div>
                     </div>
                   ) : (
-                    <p className="text-xs text-[#73766F] dark:text-[#A3A89F] pt-2 border-t border-[#DDD5C8] dark:border-white/10">
+                    <p className="text-xs text-[#73766F] dark:text-[#A3A89F] pt-2 border-t border-[#DBD4C6] dark:border-white/10">
                       Esperando respuesta de los freelancers destinatarios.
                     </p>
                   )}
@@ -671,8 +672,8 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                   onClick={() => setBkFilterStatus(pill.id)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                     active
-                      ? 'bg-[#304B3E] text-white dark:bg-[#B96F50] dark:text-[#FFFCF7]'
-                      : 'bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/12 text-[#252A27] dark:text-[#F5F1E8]'
+                      ? 'bg-[#214438] text-white dark:bg-[#C7582B] dark:text-[#FFFDFA]'
+                      : 'bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/12 text-[#1D252C] dark:text-[#F7F3EA]'
                   }`}
                 >
                   {pill.label} ({pill.count})
@@ -689,13 +690,13 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                 value={bkFilterQuery}
                 onChange={(e) => setBkFilterQuery(e.target.value)}
                 placeholder="Buscar por servicio, freelancer o colonia..."
-                className="w-full pl-9 pr-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#222825] text-xs text-[#252A27] dark:text-[#F5F1E8]"
+                className="w-full pl-9 pr-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#1A2128] text-xs text-[#1D252C] dark:text-[#F7F3EA]"
               />
             </div>
             <select
               value={bkFilterStatus}
               onChange={(e) => setBkFilterStatus(e.target.value)}
-              className="px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#222825] text-xs text-[#252A27] dark:text-[#F5F1E8]"
+              className="px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#1A2128] text-xs text-[#1D252C] dark:text-[#F7F3EA]"
             >
               <option value="all">Todos los estados</option>
               <option value="quote_accepted">Cotización aceptada</option>
@@ -710,7 +711,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
           </div>
 
           {filteredBookings.length === 0 ? (
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-8 text-center text-sm text-[#73766F] dark:text-[#A3A89F]">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-8 text-center text-sm text-[#73766F] dark:text-[#A3A89F]">
               {myBookings.length === 0
                 ? 'Cuando aceptes una cotización aparecerá aquí tu contratación y seguimiento paso a paso.'
                 : 'No hay servicios contratados que coincidan con el filtro.'}
@@ -742,7 +743,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
       {activeTab === 'favoritos' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {myFavorites.length === 0 ? (
-            <div className="md:col-span-2 rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-8 text-center space-y-3 text-sm text-[#73766F] dark:text-[#A3A89F]">
+            <div className="md:col-span-2 rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-8 text-center space-y-3 text-sm text-[#73766F] dark:text-[#A3A89F]">
               <p>
                 Guarda freelancers y profesionales independientes desde el explorador para acceder
                 rápido a ellos.
@@ -750,7 +751,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
               <button
                 type="button"
                 onClick={() => handleSelectTab('explorar')}
-                className="px-4 py-2 rounded-xl bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] dark:text-[#FFFCF7] text-xs font-semibold transition-colors"
+                className="px-4 py-2 rounded-xl bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] dark:text-[#FFFDFA] text-xs font-semibold transition-colors"
               >
                 Explorar freelancers
               </button>
@@ -792,14 +793,14 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                   refreshDb();
                   notify('¡Gracias! Tu reseña ha sido publicada.', 'success');
                 }}
-                className="rounded-xl border border-[#B96F50]/60 bg-[#EAE3D6]/55 dark:bg-[#222825] p-5 space-y-3"
+                className="rounded-xl border border-[#C7582B]/60 bg-[#ECE7DC]/55 dark:bg-[#1A2128] p-5 space-y-3"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <span className="text-[11px] font-semibold uppercase text-[#304B3E] dark:text-[#B96F50]">
+                    <span className="text-[11px] font-semibold uppercase text-[#214438] dark:text-[#C7582B]">
                       Servicio completado listo para calificar
                     </span>
-                    <h4 className="font-bold text-sm text-[#252A27] dark:text-[#F5F1E8]">
+                    <h4 className="font-bold text-sm text-[#1D252C] dark:text-[#F7F3EA]">
                       {b.serviceTitle} · {pro?.displayName || 'Freelancer'}
                     </h4>
                   </div>
@@ -817,7 +818,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                         <Star
                           className={`w-4 h-4 ${
                             starVal <= rating
-                              ? 'fill-[#B96F50] text-[#B96F50]'
+                              ? 'fill-[#C7582B] text-[#C7582B]'
                               : 'text-[#73766F] dark:text-[#A3A89F]'
                           }`}
                         />
@@ -832,12 +833,12 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                     setReviewCommentMap((prev) => ({ ...prev, [b.id]: e.target.value }))
                   }
                   placeholder="Cuéntale a otros vecinos cómo fue la puntualidad, limpieza y resultado..."
-                  className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-xs text-[#252A27] dark:text-[#F5F1E8]"
+                  className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-xs text-[#1D252C] dark:text-[#F7F3EA]"
                   required
                 />
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-xl bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] dark:text-[#FFFCF7] text-xs font-semibold transition-colors"
+                  className="px-4 py-2 rounded-xl bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] dark:text-[#FFFDFA] text-xs font-semibold transition-colors"
                 >
                   Publicar reseña
                 </button>
@@ -846,7 +847,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
           })}
 
           {myReviews.length === 0 ? (
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-8 text-center text-sm text-[#73766F] dark:text-[#A3A89F]">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-8 text-center text-sm text-[#73766F] dark:text-[#A3A89F]">
               Aún no has publicado reseñas. Se habilitan automáticamente al completar una
               contratación.
             </div>
@@ -854,17 +855,17 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
             myReviews.map((rev) => (
               <div
                 key={rev.id}
-                className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-2 text-sm"
+                className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-2 text-sm"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-[#252A27] dark:text-[#F5F1E8]">
+                  <span className="font-bold text-[#1D252C] dark:text-[#F7F3EA]">
                     {rev.serviceName}
                   </span>
-                  <span className="font-mono-num font-semibold text-[#B96F50]">{rev.rating} / 5</span>
+                  <span className="font-mono-num font-semibold text-[#C7582B]">{rev.rating} / 5</span>
                 </div>
-                <p className="text-[#252A27]/85 dark:text-[#F5F1E8]/85">{rev.comment}</p>
+                <p className="text-[#1D252C]/85 dark:text-[#F7F3EA]/85">{rev.comment}</p>
                 {rev.proResponse && (
-                  <p className="text-xs p-3 rounded-lg bg-[#EAE3D6]/60 dark:bg-[#1C211E] text-[#73766F] dark:text-[#A3A89F]">
+                  <p className="text-xs p-3 rounded-lg bg-[#ECE7DC]/60 dark:bg-[#161C22] text-[#73766F] dark:text-[#A3A89F]">
                     <strong>Respuesta del freelancer:</strong> {rev.proResponse.text}
                   </p>
                 )}
@@ -877,9 +878,9 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
       {/* 8. Notificaciones */}
       {activeTab === 'notificaciones' && (
         <div className="space-y-5">
-          <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-3">
+          <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-[#252A27] dark:text-[#F5F1E8]">Centro de notificaciones</h3>
+              <h3 className="text-sm font-bold text-[#1D252C] dark:text-[#F7F3EA]">Centro de notificaciones</h3>
               {unreadNotifs > 0 && (
                 <button
                   type="button"
@@ -887,7 +888,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                     notificationsService.markAllRead(currentUser.id);
                     refreshDb();
                   }}
-                  className="text-xs font-semibold text-[#304B3E] dark:text-[#B96F50] hover:underline"
+                  className="text-xs font-semibold text-[#214438] dark:text-[#C7582B] hover:underline"
                 >
                   Marcar todas como leídas
                 </button>
@@ -896,7 +897,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
             {myNotifications.length === 0 ? (
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Sin notificaciones por el momento.</p>
             ) : (
-              <div className="divide-y divide-[#DDD5C8] dark:divide-white/10">
+              <div className="divide-y divide-[#DBD4C6] dark:divide-white/10">
                 {myNotifications.map((n) => (
                   <div
                     key={n.id}
@@ -905,7 +906,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                     }`}
                   >
                     <div>
-                      <p className="text-sm font-semibold text-[#252A27] dark:text-[#F5F1E8]">
+                      <p className="text-sm font-semibold text-[#1D252C] dark:text-[#F7F3EA]">
                         {n.title}
                       </p>
                       <p className="text-xs text-[#73766F] dark:text-[#A3A89F] mt-0.5">{n.body}</p>
@@ -920,7 +921,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                           notificationsService.markRead(n.id);
                           refreshDb();
                         }}
-                        className="text-xs font-medium text-[#304B3E] dark:text-[#B96F50] whitespace-nowrap"
+                        className="text-xs font-medium text-[#214438] dark:text-[#C7582B] whitespace-nowrap"
                       >
                         Marcar leída
                       </button>
@@ -931,8 +932,8 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
             )}
           </div>
 
-          <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-3 text-sm">
-            <h3 className="font-bold text-[#252A27] dark:text-[#F5F1E8]">Preferencias de notificación</h3>
+          <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-3 text-sm">
+            <h3 className="font-bold text-[#1D252C] dark:text-[#F7F3EA]">Preferencias de notificación</h3>
             {(
               [
                 { key: 'inApp', label: 'Alertas dentro de la app' },
@@ -967,12 +968,12 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
       {activeTab === 'perfil' && (
         <form
           onSubmit={handleSaveProfile}
-          className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-6 space-y-4 max-w-2xl"
+          className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-6 space-y-4 max-w-2xl"
         >
-          <h3 className="text-base font-bold text-[#252A27] dark:text-[#F5F1E8]">Datos de tu cuenta</h3>
-          <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-lg bg-[#EAE3D6]/55 dark:bg-[#1C211E] text-xs">
+          <h3 className="text-base font-bold text-[#1D252C] dark:text-[#F7F3EA]">Datos de tu cuenta</h3>
+          <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-lg bg-[#ECE7DC]/55 dark:bg-[#161C22] text-xs">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#304B3E] dark:text-[#B96F50]" />
+              <ShieldCheck className="w-4 h-4 text-[#214438] dark:text-[#C7582B]" />
               <span>
                 Correo: <strong>{currentUser.email}</strong> (
                 {currentUser.emailConfirmed ? 'Confirmado' : 'Pendiente de confirmar'})
@@ -986,7 +987,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                   refreshDb();
                   notify('Correo confirmado exitosamente.', 'success');
                 }}
-                className="px-3 py-1 rounded bg-[#304B3E] text-white font-semibold"
+                className="px-3 py-1 rounded bg-[#214438] text-white font-semibold"
               >
                 Confirmar correo ahora
               </button>
@@ -1000,7 +1001,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm text-[#252A27] dark:text-[#F5F1E8]"
+                className="w-full px-3.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm text-[#1D252C] dark:text-[#F7F3EA]"
                 required
               />
             </div>
@@ -1009,7 +1010,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
               <select
                 value={colonia}
                 onChange={(e) => setColonia(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm text-[#252A27] dark:text-[#F5F1E8]"
+                className="w-full px-3.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm text-[#1D252C] dark:text-[#F7F3EA]"
               >
                 {izcalliColonias.map((col) => (
                   <option key={col} value={col}>
@@ -1046,7 +1047,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
 
           <button
             type="submit"
-            className="px-5 py-2.5 rounded-xl bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] dark:text-[#FFFCF7] text-sm font-semibold transition-colors"
+            className="px-5 py-2.5 rounded-xl bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] dark:text-[#FFFDFA] text-sm font-semibold transition-colors"
           >
             Guardar cambios
           </button>
@@ -1056,8 +1057,8 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
       {/* 10. Configuración */}
       {activeTab === 'configuracion' && (
         <div className="space-y-5 max-w-2xl">
-          <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-6 space-y-3">
-            <h3 className="text-base font-bold text-[#252A27] dark:text-[#F5F1E8]">Apariencia de la interfaz</h3>
+          <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-6 space-y-3">
+            <h3 className="text-base font-bold text-[#1D252C] dark:text-[#F7F3EA]">Apariencia de la interfaz</h3>
             <div className="grid grid-cols-3 gap-3">
               {(
                 [
@@ -1072,8 +1073,8 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                   onClick={() => setTheme(opt.id)}
                   className={`py-2.5 rounded-lg border text-xs font-semibold transition-colors ${
                     theme === opt.id
-                      ? 'bg-[#304B3E] text-white border-[#304B3E] dark:bg-[#B96F50] dark:border-[#B96F50] dark:text-[#FFFCF7]'
-                      : 'border-[#DDD5C8] dark:border-white/15 text-[#252A27] dark:text-[#F5F1E8]'
+                      ? 'bg-[#214438] text-white border-[#214438] dark:bg-[#C7582B] dark:border-[#C7582B] dark:text-[#FFFDFA]'
+                      : 'border-[#DBD4C6] dark:border-white/15 text-[#1D252C] dark:text-[#F7F3EA]'
                   }`}
                 >
                   {opt.label}
@@ -1082,7 +1083,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
             </div>
           </div>
 
-          <div className="rounded-xl border border-red-300/60 dark:border-red-900/50 bg-[#FFFCF7] dark:bg-[#222825] p-6 space-y-3">
+          <div className="rounded-xl border border-red-300/60 dark:border-red-900/50 bg-[#FFFDFA] dark:bg-[#1A2128] p-6 space-y-3">
             <h3 className="text-base font-bold text-red-700 dark:text-red-300">
               Privacidad y eliminación de cuenta
             </h3>
@@ -1093,7 +1094,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
               <button
                 type="button"
                 onClick={signOut}
-                className="px-4 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/20 text-xs font-semibold text-[#252A27] dark:text-[#F5F1E8]"
+                className="px-4 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/20 text-xs font-semibold text-[#1D252C] dark:text-[#F7F3EA]"
               >
                 Cerrar sesión
               </button>
@@ -1123,7 +1124,7 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
                   <button
                     type="button"
                     onClick={() => setConfirmDelete(false)}
-                    className="px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 text-xs"
+                    className="px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 text-xs"
                   >
                     Cancelar
                   </button>
@@ -1154,15 +1155,15 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
               refreshDb();
               notify('Ticket de soporte enviado.', 'success');
             }}
-            className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-6 space-y-4"
+            className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-6 space-y-4"
           >
-            <h3 className="text-base font-bold text-[#252A27] dark:text-[#F5F1E8]">Crear ticket de soporte</h3>
+            <h3 className="text-base font-bold text-[#1D252C] dark:text-[#F7F3EA]">Crear ticket de soporte</h3>
             <input
               type="text"
               value={ticketSubject}
               onChange={(e) => setTicketSubject(e.target.value)}
               placeholder="Asunto de tu consulta"
-              className="w-full px-3.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm text-[#252A27] dark:text-[#F5F1E8]"
+              className="w-full px-3.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm text-[#1D252C] dark:text-[#F7F3EA]"
               required
             />
             <textarea
@@ -1170,12 +1171,12 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
               onChange={(e) => setTicketDesc(e.target.value)}
               rows={3}
               placeholder="Describe cómo podemos ayudarte..."
-              className="w-full px-3.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm text-[#252A27] dark:text-[#F5F1E8]"
+              className="w-full px-3.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm text-[#1D252C] dark:text-[#F7F3EA]"
               required
             />
             <button
               type="submit"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] dark:text-[#FFFCF7] text-xs font-semibold transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] dark:text-[#FFFDFA] text-xs font-semibold transition-colors"
             >
               <CheckCircle2 className="w-4 h-4" />
               Enviar ticket
@@ -1183,22 +1184,22 @@ export const ClientPanelPage: React.FC<ClientPanelPageProps> = ({ initialTab = '
           </form>
 
           {myTickets.length > 0 && (
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-3">
-              <h4 className="text-sm font-bold text-[#252A27] dark:text-[#F5F1E8]">Mis tickets</h4>
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-3">
+              <h4 className="text-sm font-bold text-[#1D252C] dark:text-[#F7F3EA]">Mis tickets</h4>
               {myTickets.map((t) => (
                 <div
                   key={t.id}
-                  className="p-3 rounded-lg bg-[#EAE3D6]/50 dark:bg-[#1C211E] text-xs space-y-1"
+                  className="p-3 rounded-lg bg-[#ECE7DC]/50 dark:bg-[#161C22] text-xs space-y-1"
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <p className="font-semibold text-[#252A27] dark:text-[#F5F1E8]">{t.subject}</p>
-                    <span className="font-semibold uppercase text-[#304B3E] dark:text-[#B96F50]">
+                    <p className="font-semibold text-[#1D252C] dark:text-[#F7F3EA]">{t.subject}</p>
+                    <span className="font-semibold uppercase text-[#214438] dark:text-[#C7582B]">
                       {t.status}
                     </span>
                   </div>
                   <p className="text-[#73766F] dark:text-[#A3A89F]">{t.description}</p>
                   {t.evidenceNote && (
-                    <p className="text-[#304B3E] dark:text-[#B96F50] pt-1">
+                    <p className="text-[#214438] dark:text-[#C7582B] pt-1">
                       <strong>Respuesta de soporte:</strong> {t.evidenceNote}
                     </p>
                   )}

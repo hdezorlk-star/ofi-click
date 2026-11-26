@@ -2,31 +2,32 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --oficlick-bg: #F5F1E8;
-  --oficlick-bg-alt: #EAE3D6;
-  --oficlick-surface: #FFFCF7;
-  --oficlick-green: #304B3E;
-  --oficlick-green-hover: #243A30;
-  --oficlick-olive: #75836A;
-  --oficlick-terracotta: #B96F50;
-  --oficlick-charcoal: #252A27;
-  --oficlick-muted: #73766F;
-  --oficlick-border: #DDD5C8;
+  --oficlick-bg: #F7F3EA;
+  --oficlick-bg-alt: #ECE7DC;
+  --oficlick-surface: #FFFDFA;
+  --oficlick-slate: #1D252C;
+  --oficlick-green: #214438;
+  --oficlick-green-hover: #183329;
+  --oficlick-olive: #5B6B5F;
+  --oficlick-terracotta: #C7582B;
+  --oficlick-charcoal: #1D252C;
+  --oficlick-muted: #5B636B;
+  --oficlick-border: #DBD4C6;
 }
 
 @layer base {
   html {
     font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
-    background-color: #F5F1E8;
-    color: #252A27;
+    background-color: #F7F3EA;
+    color: #1D252C;
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     overflow-x: clip;
   }
 
   html.dark {
-    background-color: #171B19;
-    color: #F5F1E8;
+    background-color: #12171C;
+    color: #F7F3EA;
   }
 
   body {

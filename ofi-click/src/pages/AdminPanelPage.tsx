@@ -193,8 +193,8 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
   if (!currentUser || !hasAuthorizedRole) {
     return (
       <div className="max-w-xl mx-auto px-4 py-16 text-center space-y-4">
-        <ShieldCheck className="w-10 h-10 mx-auto text-[#304B3E] dark:text-[#B96F50]" />
-        <h1 className="text-2xl font-bold text-[#252A27] dark:text-[#F5F1E8]">
+        <ShieldCheck className="w-10 h-10 mx-auto text-[#214438] dark:text-[#C7582B]" />
+        <h1 className="text-2xl font-bold text-[#1D252C] dark:text-[#F7F3EA]">
           Acceso exclusivo de Administrador Central
         </h1>
         <p className="text-sm text-[#73766F] dark:text-[#A3A89F]">
@@ -205,7 +205,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
           <button
             type="button"
             onClick={() => openAuthModal('admin')}
-            className="px-5 py-2.5 rounded-xl bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] dark:text-[#FFFCF7] text-sm font-semibold transition-colors"
+            className="px-5 py-2.5 rounded-xl bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] dark:text-[#FFFDFA] text-sm font-semibold transition-colors"
           >
             Acceso interno
           </button>
@@ -359,7 +359,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
       {/* 1. Resumen */}
       {activeTab === 'resumen' && (
         <div className="space-y-6">
-          <div className="p-4 rounded-xl border border-[#304B3E]/25 bg-[#304B3E]/8 dark:bg-[#304B3E]/25 text-xs flex flex-wrap items-center justify-between gap-2">
+          <div className="p-4 rounded-xl border border-[#214438]/25 bg-[#214438]/8 dark:bg-[#214438]/25 text-xs flex flex-wrap items-center justify-between gap-2">
             <span>
               <strong>Control de alcance:</strong>{' '}
               Sesión de Administrador Central con visibilidad y control global multirregión.
@@ -367,30 +367,30 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4">
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Usuarios en ámbito</p>
-              <p className="font-mono-num text-2xl font-bold text-[#252A27] dark:text-[#F5F1E8] mt-1">{scopedProfiles.length}</p>
+              <p className="font-mono-num text-2xl font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-1">{scopedProfiles.length}</p>
             </div>
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4">
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Freelancers registrados</p>
-              <p className="font-mono-num text-2xl font-bold text-[#252A27] dark:text-[#F5F1E8] mt-1">{allScopedPros.length}</p>
+              <p className="font-mono-num text-2xl font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-1">{allScopedPros.length}</p>
             </div>
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4">
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Solicitudes registradas</p>
-              <p className="font-mono-num text-2xl font-bold text-[#252A27] dark:text-[#F5F1E8] mt-1">{scopedRequests.length}</p>
+              <p className="font-mono-num text-2xl font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-1">{scopedRequests.length}</p>
             </div>
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4">
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Contrataciones activas/históricas</p>
-              <p className="font-mono-num text-2xl font-bold text-[#252A27] dark:text-[#F5F1E8] mt-1">{scopedBookings.length}</p>
+              <p className="font-mono-num text-2xl font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-1">{scopedBookings.length}</p>
             </div>
           </div>
 
-          <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-3">
-            <h3 className="text-sm font-bold text-[#252A27] dark:text-[#F5F1E8]">Bitácora reciente de actividad administrativa</h3>
+          <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-3">
+            <h3 className="text-sm font-bold text-[#1D252C] dark:text-[#F7F3EA]">Bitácora reciente de actividad administrativa</h3>
             {scopedAuditLogs.length === 0 ? (
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Sin eventos registrados aún.</p>
             ) : (
-              <div className="divide-y divide-[#DDD5C8] dark:divide-white/10 text-xs">
+              <div className="divide-y divide-[#DBD4C6] dark:divide-white/10 text-xs">
                 {scopedAuditLogs.slice(0, 6).map((log) => (
                   <div key={log.id} className="py-2.5 flex flex-wrap justify-between gap-2">
                     <div>
@@ -411,18 +411,18 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
       {/* 2. Usuarios */}
       {activeTab === 'usuarios' && (
         <div className="space-y-6">
-          <div className="rounded-xl border border-[#304B3E]/25 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-4">
+          <div className="rounded-xl border border-[#214438]/25 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <h3 className="text-base font-bold flex items-center gap-2 text-[#252A27] dark:text-[#F5F1E8]">
-                    <ShieldCheck className="w-4 h-4 text-[#B96F50]" />
+                  <h3 className="text-base font-bold flex items-center gap-2 text-[#1D252C] dark:text-[#F7F3EA]">
+                    <ShieldCheck className="w-4 h-4 text-[#C7582B]" />
                     Solicitudes de acceso administrativo
                   </h3>
                   <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">
                     Solo las solicitudes con correo verificado pueden ser autorizadas o rechazadas por Administración Central.
                   </p>
                 </div>
-                <span className="px-2.5 py-1 rounded bg-[#304B3E]/10 dark:bg-[#75836A]/20 text-xs font-semibold text-[#304B3E] dark:text-[#EAE3D6]">
+                <span className="px-2.5 py-1 rounded bg-[#214438]/10 dark:bg-[#75836A]/20 text-xs font-semibold text-[#214438] dark:text-[#ECE7DC]">
                   {db.adminAccessRequests.filter((r) => r.status === 'pending_authorization').length}{' '}
                   pendientes de autorización
                 </span>
@@ -440,11 +440,11 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                     return (
                       <div
                         key={req.id}
-                        className="p-4 rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#EAE3D6]/45 dark:bg-[#1C211E] space-y-3 text-xs"
+                        className="p-4 rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#ECE7DC]/45 dark:bg-[#161C22] space-y-3 text-xs"
                       >
                         <div className="flex flex-wrap items-start justify-between gap-2">
                           <div>
-                            <div className="font-bold text-sm text-[#252A27] dark:text-[#F5F1E8] flex flex-wrap items-center gap-2">
+                            <div className="font-bold text-sm text-[#1D252C] dark:text-[#F7F3EA] flex flex-wrap items-center gap-2">
                               <span>{req.fullName}</span>
                               {req.emailVerified ? (
                                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 dark:bg-emerald-950/60 dark:text-emerald-200 text-[11px] font-semibold">
@@ -471,7 +471,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                                 : req.status === 'rejected'
                                 ? 'bg-red-100 text-red-900 dark:bg-red-950/50 dark:text-red-200'
                                 : req.status === 'pending_authorization'
-                                ? 'bg-[#304B3E]/12 text-[#304B3E] dark:bg-[#75836A]/25 dark:text-[#EAE3D6]'
+                                ? 'bg-[#214438]/12 text-[#214438] dark:bg-[#75836A]/25 dark:text-[#ECE7DC]'
                                 : 'bg-gray-200 text-gray-800 dark:bg-white/10 dark:text-gray-200'
                             }`}
                           >
@@ -485,7 +485,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                           </span>
                         </div>
 
-                        <p className="text-[#252A27]/85 dark:text-[#F5F1E8]/85">
+                        <p className="text-[#1D252C]/85 dark:text-[#F7F3EA]/85">
                           <strong>Justificación:</strong> {req.justification}
                         </p>
 
@@ -510,7 +510,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                                   'success'
                                 );
                               }}
-                              className="px-3 py-1.5 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white font-semibold"
+                              className="px-3 py-1.5 rounded-lg bg-[#214438] hover:bg-[#183329] text-white font-semibold"
                             >
                               Autorizar Admin Central
                             </button>
@@ -546,19 +546,19 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
             value={userSearch}
             onChange={(e) => setUserSearch(e.target.value)}
             placeholder="Buscar usuario por nombre, correo o colonia..."
-            className="w-full px-4 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#222825] text-sm text-[#252A27] dark:text-[#F5F1E8]"
+            className="w-full px-4 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#1A2128] text-sm text-[#1D252C] dark:text-[#F7F3EA]"
           />
 
           <div className="space-y-3">
             {scopedProfiles.map((u) => (
               <div
                 key={u.id}
-                className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4 flex flex-wrap items-center justify-between gap-3 text-sm"
+                className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4 flex flex-wrap items-center justify-between gap-3 text-sm"
               >
                 <div className="flex items-center gap-3">
                   <UserAvatar src={u.avatarUrl} name={u.fullName} sizeClass="w-10 h-10" />
                   <div>
-                    <div className="font-bold flex items-center gap-2 text-[#252A27] dark:text-[#F5F1E8]">
+                    <div className="font-bold flex items-center gap-2 text-[#1D252C] dark:text-[#F7F3EA]">
                       <span>{u.fullName}</span>
                       {u.suspended && (
                         <span className="text-xs font-semibold text-red-600 dark:text-red-400">
@@ -590,7 +590,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                     }}
                     className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold ${
                       u.suspended
-                        ? 'bg-[#304B3E] text-white dark:bg-[#B96F50]'
+                        ? 'bg-[#214438] text-white dark:bg-[#C7582B]'
                         : 'border border-red-300 text-red-700 dark:text-red-300'
                     }`}
                   >
@@ -611,7 +611,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
             value={userSearch}
             onChange={(e) => setUserSearch(e.target.value)}
             placeholder="Buscar cliente por nombre, correo o colonia..."
-            className="w-full px-4 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#222825] text-sm text-[#252A27] dark:text-[#F5F1E8]"
+            className="w-full px-4 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#1A2128] text-sm text-[#1D252C] dark:text-[#F7F3EA]"
           />
           <div className="space-y-3">
             {scopedClients.map((client) => {
@@ -620,12 +620,12 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
               return (
                 <div
                   key={client.id}
-                  className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4 flex flex-wrap items-center justify-between gap-3 text-sm"
+                  className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4 flex flex-wrap items-center justify-between gap-3 text-sm"
                 >
                   <div className="flex items-center gap-3">
                     <UserAvatar src={client.avatarUrl} name={client.fullName} sizeClass="w-10 h-10" />
                     <div>
-                      <div className="font-bold flex items-center gap-2 text-[#252A27] dark:text-[#F5F1E8]">
+                      <div className="font-bold flex items-center gap-2 text-[#1D252C] dark:text-[#F7F3EA]">
                         <span>{client.fullName}</span>
                         {client.suspended && (
                           <span className="text-xs text-red-600">(Suspendido)</span>
@@ -653,7 +653,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                     }}
                     className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold ${
                       client.suspended
-                        ? 'bg-[#304B3E] text-white dark:bg-[#B96F50]'
+                        ? 'bg-[#214438] text-white dark:bg-[#C7582B]'
                         : 'border border-red-300 text-red-700 dark:text-red-300'
                     }`}
                   >
@@ -674,16 +674,16 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
             value={proSearch}
             onChange={(e) => setProSearch(e.target.value)}
             placeholder="Buscar freelancer por nombre, marca personal o colonia..."
-            className="w-full px-4 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#222825] text-sm text-[#252A27] dark:text-[#F5F1E8]"
+            className="w-full px-4 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#1A2128] text-sm text-[#1D252C] dark:text-[#F7F3EA]"
           />
           <div className="space-y-3">
             {scopedPros.map((pro) => (
               <div
                 key={pro.id}
-                className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4 flex flex-wrap items-center justify-between gap-3 text-sm"
+                className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4 flex flex-wrap items-center justify-between gap-3 text-sm"
               >
                 <div>
-                  <div className="font-bold flex items-center gap-2 text-[#252A27] dark:text-[#F5F1E8]">
+                  <div className="font-bold flex items-center gap-2 text-[#1D252C] dark:text-[#F7F3EA]">
                     <span>{pro.commercialName || pro.displayName}</span>
                     {pro.pausedByAdmin && (
                       <span className="text-xs font-semibold text-red-600 dark:text-red-400">
@@ -701,7 +701,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                   <button
                     type="button"
                     onClick={() => setPreviewPro(pro)}
-                    className="px-3 py-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 text-xs font-medium inline-flex items-center gap-1.5 text-[#252A27] dark:text-[#F5F1E8]"
+                    className="px-3 py-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 text-xs font-medium inline-flex items-center gap-1.5 text-[#1D252C] dark:text-[#F7F3EA]"
                   >
                     <Eye className="w-3.5 h-3.5" />
                     Ver ficha
@@ -719,7 +719,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                     }}
                     className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold ${
                       pro.pausedByAdmin
-                        ? 'bg-[#304B3E] text-white dark:bg-[#B96F50]'
+                        ? 'bg-[#214438] text-white dark:bg-[#C7582B]'
                         : 'border border-amber-400 text-amber-800 dark:text-amber-300'
                     }`}
                   >
@@ -735,17 +735,17 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
       {/* 5. Verificaciones */}
       {activeTab === 'verificaciones' && (
         <div className="space-y-6">
-          <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-4">
+          <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
-                <h3 className="text-base font-bold text-[#252A27] dark:text-[#F5F1E8]">
+                <h3 className="text-base font-bold text-[#1D252C] dark:text-[#F7F3EA]">
                   Bandeja privada de revisión de identidad y credenciales (Nivel 4)
                 </h3>
                 <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">
                   Acceso estrictamente restringido a administradores autorizados. Compara la INE y la fotografía frontal de rostro antes de aprobar.
                 </p>
               </div>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#304B3E]/10 dark:bg-white/10 text-[#304B3E] dark:text-[#B96F50] text-xs font-semibold">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#214438]/10 dark:bg-white/10 text-[#214438] dark:text-[#C7582B] text-xs font-semibold">
                 <Lock className="w-3.5 h-3.5" />
                 Solo uso administrativo
               </span>
@@ -756,7 +756,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
               value={reasonNote}
               onChange={(e) => setReasonNote(e.target.value)}
               placeholder="Nota u observación de revisión / corrección / rechazo (se guarda en bitácora)..."
-              className="w-full px-3.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-xs text-[#252A27] dark:text-[#F5F1E8]"
+              className="w-full px-3.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-xs text-[#1D252C] dark:text-[#F7F3EA]"
             />
 
             {scopedVerifications.length === 0 ? (
@@ -773,11 +773,11 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                 return (
                   <div
                     key={ver.id}
-                    className="p-4 sm:p-5 rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#EAE3D6]/45 dark:bg-[#1C211E] space-y-4 text-xs"
+                    className="p-4 sm:p-5 rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#ECE7DC]/45 dark:bg-[#161C22] space-y-4 text-xs"
                   >
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div>
-                        <div className="font-bold text-sm text-[#252A27] dark:text-[#F5F1E8]">
+                        <div className="font-bold text-sm text-[#1D252C] dark:text-[#F7F3EA]">
                           {proDisplay}
                         </div>
                         <p className="text-[#73766F] dark:text-[#A3A89F]">
@@ -802,10 +802,10 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                         return (
                           <div
                             key={doc.id}
-                            className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-3 flex flex-col gap-2.5"
+                            className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-3 flex flex-col gap-2.5"
                           >
                             <div className="flex items-center justify-between gap-2">
-                              <span className="font-bold text-[#304B3E] dark:text-[#B96F50]">
+                              <span className="font-bold text-[#214438] dark:text-[#C7582B]">
                                 {isFace
                                   ? 'Fotografía frontal de rostro'
                                   : doc.docKind === 'ine'
@@ -819,7 +819,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                               )}
                             </div>
 
-                            <div className="relative h-40 rounded-lg overflow-hidden bg-[#EAE3D6]/50 dark:bg-[#171B19] border border-[#DDD5C8] dark:border-white/10 flex items-center justify-center">
+                            <div className="relative h-40 rounded-lg overflow-hidden bg-[#ECE7DC]/50 dark:bg-[#171B19] border border-[#DBD4C6] dark:border-white/10 flex items-center justify-center">
                               {isRealPdf ? (
                                 <div className="text-center p-3">
                                   <p className="font-bold text-sm">Documento PDF adjunto</p>
@@ -855,7 +855,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                                     isDemo: resolved.isDemo,
                                   })
                                 }
-                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 font-semibold shrink-0 hover:bg-[#EAE3D6]/60 dark:hover:bg-[#1C211E]"
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 font-semibold shrink-0 hover:bg-[#ECE7DC]/60 dark:hover:bg-[#161C22]"
                               >
                                 <Eye className="w-3.5 h-3.5" />
                                 Ampliar
@@ -867,14 +867,14 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                     </div>
 
                     {ver.reviewReason && (
-                      <div className="p-2.5 rounded-lg bg-[#FFFCF7] dark:bg-[#222825] text-xs">
+                      <div className="p-2.5 rounded-lg bg-[#FFFDFA] dark:bg-[#1A2128] text-xs">
                         <strong>Última observación:</strong> {ver.reviewReason}
                       </div>
                     )}
 
                     {ver.history && ver.history.length > 0 && (
                       <div className="space-y-1 text-[11px] text-[#73766F] dark:text-[#A3A89F]">
-                        <p className="font-semibold text-[#252A27] dark:text-[#F5F1E8]">
+                        <p className="font-semibold text-[#1D252C] dark:text-[#F7F3EA]">
                           Historial de revisión:
                         </p>
                         {ver.history.map((h, idx) => (
@@ -903,7 +903,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                           refreshDb();
                           notify('Solicitud marcada En revisión.', 'info');
                         }}
-                        className="px-3 py-1.5 rounded-lg border border-[#304B3E]/40 text-[#304B3E] dark:text-[#B96F50] font-semibold"
+                        className="px-3 py-1.5 rounded-lg border border-[#214438]/40 text-[#214438] dark:text-[#C7582B] font-semibold"
                       >
                         Marcar en revisión
                       </button>
@@ -924,7 +924,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                           refreshDb();
                           notify('Verificación aprobada y nivel actualizado.', 'success');
                         }}
-                        className="px-3 py-1.5 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white font-semibold transition-colors"
+                        className="px-3 py-1.5 rounded-lg bg-[#214438] hover:bg-[#183329] text-white font-semibold transition-colors"
                       >
                         Aprobar credenciales
                       </button>
@@ -984,10 +984,10 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
         <div className="space-y-6">
           <form
             onSubmit={handleSaveCategory}
-            className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-3"
+            className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-3"
           >
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-bold text-[#252A27] dark:text-[#F5F1E8]">
+              <h3 className="text-base font-bold text-[#1D252C] dark:text-[#F7F3EA]">
                 {editingCatId
                   ? 'Editar categoría de servicio'
                   : 'Crear nueva categoría de servicio'}
@@ -1008,7 +1008,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                 value={catName}
                 onChange={(e) => setCatName(e.target.value)}
                 placeholder="Nombre (ej. Energía Solar)"
-                className="px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm text-[#252A27] dark:text-[#F5F1E8]"
+                className="px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm text-[#1D252C] dark:text-[#F7F3EA]"
                 required
               />
               <input
@@ -1016,12 +1016,12 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                 value={catDesc}
                 onChange={(e) => setCatDesc(e.target.value)}
                 placeholder="Descripción breve"
-                className="px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm text-[#252A27] dark:text-[#F5F1E8]"
+                className="px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm text-[#1D252C] dark:text-[#F7F3EA]"
               />
               <select
                 value={catIcon}
                 onChange={(e) => setCatIcon(e.target.value)}
-                className="px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm text-[#252A27] dark:text-[#F5F1E8]"
+                className="px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm text-[#1D252C] dark:text-[#F7F3EA]"
               >
                 <option value="Wrench">Herramienta</option>
                 <option value="Zap">Electricidad</option>
@@ -1033,7 +1033,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
             </div>
             <button
               type="submit"
-              className="px-4 py-2 rounded-xl bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] dark:text-[#FFFCF7] text-xs font-semibold transition-colors"
+              className="px-4 py-2 rounded-xl bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] dark:text-[#FFFDFA] text-xs font-semibold transition-colors"
             >
               {editingCatId ? 'Guardar cambios' : 'Agregar categoría'}
             </button>
@@ -1043,11 +1043,11 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
             {db.categories.map((cat) => (
               <div
                 key={cat.id}
-                className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4 space-y-3 text-sm"
+                className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4 space-y-3 text-sm"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <span className="font-bold text-[#252A27] dark:text-[#F5F1E8]">{cat.name}</span>
+                    <span className="font-bold text-[#1D252C] dark:text-[#F7F3EA]">{cat.name}</span>
                     <p className="text-xs text-[#73766F] dark:text-[#A3A89F] mt-0.5">{cat.description}</p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
@@ -1059,7 +1059,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                         setCatDesc(cat.description);
                         setCatIcon(cat.iconName);
                       }}
-                      className="text-xs font-medium text-[#304B3E] dark:text-[#B96F50] hover:underline"
+                      className="text-xs font-medium text-[#214438] dark:text-[#C7582B] hover:underline"
                     >
                       Editar
                     </button>
@@ -1080,7 +1080,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-[#DDD5C8] dark:border-white/10 space-y-2 text-xs">
+                <div className="pt-2 border-t border-[#DBD4C6] dark:border-white/10 space-y-2 text-xs">
                   <div className="flex flex-wrap gap-1.5">
                     {cat.subcategories.map((sub) => (
                       <button
@@ -1100,7 +1100,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                         }}
                         className={`px-2 py-0.5 rounded border text-[11px] ${
                           sub.active
-                            ? 'bg-[#EAE3D6]/70 dark:bg-[#1C211E] border-[#DDD5C8] dark:border-white/12'
+                            ? 'bg-[#ECE7DC]/70 dark:bg-[#161C22] border-[#DBD4C6] dark:border-white/12'
                             : 'opacity-50 line-through border-dashed'
                         }`}
                       >
@@ -1116,7 +1116,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                         setSubcatInputMap((prev) => ({ ...prev, [cat.id]: e.target.value }))
                       }
                       placeholder="Nueva subcategoría..."
-                      className="flex-1 px-2.5 py-1 rounded border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-xs"
+                      className="flex-1 px-2.5 py-1 rounded border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-xs"
                     />
                     <button
                       type="button"
@@ -1142,7 +1142,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                         refreshDb();
                         notify('Subcategoría agregada.', 'success');
                       }}
-                      className="px-2.5 py-1 rounded bg-[#304B3E] text-white dark:bg-[#B96F50] dark:text-[#FFFCF7] text-xs font-semibold"
+                      className="px-2.5 py-1 rounded bg-[#214438] text-white dark:bg-[#C7582B] dark:text-[#FFFDFA] text-xs font-semibold"
                     >
                       + Subcategoría
                     </button>
@@ -1161,7 +1161,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
             Solicitudes de servicio registradas ({scopedRequests.length}).
           </p>
           {scopedRequests.length === 0 ? (
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-8 text-center text-sm text-[#73766F] dark:text-[#A3A89F]">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-8 text-center text-sm text-[#73766F] dark:text-[#A3A89F]">
               No hay solicitudes registradas en este ámbito.
             </div>
           ) : (
@@ -1171,13 +1171,13 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
               return (
                 <div
                   key={req.id}
-                  className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4 flex flex-wrap items-center justify-between gap-3 text-sm"
+                  className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4 flex flex-wrap items-center justify-between gap-3 text-sm"
                 >
                   <div>
-                    <div className="text-xs font-semibold uppercase text-[#304B3E] dark:text-[#B96F50]">
+                    <div className="text-xs font-semibold uppercase text-[#214438] dark:text-[#C7582B]">
                       {cat?.name || 'Servicio'} · Col. {req.colonia} · Estado: {req.status}
                     </div>
-                    <h4 className="font-bold text-[#252A27] dark:text-[#F5F1E8]">{req.title}</h4>
+                    <h4 className="font-bold text-[#1D252C] dark:text-[#F7F3EA]">{req.title}</h4>
                     <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">
                       Cliente: {client?.fullName || 'Cliente'} · Fecha deseada: {req.desiredDate} ·
                       Freelancers invitados: {req.recipientProfessionalIds.length}
@@ -1200,20 +1200,20 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
             Inspección administrativa de contrataciones dentro de tu ámbito ({scopedBookings.length}).
           </p>
           {scopedBookings.length === 0 ? (
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-8 text-center text-sm text-[#73766F] dark:text-[#A3A89F]">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-8 text-center text-sm text-[#73766F] dark:text-[#A3A89F]">
               No hay contrataciones registradas en este ámbito.
             </div>
           ) : (
             scopedBookings.map((b) => (
               <div
                 key={b.id}
-                className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4 flex flex-wrap items-center justify-between gap-3 text-sm"
+                className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4 flex flex-wrap items-center justify-between gap-3 text-sm"
               >
                 <div>
-                  <div className="text-xs font-semibold uppercase text-[#304B3E] dark:text-[#B96F50]">
+                  <div className="text-xs font-semibold uppercase text-[#214438] dark:text-[#C7582B]">
                     {b.status} · Col. {b.colonia} · Región: {b.regionId}
                   </div>
-                  <h4 className="font-bold text-[#252A27] dark:text-[#F5F1E8]">{b.serviceTitle}</h4>
+                  <h4 className="font-bold text-[#1D252C] dark:text-[#F7F3EA]">{b.serviceTitle}</h4>
                   <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">
                     Cita: {b.scheduledDate} {b.scheduledTime} · Monto acordado:{' '}
                     <span className="font-mono-num">{formatMXN(b.agreedAmountMxn)}</span>
@@ -1235,7 +1235,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                     refreshDb();
                     notify('Inspección registrada en bitácora de auditoría.', 'info');
                   }}
-                  className="px-3 py-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 text-xs font-medium text-[#252A27] dark:text-[#F5F1E8]"
+                  className="px-3 py-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 text-xs font-medium text-[#1D252C] dark:text-[#F7F3EA]"
                 >
                   Registrar inspección
                 </button>
@@ -1249,19 +1249,19 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
       {activeTab === 'moderacion' && (
         <div className="space-y-6">
           <div className="space-y-3">
-            <h3 className="text-base font-bold text-[#252A27] dark:text-[#F5F1E8]">Reportes de moderación ({scopedReports.length})</h3>
+            <h3 className="text-base font-bold text-[#1D252C] dark:text-[#F7F3EA]">Reportes de moderación ({scopedReports.length})</h3>
             {scopedReports.map((rep) => (
               <div
                 key={rep.id}
-                className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4 space-y-2 text-xs"
+                className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4 space-y-2 text-xs"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-bold uppercase text-[#304B3E] dark:text-[#B96F50]">
+                  <span className="font-bold uppercase text-[#214438] dark:text-[#C7582B]">
                     {rep.targetType} · Estado: {rep.status}
                   </span>
                   <span className="text-[#73766F] dark:text-[#A3A89F]">{formatDateMX(rep.createdAt, true)}</span>
                 </div>
-                <p className="text-sm text-[#252A27] dark:text-[#F5F1E8]">{rep.reason}</p>
+                <p className="text-sm text-[#1D252C] dark:text-[#F7F3EA]">{rep.reason}</p>
                 <div className="flex flex-wrap gap-2">
                   {(
                     [
@@ -1283,7 +1283,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                         refreshDb();
                         notify('Reporte actualizado.', 'success');
                       }}
-                      className="px-3 py-1.5 rounded border border-[#DDD5C8] dark:border-white/15 font-medium"
+                      className="px-3 py-1.5 rounded border border-[#DBD4C6] dark:border-white/15 font-medium"
                     >
                       {btn.label}
                     </button>
@@ -1294,16 +1294,16 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
           </div>
 
           <div className="space-y-3">
-            <h3 className="text-base font-bold text-[#252A27] dark:text-[#F5F1E8]">
+            <h3 className="text-base font-bold text-[#1D252C] dark:text-[#F7F3EA]">
               Moderación de reseñas en ámbito ({scopedReviews.length})
             </h3>
             {scopedReviews.map((rev) => (
               <div
                 key={rev.id}
-                className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4 flex flex-wrap items-center justify-between gap-3 text-xs"
+                className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4 flex flex-wrap items-center justify-between gap-3 text-xs"
               >
                 <div>
-                  <span className="font-bold text-sm text-[#252A27] dark:text-[#F5F1E8]">
+                  <span className="font-bold text-sm text-[#1D252C] dark:text-[#F7F3EA]">
                     {rev.clientName} ({rev.rating}/5)
                   </span>{' '}
                   · {rev.serviceName}
@@ -1323,7 +1323,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                       'info'
                     );
                   }}
-                  className="px-3 py-1.5 rounded border border-[#DDD5C8] dark:border-white/20 font-semibold"
+                  className="px-3 py-1.5 rounded border border-[#DBD4C6] dark:border-white/20 font-semibold"
                 >
                   {rev.hiddenByAdmin ? 'Restaurar reseña' : 'Ocultar reseña'}
                 </button>
@@ -1337,11 +1337,11 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
       {activeTab === 'reportes' && (
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-base font-bold text-[#252A27] dark:text-[#F5F1E8]">Centro global de reportes</h3>
+            <h3 className="text-base font-bold text-[#1D252C] dark:text-[#F7F3EA]">Centro global de reportes</h3>
             <select
               value={reportFilter}
               onChange={(e) => setReportFilter(e.target.value)}
-              className="px-3 py-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#222825] text-xs"
+              className="px-3 py-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#1A2128] text-xs"
             >
               <option value="all">Todos</option>
               <option value="open">Abiertos</option>
@@ -1355,15 +1355,15 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
             .map((rep) => (
               <div
                 key={rep.id}
-                className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4 space-y-2 text-xs"
+                className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4 space-y-2 text-xs"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-bold uppercase text-[#304B3E] dark:text-[#B96F50]">
+                  <span className="font-bold uppercase text-[#214438] dark:text-[#C7582B]">
                     {rep.targetType} · Región {rep.regionId} · Estado: {rep.status}
                   </span>
                   <span className="text-[#73766F] dark:text-[#A3A89F]">{formatDateMX(rep.createdAt, true)}</span>
                 </div>
-                <p className="text-sm text-[#252A27] dark:text-[#F5F1E8]">{rep.reason}</p>
+                <p className="text-sm text-[#1D252C] dark:text-[#F7F3EA]">{rep.reason}</p>
                 {rep.adminNotes && <p className="text-[#73766F] dark:text-[#A3A89F]">Nota: {rep.adminNotes}</p>}
                 <div className="flex flex-wrap gap-2">
                   {(
@@ -1386,7 +1386,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                         refreshDb();
                         notify('Reporte actualizado.', 'success');
                       }}
-                      className="px-3 py-1.5 rounded border border-[#DDD5C8] dark:border-white/15 font-medium"
+                      className="px-3 py-1.5 rounded border border-[#DBD4C6] dark:border-white/15 font-medium"
                     >
                       {btn.label}
                     </button>
@@ -1401,18 +1401,18 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
       {activeTab === 'soporte' && (
         <div className="space-y-4">
           {scopedTickets.length === 0 ? (
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-8 text-center text-sm text-[#73766F] dark:text-[#A3A89F]">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-8 text-center text-sm text-[#73766F] dark:text-[#A3A89F]">
               No hay tickets de soporte en este ámbito.
             </div>
           ) : (
             scopedTickets.map((t) => (
               <div
                 key={t.id}
-                className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4 space-y-3 text-xs"
+                className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4 space-y-3 text-xs"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-sm text-[#252A27] dark:text-[#F5F1E8]">{t.subject}</span>
-                  <span className="uppercase font-semibold text-[#304B3E] dark:text-[#B96F50]">
+                  <span className="font-bold text-sm text-[#1D252C] dark:text-[#F7F3EA]">{t.subject}</span>
+                  <span className="uppercase font-semibold text-[#214438] dark:text-[#C7582B]">
                     {t.status} · Prioridad {t.priority}
                   </span>
                 </div>
@@ -1420,7 +1420,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                   Creado por {t.creatorName} (Región {t.regionId}): {t.description}
                 </p>
                 {t.evidenceNote && (
-                  <p className="p-2.5 rounded-lg bg-[#EAE3D6]/60 dark:bg-[#1C211E]">
+                  <p className="p-2.5 rounded-lg bg-[#ECE7DC]/60 dark:bg-[#161C22]">
                     <strong>Última respuesta:</strong> {t.evidenceNote}
                   </p>
                 )}
@@ -1432,7 +1432,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                       setTicketReplyMap((prev) => ({ ...prev, [t.id]: e.target.value }))
                     }
                     placeholder="Escribir respuesta o nota de seguimiento..."
-                    className="flex-1 px-3 py-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-xs"
+                    className="flex-1 px-3 py-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-xs"
                   />
                   <button
                     type="button"
@@ -1444,7 +1444,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                       refreshDb();
                       notify('Respuesta enviada y registrada.', 'success');
                     }}
-                    className="px-3 py-1.5 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] dark:text-[#FFFCF7] font-semibold transition-colors"
+                    className="px-3 py-1.5 rounded-lg bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] dark:text-[#FFFDFA] font-semibold transition-colors"
                   >
                     Responder
                   </button>
@@ -1459,7 +1459,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                         refreshDb();
                         notify(`Ticket actualizado a ${st}.`, 'success');
                       }}
-                      className="px-3 py-1 rounded border border-[#DDD5C8] dark:border-white/15"
+                      className="px-3 py-1 rounded border border-[#DBD4C6] dark:border-white/15"
                     >
                       {st}
                     </button>
@@ -1476,10 +1476,10 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
         <div className="space-y-6">
           <form
             onSubmit={handleCreateRegion}
-            className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-3"
+            className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-3"
           >
-            <h3 className="text-base font-bold flex items-center gap-2 text-[#252A27] dark:text-[#F5F1E8]">
-              <Plus className="w-4 h-4 text-[#B96F50]" />
+            <h3 className="text-base font-bold flex items-center gap-2 text-[#1D252C] dark:text-[#F7F3EA]">
+              <Plus className="w-4 h-4 text-[#C7582B]" />
               Registrar nueva región operativa
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1488,7 +1488,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                 value={regName}
                 onChange={(e) => setRegName(e.target.value)}
                 placeholder="Municipio o zona (ej. Naucalpan)"
-                className="px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                className="px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                 required
               />
               <input
@@ -1496,7 +1496,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                 value={regState}
                 onChange={(e) => setRegState(e.target.value)}
                 placeholder="Estado (ej. Estado de México)"
-                className="px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                className="px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                 required
               />
               <input
@@ -1504,12 +1504,12 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                 value={regColoniasText}
                 onChange={(e) => setRegColoniasText(e.target.value)}
                 placeholder="Colonias iniciales separadas por coma"
-                className="px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                className="px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               />
             </div>
             <button
               type="submit"
-              className="px-4 py-2 rounded-xl bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] dark:text-[#FFFCF7] text-xs font-semibold transition-colors"
+              className="px-4 py-2 rounded-xl bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] dark:text-[#FFFDFA] text-xs font-semibold transition-colors"
             >
               Crear región
             </button>
@@ -1519,11 +1519,11 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
             {db.regions.map((r) => (
               <div
                 key={r.id}
-                className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-3 text-xs"
+                className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-3 text-xs"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <span className="font-bold text-base text-[#252A27] dark:text-[#F5F1E8]">
+                    <span className="font-bold text-base text-[#1D252C] dark:text-[#F7F3EA]">
                       {r.name}, {r.state}
                     </span>
                     <p className="text-[#73766F] dark:text-[#A3A89F]">
@@ -1554,7 +1554,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                   {r.colonias.map((col) => (
                     <span
                       key={col}
-                      className="px-2 py-0.5 rounded bg-[#EAE3D6]/70 dark:bg-[#1C211E] border border-[#DDD5C8] dark:border-white/12"
+                      className="px-2 py-0.5 rounded bg-[#ECE7DC]/70 dark:bg-[#161C22] border border-[#DBD4C6] dark:border-white/12"
                     >
                       {col}
                     </span>
@@ -1569,7 +1569,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                       setNewColoniaMap((prev) => ({ ...prev, [r.id]: e.target.value }))
                     }
                     placeholder="Agregar colonia a esta región..."
-                    className="flex-1 px-3 py-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-xs"
+                    className="flex-1 px-3 py-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-xs"
                   />
                   <button
                     type="button"
@@ -1585,7 +1585,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                       refreshDb();
                       notify('Colonia agregada a la región.', 'success');
                     }}
-                    className="px-3 py-1.5 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white font-semibold transition-colors"
+                    className="px-3 py-1.5 rounded-lg bg-[#214438] hover:bg-[#183329] text-white font-semibold transition-colors"
                   >
                     + Colonia
                   </button>
@@ -1600,34 +1600,34 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
       {activeTab === 'seguridad' && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4">
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Cuentas suspendidas</p>
-              <p className="font-mono-num text-2xl font-bold text-[#252A27] dark:text-[#F5F1E8] mt-1">
+              <p className="font-mono-num text-2xl font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-1">
                 {db.profiles.filter((p) => p.suspended).length}
               </p>
             </div>
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4">
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Freelancers pausados</p>
-              <p className="font-mono-num text-2xl font-bold text-[#252A27] dark:text-[#F5F1E8] mt-1">
+              <p className="font-mono-num text-2xl font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-1">
                 {db.professionals.filter((p) => p.pausedByAdmin).length}
               </p>
             </div>
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4">
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Correos sin confirmar</p>
-              <p className="font-mono-num text-2xl font-bold text-[#252A27] dark:text-[#F5F1E8] mt-1">
+              <p className="font-mono-num text-2xl font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-1">
                 {db.profiles.filter((p) => !p.emailConfirmed).length}
               </p>
             </div>
           </div>
 
-          <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-3 text-xs">
-            <h3 className="text-base font-bold text-[#252A27] dark:text-[#F5F1E8]">Cuentas con privilegios administrativos</h3>
+          <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-3 text-xs">
+            <h3 className="text-base font-bold text-[#1D252C] dark:text-[#F7F3EA]">Cuentas con privilegios administrativos</h3>
             {db.profiles
               .filter((p) => p.roles.includes('central_admin'))
               .map((adm) => (
                 <div
                   key={adm.id}
-                  className="p-3 rounded-lg bg-[#EAE3D6]/50 dark:bg-[#1C211E] flex items-center justify-between"
+                  className="p-3 rounded-lg bg-[#ECE7DC]/50 dark:bg-[#161C22] flex items-center justify-between"
                 >
                   <div>
                     <span className="font-bold text-sm">{adm.fullName}</span>
@@ -1635,7 +1635,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                       {adm.email} · Región: {adm.regionId}
                     </p>
                   </div>
-                  <span className="font-semibold uppercase text-[#304B3E] dark:text-[#75836A]">
+                  <span className="font-semibold uppercase text-[#214438] dark:text-[#75836A]">
                     {adm.primaryRole}
                   </span>
                 </div>
@@ -1646,15 +1646,15 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
 
       {/* 14. Auditoría (Central Admin only) */}
       {activeTab === 'auditoria' && (
-        <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-2">
-          <h3 className="text-base font-bold text-[#252A27] dark:text-[#F5F1E8]">Historial completo de auditoría global</h3>
+        <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-2">
+          <h3 className="text-base font-bold text-[#1D252C] dark:text-[#F7F3EA]">Historial completo de auditoría global</h3>
           {scopedAuditLogs.length === 0 ? (
             <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">No hay eventos de auditoría todavía.</p>
           ) : (
             scopedAuditLogs.map((log) => (
               <div
                 key={log.id}
-                className="py-2 border-b border-[#DDD5C8] dark:border-white/10 text-xs flex flex-wrap justify-between gap-2"
+                className="py-2 border-b border-[#DBD4C6] dark:border-white/10 text-xs flex flex-wrap justify-between gap-2"
               >
                 <div>
                   <strong>{log.action}</strong> ({log.targetEntity} #{log.targetId}) ·{' '}
@@ -1672,9 +1672,9 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
 
       {/* 15. Notificaciones */}
       {activeTab === 'notificaciones' && (
-        <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-3">
+        <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-[#252A27] dark:text-[#F5F1E8]">Notificaciones administrativas</h3>
+            <h3 className="text-sm font-bold text-[#1D252C] dark:text-[#F7F3EA]">Notificaciones administrativas</h3>
             {unreadNotifs > 0 && (
               <button
                 type="button"
@@ -1682,7 +1682,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                   notificationsService.markAllRead(currentUser.id);
                   refreshDb();
                 }}
-                className="text-xs font-semibold text-[#304B3E] dark:text-[#B96F50] hover:underline"
+                className="text-xs font-semibold text-[#214438] dark:text-[#C7582B] hover:underline"
               >
                 Marcar leídas
               </button>
@@ -1694,10 +1694,10 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
             myNotifications.map((n) => (
               <div
                 key={n.id}
-                className="py-2.5 border-b border-[#DDD5C8] dark:border-white/10 text-xs flex justify-between gap-2"
+                className="py-2.5 border-b border-[#DBD4C6] dark:border-white/10 text-xs flex justify-between gap-2"
               >
                 <div>
-                  <p className="font-semibold text-sm text-[#252A27] dark:text-[#F5F1E8]">{n.title}</p>
+                  <p className="font-semibold text-sm text-[#1D252C] dark:text-[#F7F3EA]">{n.title}</p>
                   <p className="text-[#73766F] dark:text-[#A3A89F]">{n.body}</p>
                 </div>
                 <span className="text-[#73766F] dark:text-[#A3A89F] whitespace-nowrap">
@@ -1712,8 +1712,8 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
       {/* 16. Configuración */}
       {activeTab === 'configuracion' && (
         <div className="space-y-5 max-w-2xl">
-          <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-6 space-y-3">
-            <h3 className="text-base font-bold text-[#252A27] dark:text-[#F5F1E8]">Apariencia del panel</h3>
+          <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-6 space-y-3">
+            <h3 className="text-base font-bold text-[#1D252C] dark:text-[#F7F3EA]">Apariencia del panel</h3>
             <div className="grid grid-cols-3 gap-3">
               {(['light', 'dark', 'system'] as ThemePreference[]).map((opt) => (
                 <button
@@ -1722,8 +1722,8 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                   onClick={() => setTheme(opt)}
                   className={`py-2 rounded-lg border text-xs font-semibold transition-colors ${
                     theme === opt
-                      ? 'bg-[#304B3E] text-white border-[#304B3E] dark:bg-[#B96F50] dark:border-[#B96F50] dark:text-[#FFFCF7]'
-                      : 'border-[#DDD5C8] dark:border-white/15 text-[#252A27] dark:text-[#F5F1E8]'
+                      ? 'bg-[#214438] text-white border-[#214438] dark:bg-[#C7582B] dark:border-[#C7582B] dark:text-[#FFFDFA]'
+                      : 'border-[#DBD4C6] dark:border-white/15 text-[#1D252C] dark:text-[#F7F3EA]'
                   }`}
                 >
                   {opt === 'light' ? 'Claro' : opt === 'dark' ? 'Oscuro' : 'Sistema'}
@@ -1732,8 +1732,8 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
             </div>
           </div>
 
-          <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-6 space-y-3 text-xs">
-            <h3 className="text-base font-bold text-[#252A27] dark:text-[#F5F1E8]">Sesión administrativa</h3>
+          <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-6 space-y-3 text-xs">
+            <h3 className="text-base font-bold text-[#1D252C] dark:text-[#F7F3EA]">Sesión administrativa</h3>
             <p className="text-[#73766F] dark:text-[#A3A89F]">
               Cuenta activa: <strong>{currentUser.email}</strong> · Rol:{' '}
               <strong>Administrador Central</strong>
@@ -1753,34 +1753,34 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
       {activeTab === 'estadisticas' && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4">
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Regiones activas</p>
-              <p className="font-mono-num text-2xl font-bold text-[#252A27] dark:text-[#F5F1E8] mt-1">
+              <p className="font-mono-num text-2xl font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-1">
                 {db.regions.filter((r) => r.active).length} / {db.regions.length}
               </p>
             </div>
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4">
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Categorías activas</p>
-              <p className="font-mono-num text-2xl font-bold text-[#252A27] dark:text-[#F5F1E8] mt-1">
+              <p className="font-mono-num text-2xl font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-1">
                 {db.categories.filter((c) => c.active).length} / {db.categories.length}
               </p>
             </div>
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4">
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Cotizaciones aceptadas</p>
-              <p className="font-mono-num text-2xl font-bold text-[#252A27] dark:text-[#F5F1E8] mt-1">
+              <p className="font-mono-num text-2xl font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-1">
                 {db.quotes.filter((q) => q.status === 'accepted').length} / {db.quotes.length}
               </p>
             </div>
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4">
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Servicios completados</p>
-              <p className="font-mono-num text-2xl font-bold text-[#252A27] dark:text-[#F5F1E8] mt-1">
+              <p className="font-mono-num text-2xl font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-1">
                 {db.bookings.filter((b) => b.status === 'completed').length} / {db.bookings.length}
               </p>
             </div>
           </div>
 
-          <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-3 text-xs">
-            <h3 className="text-base font-bold text-[#252A27] dark:text-[#F5F1E8]">Distribución por categoría</h3>
+          <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-3 text-xs">
+            <h3 className="text-base font-bold text-[#1D252C] dark:text-[#F7F3EA]">Distribución por categoría</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {db.categories.map((cat) => {
                 const prosInCat = db.professionals.filter((p) =>
@@ -1790,9 +1790,9 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                 return (
                   <div
                     key={cat.id}
-                    className="p-3 rounded-lg bg-[#EAE3D6]/55 dark:bg-[#1C211E] flex items-center justify-between"
+                    className="p-3 rounded-lg bg-[#ECE7DC]/55 dark:bg-[#161C22] flex items-center justify-between"
                   >
-                    <span className="font-semibold text-[#252A27] dark:text-[#F5F1E8]">{cat.name}</span>
+                    <span className="font-semibold text-[#1D252C] dark:text-[#F7F3EA]">{cat.name}</span>
                     <span className="text-[#73766F] dark:text-[#A3A89F]">
                       {prosInCat} freelancers · {reqsInCat} solicitudes
                     </span>
@@ -1814,22 +1814,22 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
           onClick={() => setInspectingDoc(null)}
         >
           <div
-            className="w-full max-w-2xl rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/15 overflow-hidden shadow-2xl"
+            className="w-full max-w-2xl rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/15 overflow-hidden shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="px-5 py-3.5 border-b border-[#DDD5C8] dark:border-white/10 flex items-center justify-between gap-3">
+            <div className="px-5 py-3.5 border-b border-[#DBD4C6] dark:border-white/10 flex items-center justify-between gap-3">
               <div className="min-w-0">
-                <p className="text-[11px] font-semibold uppercase text-[#304B3E] dark:text-[#B96F50]">
+                <p className="text-[11px] font-semibold uppercase text-[#214438] dark:text-[#C7582B]">
                   Revisión privada · {inspectingDoc.proName}
                   {inspectingDoc.isDemo ? ' · DEMO' : ''}
                 </p>
-                <h4 className="font-bold text-sm truncate text-[#252A27] dark:text-[#F5F1E8]">{inspectingDoc.label}</h4>
+                <h4 className="font-bold text-sm truncate text-[#1D252C] dark:text-[#F7F3EA]">{inspectingDoc.label}</h4>
               </div>
               <button
                 type="button"
                 onClick={() => setInspectingDoc(null)}
                 aria-label="Cerrar vista ampliada"
-                className="p-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15"
+                className="p-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1872,15 +1872,15 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
           onClick={() => setPreviewPro(null)}
         >
           <div
-            className="w-full max-w-lg rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/15 shadow-2xl overflow-hidden"
+            className="w-full max-w-lg rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/15 shadow-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="px-5 py-3.5 border-b border-[#DDD5C8] dark:border-white/10 flex items-center justify-between gap-3">
+            <div className="px-5 py-3.5 border-b border-[#DBD4C6] dark:border-white/10 flex items-center justify-between gap-3">
               <div>
-                <p className="text-[11px] font-semibold uppercase text-[#304B3E] dark:text-[#B96F50]">
+                <p className="text-[11px] font-semibold uppercase text-[#214438] dark:text-[#C7582B]">
                   Ficha interna de freelancer
                 </p>
-                <h4 className="font-bold text-sm text-[#252A27] dark:text-[#F5F1E8]">
+                <h4 className="font-bold text-sm text-[#1D252C] dark:text-[#F7F3EA]">
                   {previewPro.commercialName || previewPro.displayName}
                 </h4>
               </div>
@@ -1888,7 +1888,7 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                 type="button"
                 onClick={() => setPreviewPro(null)}
                 aria-label="Cerrar ficha"
-                className="p-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15"
+                className="p-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1901,22 +1901,22 @@ export const AdminPanelPage: React.FC<AdminPanelPageProps> = ({
                   sizeClass="w-12 h-12"
                 />
                 <div>
-                  <p className="font-bold text-sm text-[#252A27] dark:text-[#F5F1E8]">{previewPro.displayName}</p>
+                  <p className="font-bold text-sm text-[#1D252C] dark:text-[#F7F3EA]">{previewPro.displayName}</p>
                   <p className="text-[#73766F] dark:text-[#A3A89F] flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5 text-[#B96F50]" />
+                    <MapPin className="w-3.5 h-3.5 text-[#C7582B]" />
                     Col. {previewPro.primaryColonia} · Nivel {previewPro.verificationLevel}/4 ·{' '}
                     {previewPro.ratingAvg.toFixed(1)} ★ ({previewPro.reviewsCount} reseñas)
                   </p>
                 </div>
               </div>
-              <p className="text-[#252A27]/85 dark:text-[#F5F1E8]/85 leading-relaxed">
+              <p className="text-[#1D252C]/85 dark:text-[#F7F3EA]/85 leading-relaxed">
                 {previewPro.bio}
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {previewPro.specialties.map((s) => (
                   <span
                     key={s}
-                    className="px-2 py-0.5 rounded bg-[#EAE3D6] dark:bg-white/10 font-medium"
+                    className="px-2 py-0.5 rounded bg-[#ECE7DC] dark:bg-white/10 font-medium"
                   >
                     {s}
                   </span>

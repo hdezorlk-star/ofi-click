@@ -6,9 +6,10 @@ import type {
   Profile,
   Region,
 } from '../../types/oficlick';
+import { ALL_IZCALLI_COLONIAS, IZCALLI_HERO_IMAGE } from '../../data/izcalliLocations';
 
 export const LOCAL_IMAGES = {
-  hero: '/src/assets/images/hero_craftsman_home_1795488295692.jpg',
+  hero: IZCALLI_HERO_IMAGE,
   plumbing: '/src/assets/images/service_plumbing_work_1795488295847.jpg',
   electrical: '/src/assets/images/service_electrical_lighting_1795488296087.jpg',
   carpentry: '/src/assets/images/service_carpentry_woodwork_1795488297078.jpg',
@@ -16,7 +17,7 @@ export const LOCAL_IMAGES = {
   clientAvatarDemo:
     'data:image/svg+xml;utf8,' +
     encodeURIComponent(
-      `<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><rect width="160" height="160" rx="80" fill="#EAE3D6"/><circle cx="80" cy="60" r="28" fill="#304B3E"/><path d="M36 138c6-26 24-38 44-38s38 12 44 38" fill="#304B3E"/><circle cx="71" cy="57" r="2.5" fill="#F5F1E8"/><circle cx="89" cy="57" r="2.5" fill="#F5F1E8"/><path d="M72 68c4 4 12 4 16 0" stroke="#F5F1E8" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>`
+      `<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><rect width="160" height="160" rx="80" fill="#ECE7DC"/><circle cx="80" cy="60" r="28" fill="#1D252C"/><path d="M36 138c6-26 24-38 44-38s38 12 44 38" fill="#1D252C"/><circle cx="71" cy="57" r="2.5" fill="#F7F3EA"/><circle cx="89" cy="57" r="2.5" fill="#F7F3EA"/><path d="M72 68c4 4 12 4 16 0" stroke="#F7F3EA" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>`
     ),
 };
 
@@ -38,24 +39,7 @@ export const INITIAL_REGIONS: Region[] = [
     country: 'México',
     active: true,
     center: { lat: 19.6562, lng: -99.2104 },
-    colonias: [
-      'Centro Urbano',
-      'Ensueños',
-      'Cumbria',
-      'Atlanta',
-      'Bosques del Lago',
-      'Arcos del Alba',
-      'Lago de Guadalupe',
-      'La Quebrada',
-      'San Martín Tepetlixpan',
-      'Cofradía de San Miguel',
-      'Infonavit Norte',
-      'Jardines de la Hacienda',
-      'Valle de las Flores',
-      'Tepalcapa',
-      'Campo Uno',
-      'Luis Echeverría',
-    ],
+    colonias: ALL_IZCALLI_COLONIAS,
   },
   {
     id: 'reg-tlalnepantla',

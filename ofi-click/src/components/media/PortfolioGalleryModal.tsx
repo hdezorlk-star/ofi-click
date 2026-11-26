@@ -52,12 +52,12 @@ export const PortfolioGalleryModal: React.FC<PortfolioGalleryModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-4xl rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/15 overflow-hidden shadow-2xl"
+        className="w-full max-w-4xl rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/15 overflow-hidden shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="px-5 py-3.5 border-b border-[#DDD5C8] dark:border-white/10 flex items-center justify-between gap-3">
+        <div className="px-5 py-3.5 border-b border-[#DBD4C6] dark:border-white/10 flex items-center justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-[11px] font-semibold text-[#304B3E] dark:text-[#B96F50] flex items-center gap-1.5">
+            <p className="text-[11px] font-semibold text-[#214438] dark:text-[#C7582B] flex items-center gap-1.5">
               {item.origin === 'oficlick_completed' ? (
                 <>
                   <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
@@ -73,7 +73,7 @@ export const PortfolioGalleryModal: React.FC<PortfolioGalleryModalProps> = ({
             </p>
             <h3
               id="portfolio-lightbox-title"
-              className="font-display font-bold text-base sm:text-lg text-[#252A27] dark:text-[#F5F1E8] truncate"
+              className="font-display font-bold text-base sm:text-lg text-[#1D252C] dark:text-[#F7F3EA] truncate"
             >
               {item.title}
             </h3>
@@ -82,14 +82,14 @@ export const PortfolioGalleryModal: React.FC<PortfolioGalleryModalProps> = ({
             type="button"
             onClick={onClose}
             aria-label="Cerrar galería de proyecto"
-            className="p-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 text-[#73766F] hover:text-[#252A27] dark:hover:text-white"
+            className="p-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 text-[#73766F] hover:text-[#1D252C] dark:hover:text-white"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Enlarged Main Image */}
-        <div className="relative bg-[#171B19] flex items-center justify-center min-h-[260px] max-h-[60vh]">
+        <div className="relative bg-[#12171C] flex items-center justify-center min-h-[260px] max-h-[60vh]">
           <SafeImage
             src={photos[currentIdx]}
             alt={`${item.title} - foto ${currentIdx + 1}`}
@@ -124,7 +124,7 @@ export const PortfolioGalleryModal: React.FC<PortfolioGalleryModalProps> = ({
 
         {/* Thumbnails */}
         {photos.length > 1 && (
-          <div className="px-5 py-3 bg-[#EAE3D6]/50 dark:bg-[#1C211E] border-t border-[#DDD5C8] dark:border-white/10 flex items-center gap-2 overflow-x-auto">
+          <div className="px-5 py-3 bg-[#ECE7DC]/50 dark:bg-[#161C22] border-t border-[#DBD4C6] dark:border-white/10 flex items-center gap-2 overflow-x-auto">
             {photos.map((photo, idx) => (
               <button
                 key={`${item.id}-thumb-${idx}`}
@@ -133,7 +133,7 @@ export const PortfolioGalleryModal: React.FC<PortfolioGalleryModalProps> = ({
                 aria-label={`Ver fotografía ${idx + 1}`}
                 className={`w-16 h-12 rounded-lg overflow-hidden shrink-0 border-2 transition-all ${
                   idx === currentIdx
-                    ? 'border-[#B96F50] ring-2 ring-[#B96F50]/30'
+                    ? 'border-[#C7582B] ring-2 ring-[#C7582B]/30'
                     : 'border-transparent opacity-70 hover:opacity-100'
                 }`}
               >
@@ -149,7 +149,7 @@ export const PortfolioGalleryModal: React.FC<PortfolioGalleryModalProps> = ({
 
         {/* Project Details */}
         <div className="p-5 space-y-2.5 text-sm">
-          <p className="text-[#252A27]/90 dark:text-[#F5F1E8]/90 leading-relaxed">
+          <p className="text-[#1D252C]/90 dark:text-[#F7F3EA]/90 leading-relaxed">
             {item.description}
           </p>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#73766F] dark:text-[#A3A89F]">

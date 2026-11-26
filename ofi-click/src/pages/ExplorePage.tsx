@@ -13,6 +13,7 @@ import type { SearchFilters, SortOption } from '../types/oficlick';
 import { filterAndSortProfessionals } from '../utils/marketplace';
 import { ProfessionalCard } from '../components/ProfessionalCard';
 import { ServiceMap } from '../components/map/ServiceMap';
+import { ALL_IZCALLI_COLONIAS } from '../data/izcalliLocations';
 
 const DEFAULT_FILTERS: SearchFilters = {
   query: '',
@@ -67,6 +68,10 @@ export const ExplorePage: React.FC<{
   }, [initialQuery, initialCategoryId, initialColonia]);
 
   const activeRegion = db.regions.find((r) => r.active) || db.regions[0];
+  const izcalliColonias = useMemo(
+    () => (activeRegion?.colonias?.length ? activeRegion.colonias : ALL_IZCALLI_COLONIAS),
+    [activeRegion]
+  );
   const activeCategories = db.categories.filter((c) => c.active);
   const selectedCategory = activeCategories.find((c) => c.id === filters.categoryId);
 
@@ -250,7 +255,7 @@ export const ExplorePage: React.FC<{
   return (
     <Wrapper className={embedded ? 'space-y-4' : 'max-w-7xl mx-auto px-4 sm:px-6 py-6 min-h-[80vh]'}>
       {/* Search & Controls Bar */}
-      <div className="rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/10 p-4 mb-5 shadow-xs">
+      <div className="rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/10 p-4 mb-5 shadow-xs">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
           <div className="md:col-span-3">
             <label htmlFor="explore-query" className="sr-only">
@@ -262,7 +267,7 @@ export const ExplorePage: React.FC<{
               value={filters.query}
               onChange={(e) => setFilters((f) => ({ ...f, query: e.target.value }))}
               placeholder="Buscar servicio, colonia..."
-              className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#DDD5C8] dark:border-white/15 bg-[#F5F1E8]/60 dark:bg-black/20"
+              className="w-full px-3.5 py-2 text-sm rounded-xl border border-[#DBD4C6] dark:border-white/15 bg-[#F7F3EA]/60 dark:bg-black/20"
             />
           </div>
 
@@ -281,7 +286,7 @@ export const ExplorePage: React.FC<{
                   serviceId: '',
                 }))
               }
-              className="w-full px-3 py-2 text-sm rounded-xl border border-[#DDD5C8] dark:border-white/15 bg-[#F5F1E8]/60 dark:bg-black/20"
+              className="w-full px-3 py-2 text-sm rounded-xl border border-[#DBD4C6] dark:border-white/15 bg-[#F7F3EA]/60 dark:bg-black/20"
             >
               <option value="">Todas las categorías</option>
               {activeCategories.map((c) => (
@@ -300,7 +305,7 @@ export const ExplorePage: React.FC<{
               id="explore-service"
               value={filters.serviceId}
               onChange={(e) => setFilters((f) => ({ ...f, serviceId: e.target.value }))}
-              className="w-full px-3 py-2 text-sm rounded-xl border border-[#DDD5C8] dark:border-white/15 bg-[#F5F1E8]/60 dark:bg-black/20"
+              className="w-full px-3 py-2 text-sm rounded-xl border border-[#DBD4C6] dark:border-white/15 bg-[#F7F3EA]/60 dark:bg-black/20"
             >
               <option value="">Todos los servicios</option>
               {availableServices.map((srv) => (
@@ -319,10 +324,10 @@ export const ExplorePage: React.FC<{
               id="explore-colonia"
               value={filters.colonia}
               onChange={(e) => setFilters((f) => ({ ...f, colonia: e.target.value }))}
-              className="w-full px-3 py-2 text-sm rounded-xl border border-[#DDD5C8] dark:border-white/15 bg-[#F5F1E8]/60 dark:bg-black/20"
+              className="w-full px-3 py-2 text-sm rounded-xl border border-[#DBD4C6] dark:border-white/15 bg-[#F7F3EA]/60 dark:bg-black/20"
             >
-              <option value="">Todo Cuautitlán Izcalli</option>
-              {activeRegion.colonias.map((c) => (
+              <option value="">Todo Cuautitlán Izcalli ({izcalliColonias.length})</option>
+              {izcalliColonias.map((c) => (
                 <option key={c} value={c}>
                   {c}
                 </option>
@@ -335,7 +340,7 @@ export const ExplorePage: React.FC<{
               type="button"
               onClick={() => setFiltersOpen(!filtersOpen)}
               aria-expanded={filtersOpen}
-              className="w-full py-2 px-3 rounded-xl border border-[#DDD5C8] dark:border-white/15 bg-[#EAE3D6]/50 dark:bg-white/5 text-xs font-semibold inline-flex items-center justify-center gap-1.5 hover:bg-[#EAE3D6] dark:hover:bg-white/10 transition-colors"
+              className="w-full py-2 px-3 rounded-xl border border-[#DBD4C6] dark:border-white/15 bg-[#ECE7DC]/50 dark:bg-white/5 text-xs font-semibold inline-flex items-center justify-center gap-1.5 hover:bg-[#ECE7DC] dark:hover:bg-white/10 transition-colors"
             >
               <Filter className="w-3.5 h-3.5" />
               Más filtros
@@ -345,7 +350,7 @@ export const ExplorePage: React.FC<{
 
         {/* Advanced filters drawer */}
         {filtersOpen && (
-          <div className="mt-4 pt-4 border-t border-[#DDD5C8] dark:border-white/10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+          <div className="mt-4 pt-4 border-t border-[#DBD4C6] dark:border-white/10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
             {selectedCategory && selectedCategory.subcategories.length > 0 && (
               <div>
                 <label className="block font-medium mb-1">Subcategoría</label>
@@ -354,7 +359,7 @@ export const ExplorePage: React.FC<{
                   onChange={(e) =>
                     setFilters((f) => ({ ...f, subcategoryId: e.target.value }))
                   }
-                  className="w-full px-2.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-transparent"
+                  className="w-full px-2.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-transparent"
                 >
                   <option value="">Todas</option>
                   {selectedCategory.subcategories.map((sub) => (
@@ -373,7 +378,7 @@ export const ExplorePage: React.FC<{
                 onChange={(e) =>
                   setFilters((f) => ({ ...f, minRating: Number(e.target.value) }))
                 }
-                className="w-full px-2.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-transparent"
+                className="w-full px-2.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-transparent"
               >
                 <option value={0}>Cualquiera</option>
                 <option value={4}>4.0+ estrellas</option>
@@ -392,7 +397,7 @@ export const ExplorePage: React.FC<{
                     availability: e.target.value as SearchFilters['availability'],
                   }))
                 }
-                className="w-full px-2.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-transparent"
+                className="w-full px-2.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-transparent"
               >
                 <option value="all">Todas</option>
                 <option value="available">Disponible ahora</option>
@@ -413,7 +418,7 @@ export const ExplorePage: React.FC<{
                     maxPrice: e.target.value ? Number(e.target.value) : null,
                   }))
                 }
-                className="w-full px-2.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-transparent"
+                className="w-full px-2.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-transparent"
               />
             </div>
 
@@ -429,7 +434,7 @@ export const ExplorePage: React.FC<{
                     minExperienceYears: Number(e.target.value) || 0,
                   }))
                 }
-                className="w-full px-2.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-transparent"
+                className="w-full px-2.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-transparent"
               />
             </div>
 
@@ -445,7 +450,7 @@ export const ExplorePage: React.FC<{
                     minCompletedJobs: Number(e.target.value) || 0,
                   }))
                 }
-                className="w-full px-2.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-transparent"
+                className="w-full px-2.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-transparent"
               />
             </div>
 
@@ -486,14 +491,14 @@ export const ExplorePage: React.FC<{
 
         {/* Active filter chips */}
         {activeFilterChips.length > 0 && (
-          <div className="mt-3 pt-3 border-t border-[#DDD5C8] dark:border-white/10 flex flex-wrap items-center gap-2 text-xs">
+          <div className="mt-3 pt-3 border-t border-[#DBD4C6] dark:border-white/10 flex flex-wrap items-center gap-2 text-xs">
             <span className="text-[#73766F] font-medium">Filtros activos:</span>
             {activeFilterChips.map((chip) => (
               <button
                 key={chip.key}
                 type="button"
                 onClick={chip.clear}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#EAE3D6] dark:bg-white/10 text-[#252A27] dark:text-[#F5F1E8] font-medium hover:bg-[#B96F50]/20"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#ECE7DC] dark:bg-white/10 text-[#1D252C] dark:text-[#F7F3EA] font-medium hover:bg-[#C7582B]/20"
               >
                 <span>{chip.label}</span>
                 <X className="w-3 h-3" />
@@ -502,27 +507,27 @@ export const ExplorePage: React.FC<{
             <button
               type="button"
               onClick={resetAllFilters}
-              className="text-xs font-semibold text-[#304B3E] dark:text-[#B96F50] hover:underline ml-1"
+              className="text-xs font-semibold text-[#214438] dark:text-[#C7582B] hover:underline ml-1"
             >
               Limpiar todo
             </button>
           </div>
         )}
 
-        <div className="mt-3 pt-3 border-t border-[#DDD5C8] dark:border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="mt-3 pt-3 border-t border-[#DBD4C6] dark:border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="font-semibold text-[#252A27] dark:text-[#F5F1E8] font-mono-num">
+            <span className="font-semibold text-[#1D252C] dark:text-[#F7F3EA] font-mono-num">
               {results.length} {results.length === 1 ? 'resultado' : 'resultados'} en lista y mapa
             </span>
             {isUpdatingFilters && (
-              <span className="text-[11px] text-[#304B3E] dark:text-[#B96F50]">
+              <span className="text-[11px] text-[#214438] dark:text-[#C7582B]">
                 Actualizando mapa...
               </span>
             )}
             <button
               type="button"
               onClick={handleRequestLocation}
-              className="inline-flex items-center gap-1 text-[#304B3E] dark:text-[#B96F50] font-medium hover:underline"
+              className="inline-flex items-center gap-1 text-[#214438] dark:text-[#C7582B] font-medium hover:underline"
             >
               <LocateFixed className="w-3.5 h-3.5" />
               Ordenar por cercanía (opcional)
@@ -540,7 +545,7 @@ export const ExplorePage: React.FC<{
               id="sort-select"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="px-2.5 py-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-transparent font-medium"
+              className="px-2.5 py-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-transparent font-medium"
             >
               <option value="relevance">Relevancia</option>
               <option value="rating">Mejor calificación</option>
@@ -553,7 +558,7 @@ export const ExplorePage: React.FC<{
               type="button"
               onClick={resetAllFilters}
               aria-label="Restablecer filtros"
-              className="p-1.5 rounded-lg text-[#73766F] hover:bg-[#EAE3D6] dark:hover:bg-white/10"
+              className="p-1.5 rounded-lg text-[#73766F] hover:bg-[#ECE7DC] dark:hover:bg-white/10"
             >
               <RotateCcw className="w-3.5 h-3.5" />
             </button>
@@ -562,12 +567,12 @@ export const ExplorePage: React.FC<{
       </div>
 
       {/* Mobile list/map toggle */}
-      <div className="lg:hidden mb-4 grid grid-cols-2 gap-1 p-1 rounded-xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/10">
+      <div className="lg:hidden mb-4 grid grid-cols-2 gap-1 p-1 rounded-xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/10">
         <button
           type="button"
           onClick={() => setMobileView('list')}
           className={`py-2 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-1.5 ${
-            mobileView === 'list' ? 'bg-[#304B3E] text-white' : 'text-[#73766F]'
+            mobileView === 'list' ? 'bg-[#214438] text-white' : 'text-[#73766F]'
           }`}
         >
           <List className="w-4 h-4" />
@@ -577,7 +582,7 @@ export const ExplorePage: React.FC<{
           type="button"
           onClick={() => setMobileView('map')}
           className={`py-2 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-1.5 ${
-            mobileView === 'map' ? 'bg-[#304B3E] text-white' : 'text-[#73766F]'
+            mobileView === 'map' ? 'bg-[#214438] text-white' : 'text-[#73766F]'
           }`}
         >
           <MapIcon className="w-4 h-4" />
@@ -593,8 +598,8 @@ export const ExplorePage: React.FC<{
           }`}
         >
           {results.length === 0 ? (
-            <div className="rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/10 p-10 text-center">
-              <p className="font-display font-bold text-lg text-[#252A27] dark:text-[#F5F1E8]">
+            <div className="rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/10 p-10 text-center">
+              <p className="font-display font-bold text-lg text-[#1D252C] dark:text-[#F7F3EA]">
                 No hay profesionales con esos filtros
               </p>
               <p className="text-sm text-[#73766F] mt-1">
@@ -603,7 +608,7 @@ export const ExplorePage: React.FC<{
               <button
                 type="button"
                 onClick={resetAllFilters}
-                className="mt-4 px-4 py-2 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-xs font-semibold transition-colors"
+                className="mt-4 px-4 py-2 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-xs font-semibold transition-colors"
               >
                 Limpiar filtros
               </button>
@@ -637,6 +642,8 @@ export const ExplorePage: React.FC<{
             professionals={results}
             selectedProId={selectedProId}
             hoveredProId={hoveredProId}
+            selectedColonia={filters.colonia}
+            onSelectColonia={(col) => setFilters((f) => ({ ...f, colonia: col }))}
             onSelectPro={handleMapSelectPro}
             onHoverPro={(id) => setHoveredProId(id)}
             onOpenProfile={(id) => navigate({ page: 'pro-profile', proId: id })}
@@ -646,14 +653,14 @@ export const ExplorePage: React.FC<{
 
       {/* Compare floating trigger when 1..3 pros selected */}
       {compareIds.length > 0 && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-30 rounded-xl bg-[#304B3E] text-white px-4 py-2.5 shadow-xl border border-white/15 flex items-center gap-3 text-xs">
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-30 rounded-xl bg-[#214438] text-white px-4 py-2.5 shadow-xl border border-white/15 flex items-center gap-3 text-xs">
           <span className="font-mono-num">
             {compareIds.length}/3 seleccionados para comparar
           </span>
           <button
             type="button"
             onClick={() => navigate({ page: 'compare' })}
-            className="px-3 py-1.5 rounded-lg bg-[#B96F50] hover:bg-[#a65e41] text-white font-semibold inline-flex items-center gap-1 transition-colors"
+            className="px-3 py-1.5 rounded-lg bg-[#C7582B] hover:bg-[#AC4921] text-white font-semibold inline-flex items-center gap-1 transition-colors"
           >
             <ArrowLeftRight className="w-3.5 h-3.5" />
             Comparar ahora

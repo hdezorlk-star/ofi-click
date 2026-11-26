@@ -558,8 +558,8 @@ export interface PreparedEmailRecord {
   subject: string;
   htmlBody: string;
   textBody: string;
-  deliveryStatus: 'prepared_local_only';
-  providerConfigured: false;
+  deliveryStatus: 'prepared_local_only' | 'sent' | 'failed';
+  providerConfigured: boolean;
   metadata?: Record<string, string>;
   createdAt: string;
 }

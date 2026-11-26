@@ -60,7 +60,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
     >
       {logoMark}
       <span
-        className={`font-display font-bold tracking-tight ${textSize} text-[#252A27] dark:text-[#F5F1E8]`}
+        className={`font-display font-bold tracking-tight ${textSize} text-[#1D252C] dark:text-[#F7F3EA]`}
       >
         OFI CLICK
       </span>

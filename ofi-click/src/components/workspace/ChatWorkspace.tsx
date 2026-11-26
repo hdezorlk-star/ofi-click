@@ -252,9 +252,9 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
 
   if (myConversations.length === 0) {
     return (
-      <div className="rounded-xl border border-[#DDD5C8] dark:border-white/10 bg-[#FFFCF7] dark:bg-[#222825] p-8 text-center">
+      <div className="rounded-xl border border-[#DBD4C6] dark:border-white/10 bg-[#FFFDFA] dark:bg-[#1A2128] p-8 text-center">
         <MessageSquare className="w-10 h-10 mx-auto text-[#73766F] mb-3" />
-        <h3 className="text-lg font-semibold text-[#252A27] dark:text-[#F5F1E8]">
+        <h3 className="text-lg font-semibold text-[#1D252C] dark:text-[#F7F3EA]">
           Sin conversaciones activas
         </h3>
         <p className="text-sm text-[#73766F] dark:text-[#A3A89F] mt-1 max-w-md mx-auto">
@@ -271,15 +271,15 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
 
   return (
     <>
-      <div className="grid grid-cols-1 lg:grid-cols-12 rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] overflow-hidden min-h-[540px]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] overflow-hidden min-h-[540px]">
         {/* Conversation list */}
-        <div className="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-[#DDD5C8] dark:border-white/10 flex flex-col max-h-[300px] lg:max-h-[640px]">
-          <div className="px-4 py-3.5 border-b border-[#DDD5C8] dark:border-white/10 bg-[#EAE3D6]/50 dark:bg-[#1C211E]">
-            <h3 className="text-sm font-semibold text-[#252A27] dark:text-[#F5F1E8]">
+        <div className="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-[#DBD4C6] dark:border-white/10 flex flex-col max-h-[300px] lg:max-h-[640px]">
+          <div className="px-4 py-3.5 border-b border-[#DBD4C6] dark:border-white/10 bg-[#ECE7DC]/50 dark:bg-[#161C22]">
+            <h3 className="text-sm font-semibold text-[#1D252C] dark:text-[#F7F3EA]">
               Conversaciones ({myConversations.length})
             </h3>
           </div>
-          <div className="overflow-y-auto divide-y divide-[#DDD5C8]/70 dark:divide-white/8">
+          <div className="overflow-y-auto divide-y divide-[#DBD4C6]/70 dark:divide-white/8">
             {myConversations.map((conv) => {
               const other = resolveOtherParticipant(conv);
               const msgs = db.messages.filter((m) => m.conversationId === conv.id);
@@ -296,18 +296,18 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                   onClick={() => setSelectedConvId(conv.id)}
                   className={`w-full text-left px-4 py-3.5 transition-colors flex items-start gap-3 ${
                     active
-                      ? 'bg-[#EAE3D6] dark:bg-[#2A312D]'
-                      : 'hover:bg-[#EAE3D6]/45 dark:hover:bg-white/5'
+                      ? 'bg-[#ECE7DC] dark:bg-[#2A312D]'
+                      : 'hover:bg-[#ECE7DC]/45 dark:hover:bg-white/5'
                   }`}
                 >
                   <UserAvatar src={other.avatarUrl} name={other.name} sizeClass="w-10 h-10" />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="font-semibold text-sm text-[#252A27] dark:text-[#F5F1E8] truncate">
+                      <span className="font-semibold text-sm text-[#1D252C] dark:text-[#F7F3EA] truncate">
                         {other.name}
                       </span>
                       {unread > 0 && (
-                        <span className="px-1.5 py-0.5 text-[11px] font-bold rounded bg-[#B96F50] text-white">
+                        <span className="px-1.5 py-0.5 text-[11px] font-bold rounded bg-[#C7582B] text-white">
                           {unread}
                         </span>
                       )}
@@ -326,11 +326,11 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
         {selectedConv && otherInfo ? (
           <div className="lg:col-span-8 flex flex-col max-h-[640px]">
             {/* Header */}
-            <div className="px-4 py-3 border-b border-[#DDD5C8] dark:border-white/10 flex flex-wrap items-center justify-between gap-3 bg-[#FFFCF7] dark:bg-[#222825]">
+            <div className="px-4 py-3 border-b border-[#DBD4C6] dark:border-white/10 flex flex-wrap items-center justify-between gap-3 bg-[#FFFDFA] dark:bg-[#1A2128]">
               <div className="flex items-center gap-3 min-w-0">
                 <UserAvatar src={otherInfo.avatarUrl} name={otherInfo.name} sizeClass="w-9 h-9" />
                 <div className="min-w-0">
-                  <h4 className="font-semibold text-sm text-[#252A27] dark:text-[#F5F1E8] truncate">
+                  <h4 className="font-semibold text-sm text-[#1D252C] dark:text-[#F7F3EA] truncate">
                     {otherInfo.name}
                   </h4>
                   <p className="text-xs text-[#73766F] dark:text-[#A3A89F] truncate">
@@ -342,7 +342,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                 <button
                   type="button"
                   onClick={() => setShowReportBox((v) => !v)}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 text-xs font-medium text-[#252A27] dark:text-[#F5F1E8] hover:bg-[#EAE3D6]/60 dark:hover:bg-white/10 whitespace-nowrap"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 text-xs font-medium text-[#1D252C] dark:text-[#F7F3EA] hover:bg-[#ECE7DC]/60 dark:hover:bg-white/10 whitespace-nowrap"
                 >
                   <ShieldAlert className="w-3.5 h-3.5" />
                   Reportar
@@ -352,8 +352,8 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                   onClick={handleToggleBlock}
                   className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-xs font-medium whitespace-nowrap ${
                     blockedByMe
-                      ? 'border-[#B96F50] bg-[#B96F50]/15 text-[#252A27] dark:text-[#F5F1E8]'
-                      : 'border-[#DDD5C8] dark:border-white/15 text-[#252A27] dark:text-[#F5F1E8] hover:bg-red-50 dark:hover:bg-red-950/30'
+                      ? 'border-[#C7582B] bg-[#C7582B]/15 text-[#1D252C] dark:text-[#F7F3EA]'
+                      : 'border-[#DBD4C6] dark:border-white/15 text-[#1D252C] dark:text-[#F7F3EA] hover:bg-red-50 dark:hover:bg-red-950/30'
                   }`}
                 >
                   <Ban className="w-3.5 h-3.5" />
@@ -373,12 +373,12 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                   value={reportReason}
                   onChange={(e) => setReportReason(e.target.value)}
                   placeholder="Describe el motivo del reporte para moderación..."
-                  className="flex-1 min-w-[200px] px-3 py-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-xs text-[#252A27] dark:text-[#F5F1E8]"
+                  className="flex-1 min-w-[200px] px-3 py-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-xs text-[#1D252C] dark:text-[#F7F3EA]"
                   required
                 />
                 <button
                   type="submit"
-                  className="px-3 py-1.5 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-xs font-medium whitespace-nowrap transition-colors"
+                  className="px-3 py-1.5 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-xs font-medium whitespace-nowrap transition-colors"
                 >
                   Enviar reporte
                 </button>
@@ -386,7 +386,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
             )}
 
             {/* Message stream */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#F5F1E8]/55 dark:bg-[#171B19]">
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#F7F3EA]/55 dark:bg-[#12171C]">
               {convMessages.map((msg) => {
                 const isMine = msg.senderId === currentUser.id;
                 const linkedQuote = msg.quoteId
@@ -408,15 +408,15 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                     <div
                       className={`max-w-[85%] sm:max-w-[75%] rounded-xl px-4 py-2.5 text-sm shadow-xs ${
                         isMine
-                          ? 'bg-[#304B3E] text-[#FFFFFF] dark:bg-[#B96F50] dark:text-white'
-                          : 'bg-[#FFFCF7] dark:bg-[#222825] text-[#252A27] dark:text-[#F5F1E8] border border-[#DDD5C8] dark:border-white/10'
+                          ? 'bg-[#214438] text-[#FFFFFF] dark:bg-[#C7582B] dark:text-white'
+                          : 'bg-[#FFFDFA] dark:bg-[#1A2128] text-[#1D252C] dark:text-[#F7F3EA] border border-[#DBD4C6] dark:border-white/10'
                       }`}
                     >
                       <p className="whitespace-pre-wrap leading-relaxed">{msg.text}</p>
 
                       {/* Real Chat Attachment Rendering */}
                       {attName && (
-                        <div className="mt-2 rounded-lg overflow-hidden border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] text-[#252A27] dark:bg-[#1C211E] dark:text-[#F5F1E8]">
+                        <div className="mt-2 rounded-lg overflow-hidden border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] text-[#1D252C] dark:bg-[#161C22] dark:text-[#F7F3EA]">
                           {attKind === 'image' && resolvedAtt.url ? (
                             <div className="space-y-1.5 p-2">
                               <button
@@ -458,7 +458,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                                         sizeBytes: msg.attachment?.sizeBytes,
                                       })
                                     }
-                                    className="font-semibold text-[#304B3E] dark:text-[#B96F50] hover:underline inline-flex items-center gap-1"
+                                    className="font-semibold text-[#214438] dark:text-[#C7582B] hover:underline inline-flex items-center gap-1"
                                   >
                                     <Eye className="w-3 h-3" />
                                     Ampliar
@@ -466,7 +466,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                                   <a
                                     href={resolvedAtt.url}
                                     download={attName}
-                                    className="font-semibold text-[#304B3E] dark:text-[#B96F50] hover:underline inline-flex items-center gap-1"
+                                    className="font-semibold text-[#214438] dark:text-[#C7582B] hover:underline inline-flex items-center gap-1"
                                   >
                                     <Download className="w-3 h-3" />
                                     Descargar
@@ -478,9 +478,9 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                             <div className="p-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
                               <div className="flex items-center gap-2 min-w-0">
                                 {attKind === 'image' ? (
-                                  <ImageIcon className="w-4 h-4 shrink-0 text-[#304B3E] dark:text-[#B96F50]" />
+                                  <ImageIcon className="w-4 h-4 shrink-0 text-[#214438] dark:text-[#C7582B]" />
                                 ) : (
-                                  <FileText className="w-4 h-4 shrink-0 text-[#304B3E] dark:text-[#B96F50]" />
+                                  <FileText className="w-4 h-4 shrink-0 text-[#214438] dark:text-[#C7582B]" />
                                 )}
                                 <div className="min-w-0">
                                   <p className="font-semibold truncate">{attName}</p>
@@ -509,7 +509,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                                           sizeBytes: msg.attachment?.sizeBytes,
                                         })
                                       }
-                                      className="px-2.5 py-1 rounded bg-[#EAE3D6] dark:bg-white/10 font-semibold text-[11px] inline-flex items-center gap-1"
+                                      className="px-2.5 py-1 rounded bg-[#ECE7DC] dark:bg-white/10 font-semibold text-[11px] inline-flex items-center gap-1"
                                     >
                                       <Eye className="w-3 h-3" />
                                       Ver
@@ -518,7 +518,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                                   <a
                                     href={resolvedAtt.url}
                                     download={attName}
-                                    className="px-2.5 py-1 rounded bg-[#304B3E] text-white font-semibold text-[11px] inline-flex items-center gap-1"
+                                    className="px-2.5 py-1 rounded bg-[#214438] text-white font-semibold text-[11px] inline-flex items-center gap-1"
                                   >
                                     <Download className="w-3 h-3" />
                                     Descargar
@@ -531,19 +531,19 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                       )}
 
                       {msg.attachmentType === 'location' && msg.sharedLocationNote && (
-                        <div className="mt-2 px-3 py-2 rounded-lg bg-[#304B3E]/15 dark:bg-[#304B3E]/40 text-xs flex items-center gap-2">
-                          <MapPin className="w-4 h-4 shrink-0 text-[#304B3E] dark:text-[#B96F50]" />
+                        <div className="mt-2 px-3 py-2 rounded-lg bg-[#214438]/15 dark:bg-[#214438]/40 text-xs flex items-center gap-2">
+                          <MapPin className="w-4 h-4 shrink-0 text-[#214438] dark:text-[#C7582B]" />
                           <span>Zona compartida: {msg.sharedLocationNote}</span>
                         </div>
                       )}
 
                       {linkedQuote && quoteVersion && (
-                        <div className="mt-2.5 p-3 rounded-lg bg-[#FFFCF7] text-[#252A27] dark:bg-[#1C211E] dark:text-[#F5F1E8] border border-[#DDD5C8] dark:border-white/15 space-y-2">
+                        <div className="mt-2.5 p-3 rounded-lg bg-[#FFFDFA] text-[#1D252C] dark:bg-[#161C22] dark:text-[#F7F3EA] border border-[#DBD4C6] dark:border-white/15 space-y-2">
                           <div className="flex items-center justify-between gap-2">
                             <span className="text-xs font-semibold uppercase tracking-wide text-[#73766F] dark:text-[#A3A89F]">
                               Cotización v{quoteVersion.versionNumber}
                             </span>
-                            <span className="text-xs font-semibold text-[#304B3E] dark:text-[#B96F50]">
+                            <span className="text-xs font-semibold text-[#214438] dark:text-[#C7582B]">
                               {linkedQuote.status === 'accepted'
                                 ? 'Aceptada'
                                 : linkedQuote.status === 'rejected'
@@ -555,7 +555,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                           <div className="text-xs text-[#73766F] dark:text-[#A3A89F] space-y-0.5">
                             <div>
                               Total:{' '}
-                              <strong className="font-mono-num text-[#252A27] dark:text-[#F5F1E8]">
+                              <strong className="font-mono-num text-[#1D252C] dark:text-[#F7F3EA]">
                                 {formatMXN(quoteVersion.totalAmount)}
                               </strong>{' '}
                               · Duración: {quoteVersion.estimatedDuration}
@@ -571,14 +571,14 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                                 <button
                                   type="button"
                                   onClick={() => handleAcceptQuote(linkedQuote.id)}
-                                  className="px-3 py-1.5 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] text-xs font-semibold whitespace-nowrap transition-colors"
+                                  className="px-3 py-1.5 rounded-lg bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#A8431B] text-xs font-semibold whitespace-nowrap transition-colors"
                                 >
                                   Aceptar cotización
                                 </button>
                                 <button
                                   type="button"
                                   onClick={() => handleRejectQuote(linkedQuote.id)}
-                                  className="px-3 py-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/20 text-xs font-medium whitespace-nowrap"
+                                  className="px-3 py-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/20 text-xs font-medium whitespace-nowrap"
                                 >
                                   Rechazar
                                 </button>
@@ -591,7 +591,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                       <span>{formatDateMX(msg.createdAt, true)}</span>
                       {isMine &&
                         (readByOther ? (
-                          <CheckCheck className="w-3.5 h-3.5 text-[#304B3E] dark:text-[#B96F50]" />
+                          <CheckCheck className="w-3.5 h-3.5 text-[#214438] dark:text-[#C7582B]" />
                         ) : (
                           <Check className="w-3.5 h-3.5" />
                         ))}
@@ -603,8 +603,8 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
 
             {/* Consent-based location prompt */}
             {showLocationConfirm && (
-              <div className="px-4 py-3 bg-[#EAE3D6] dark:bg-[#1C211E] border-t border-[#DDD5C8] dark:border-white/10 space-y-2">
-                <p className="text-xs font-medium text-[#252A27] dark:text-[#F5F1E8]">
+              <div className="px-4 py-3 bg-[#ECE7DC] dark:bg-[#161C22] border-t border-[#DBD4C6] dark:border-white/10 space-y-2">
+                <p className="text-xs font-medium text-[#1D252C] dark:text-[#F7F3EA]">
                   Compartir ubicación aproximada (solo visible en esta conversación):
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -613,19 +613,19 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                     value={locationReference}
                     onChange={(e) => setLocationReference(e.target.value)}
                     placeholder="Colonia o referencia cercana"
-                    className="flex-1 min-w-[200px] px-3 py-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#222825] text-xs text-[#252A27] dark:text-[#F5F1E8]"
+                    className="flex-1 min-w-[200px] px-3 py-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#1A2128] text-xs text-[#1D252C] dark:text-[#F7F3EA]"
                   />
                   <button
                     type="button"
                     onClick={handleShareLocation}
-                    className="px-3 py-1.5 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-xs font-medium whitespace-nowrap transition-colors"
+                    className="px-3 py-1.5 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-xs font-medium whitespace-nowrap transition-colors"
                   >
                     Confirmar envío
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowLocationConfirm(false)}
-                    className="px-3 py-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 text-xs whitespace-nowrap"
+                    className="px-3 py-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 text-xs whitespace-nowrap"
                   >
                     Cancelar
                   </button>
@@ -635,7 +635,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
 
             {/* Composer */}
             {isBlocked ? (
-              <div className="p-4 border-t border-[#DDD5C8] dark:border-white/10 bg-red-50/70 dark:bg-red-950/20 text-xs text-red-800 dark:text-red-300 flex items-center justify-between gap-3">
+              <div className="p-4 border-t border-[#DBD4C6] dark:border-white/10 bg-red-50/70 dark:bg-red-950/20 text-xs text-red-800 dark:text-red-300 flex items-center justify-between gap-3">
                 <span>
                   Esta conversación está bloqueada. No se pueden enviar nuevos mensajes.
                 </span>
@@ -643,7 +643,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                   <button
                     type="button"
                     onClick={handleToggleBlock}
-                    className="px-3 py-1 rounded bg-[#304B3E] text-white font-medium whitespace-nowrap"
+                    className="px-3 py-1 rounded bg-[#214438] text-white font-medium whitespace-nowrap"
                   >
                     Desbloquear
                   </button>
@@ -652,10 +652,10 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
             ) : (
               <form
                 onSubmit={handleSend}
-                className="p-3 border-t border-[#DDD5C8] dark:border-white/10 bg-[#FFFCF7] dark:bg-[#222825] space-y-2"
+                className="p-3 border-t border-[#DBD4C6] dark:border-white/10 bg-[#FFFDFA] dark:bg-[#1A2128] space-y-2"
               >
                 {pendingAttachment && (
-                  <div className="flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-[#EAE3D6] dark:bg-[#1C211E] text-xs">
+                  <div className="flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-[#ECE7DC] dark:bg-[#161C22] text-xs">
                     <div className="flex items-center gap-2.5 min-w-0">
                       {pendingAttachment.metadata.kind === 'image' ? (
                         <img
@@ -664,7 +664,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                           className="w-10 h-10 rounded object-cover shrink-0 border border-black/10"
                         />
                       ) : (
-                        <FileText className="w-5 h-5 text-[#304B3E] dark:text-[#B96F50] shrink-0" />
+                        <FileText className="w-5 h-5 text-[#214438] dark:text-[#C7582B] shrink-0" />
                       )}
                       <div className="min-w-0">
                         <p className="truncate font-semibold">{pendingAttachment.metadata.name}</p>
@@ -696,7 +696,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                     onClick={() => fileInputRef.current?.click()}
                     title="Adjuntar foto o documento (JPG, PNG, WEBP, PDF, DOC, DOCX, TXT · máx. 8 MB)"
                     aria-label="Adjuntar archivo en mensaje"
-                    className="p-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 text-[#73766F] hover:text-[#252A27] dark:hover:text-[#F5F1E8]"
+                    className="p-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 text-[#73766F] hover:text-[#1D252C] dark:hover:text-[#F7F3EA]"
                   >
                     <Paperclip className="w-4 h-4" />
                   </button>
@@ -705,7 +705,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                     onClick={() => setShowLocationConfirm((v) => !v)}
                     title="Compartir referencia de ubicación"
                     aria-label="Compartir referencia de ubicación"
-                    className="p-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 text-[#73766F] hover:text-[#252A27] dark:hover:text-[#F5F1E8]"
+                    className="p-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 text-[#73766F] hover:text-[#1D252C] dark:hover:text-[#F7F3EA]"
                   >
                     <MapPin className="w-4 h-4" />
                   </button>
@@ -714,12 +714,12 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                     value={messageText}
                     onChange={(e) => setMessageText(e.target.value)}
                     placeholder="Escribe un mensaje privado..."
-                    className="flex-1 px-3.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#EAE3D6]/40 dark:bg-[#1C211E] text-sm text-[#252A27] dark:text-[#F5F1E8] focus:outline-none focus:ring-2 focus:ring-[#304B3E]"
+                    className="flex-1 px-3.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#ECE7DC]/40 dark:bg-[#161C22] text-sm text-[#1D252C] dark:text-[#F7F3EA] focus:outline-none focus:ring-2 focus:ring-[#214438]"
                   />
                   <button
                     type="submit"
                     disabled={readingAttachment}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] text-sm font-semibold whitespace-nowrap transition-colors disabled:opacity-50"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#A8431B] text-sm font-semibold whitespace-nowrap transition-colors disabled:opacity-50"
                   >
                     <Send className="w-4 h-4" />
                     <span className="hidden sm:inline">Enviar</span>
@@ -742,10 +742,10 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
         >
           <div
             data-testid="chat-attachment-preview-modal"
-            className="w-full max-w-3xl rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-white/15 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+            className="w-full max-w-3xl rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-white/15 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="px-4 py-3 border-b border-[#DDD5C8] dark:border-white/10 flex items-center justify-between gap-3">
+            <div className="px-4 py-3 border-b border-[#DBD4C6] dark:border-white/10 flex items-center justify-between gap-3">
               <div className="min-w-0">
                 <p className="text-sm font-bold truncate">{previewModal.name}</p>
                 {previewModal.sizeBytes && (
@@ -758,7 +758,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                 <a
                   href={previewModal.url}
                   download={previewModal.name}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-xs font-semibold transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-xs font-semibold transition-colors"
                 >
                   <Download className="w-3.5 h-3.5" />
                   Descargar
@@ -773,7 +773,7 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                 </button>
               </div>
             </div>
-            <div className="p-4 overflow-auto flex-1 flex items-center justify-center bg-[#EAE3D6]/40 dark:bg-[#171B19]">
+            <div className="p-4 overflow-auto flex-1 flex items-center justify-center bg-[#ECE7DC]/40 dark:bg-[#12171C]">
               {previewModal.kind === 'image' ? (
                 <img
                   src={previewModal.url}
@@ -784,11 +784,11 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
                 <iframe
                   src={previewModal.url}
                   title={previewModal.name}
-                  className="w-full h-[70vh] rounded-lg border border-[#DDD5C8]"
+                  className="w-full h-[70vh] rounded-lg border border-[#DBD4C6]"
                 />
               ) : (
                 <div className="text-center space-y-3 p-6">
-                  <FileText className="w-12 h-12 mx-auto text-[#304B3E] dark:text-[#B96F50]" />
+                  <FileText className="w-12 h-12 mx-auto text-[#214438] dark:text-[#C7582B]" />
                   <p className="text-sm font-semibold">{previewModal.name}</p>
                   <p className="text-xs text-[#73766F]">
                     Usa el botón Descargar para abrir este archivo en tu dispositivo.

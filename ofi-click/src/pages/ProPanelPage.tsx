@@ -33,6 +33,7 @@ import {
   X,
 } from 'lucide-react';
 import { useOfiClick } from '../context/OfiClickContext';
+import { ALL_IZCALLI_COLONIAS } from '../data/izcalliLocations';
 import { DashboardShell, type DashboardNavItem } from '../components/workspace/DashboardShell';
 import { BookingCard } from '../components/workspace/BookingCard';
 import { BookingDetailModal } from '../components/workspace/BookingDetailModal';
@@ -241,15 +242,15 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
     }
   }, [pro?.id]);
 
-  const regionColonias = useMemo(
-    () => db.regions.find((r) => r.id === (pro?.regionId || 'reg-izcalli'))?.colonias || [],
-    [db.regions, pro?.regionId]
-  );
+  const regionColonias = useMemo(() => {
+    const reg = db.regions.find((r) => r.id === (pro?.regionId || 'reg-izcalli'));
+    return reg && reg.colonias.length > 0 ? reg.colonias : ALL_IZCALLI_COLONIAS;
+  }, [db.regions, pro?.regionId]);
 
   if (!currentUser || !pro || !canAccessWorkspaceRoute(currentUser, 'pro-panel')) {
     return (
       <div className="max-w-xl mx-auto px-4 py-16 text-center space-y-4">
-        <h1 className="text-2xl font-bold text-[#252A27] dark:text-[#F5F1E8]">
+        <h1 className="text-2xl font-bold text-[#1D252C] dark:text-[#F7F3EA]">
           Panel exclusivo para freelancers registrados
         </h1>
         <p className="text-sm text-[#73766F] dark:text-[#A3A89F]">
@@ -260,7 +261,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
           <button
             type="button"
             onClick={() => openAuthModal('login')}
-            className="px-5 py-2.5 rounded-xl bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] dark:text-[#FFFCF7] text-sm font-semibold transition-colors"
+            className="px-5 py-2.5 rounded-xl bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] dark:text-[#FFFDFA] text-sm font-semibold transition-colors"
           >
             Iniciar sesión
           </button>
@@ -655,7 +656,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
         <button
           type="button"
           onClick={() => setShowProfilePreviewModal(true)}
-          className="px-3.5 py-2 rounded-xl border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#222825] text-[#252A27] dark:text-[#F5F1E8] text-xs font-semibold whitespace-nowrap inline-flex items-center gap-1.5 hover:border-[#304B3E] dark:hover:border-[#B96F50] transition-colors"
+          className="px-3.5 py-2 rounded-xl border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#1A2128] text-[#1D252C] dark:text-[#F7F3EA] text-xs font-semibold whitespace-nowrap inline-flex items-center gap-1.5 hover:border-[#214438] dark:hover:border-[#C7582B] transition-colors"
         >
           <Eye className="w-3.5 h-3.5" />
           Vista previa de mi perfil
@@ -666,23 +667,23 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
       {activeTab === 'inicio' && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4">
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Importes cotizados vigentes</p>
-              <p className="font-mono-num text-2xl font-bold text-[#252A27] dark:text-[#F5F1E8] mt-1">
+              <p className="font-mono-num text-2xl font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-1">
                 {formatMXN(totalQuotedPending)}
               </p>
               <p className="text-[11px] text-[#73766F] dark:text-[#A3A89F] mt-1">Propuestas pendientes de aceptación</p>
             </div>
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4">
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Importes acordados</p>
-              <p className="font-mono-num text-2xl font-bold text-[#304B3E] dark:text-[#B96F50] mt-1">
+              <p className="font-mono-num text-2xl font-bold text-[#214438] dark:text-[#C7582B] mt-1">
                 {formatMXN(totalAgreedBookings)}
               </p>
               <p className="text-[11px] text-[#73766F] dark:text-[#A3A89F] mt-1">Citas aceptadas en curso o cerradas</p>
             </div>
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4">
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Cobro acordado fuera de OFI CLICK</p>
-              <p className="font-mono-num text-2xl font-bold text-[#252A27] dark:text-[#F5F1E8] mt-1">
+              <p className="font-mono-num text-2xl font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-1">
                 {formatMXN(totalCompletedOutside)}
               </p>
               <p className="text-[11px] text-[#73766F] dark:text-[#A3A89F] mt-1">
@@ -692,21 +693,21 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/10 bg-[#EAE3D6]/55 dark:bg-[#222825] p-4 text-xs">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/10 bg-[#ECE7DC]/55 dark:bg-[#1A2128] p-4 text-xs">
               <span className="text-[#73766F] dark:text-[#A3A89F]">Solicitudes recibidas</span>
-              <div className="font-mono-num text-xl font-bold text-[#252A27] dark:text-[#F5F1E8] mt-1">{incomingRequests.length}</div>
+              <div className="font-mono-num text-xl font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-1">{incomingRequests.length}</div>
             </div>
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/10 bg-[#EAE3D6]/55 dark:bg-[#222825] p-4 text-xs">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/10 bg-[#ECE7DC]/55 dark:bg-[#1A2128] p-4 text-xs">
               <span className="text-[#73766F] dark:text-[#A3A89F]">Trabajos completados</span>
-              <div className="font-mono-num text-xl font-bold text-[#252A27] dark:text-[#F5F1E8] mt-1">{pro.completedJobsCount}</div>
+              <div className="font-mono-num text-xl font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-1">{pro.completedJobsCount}</div>
             </div>
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/10 bg-[#EAE3D6]/55 dark:bg-[#222825] p-4 text-xs">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/10 bg-[#ECE7DC]/55 dark:bg-[#1A2128] p-4 text-xs">
               <span className="text-[#73766F] dark:text-[#A3A89F]">Calificación promedio</span>
-              <div className="font-mono-num text-xl font-bold text-[#252A27] dark:text-[#F5F1E8] mt-1">{pro.ratingAvg.toFixed(1)} / 5</div>
+              <div className="font-mono-num text-xl font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-1">{pro.ratingAvg.toFixed(1)} / 5</div>
             </div>
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/10 bg-[#EAE3D6]/55 dark:bg-[#222825] p-4 text-xs">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/10 bg-[#ECE7DC]/55 dark:bg-[#1A2128] p-4 text-xs">
               <span className="text-[#73766F] dark:text-[#A3A89F]">Tasa de respuesta</span>
-              <div className="font-mono-num text-xl font-bold text-[#252A27] dark:text-[#F5F1E8] mt-1">{pro.responseRatePercent}%</div>
+              <div className="font-mono-num text-xl font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-1">{pro.responseRatePercent}%</div>
             </div>
           </div>
 
@@ -730,7 +731,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
       {activeTab === 'solicitudes' && (
         <div className="space-y-4">
           {incomingRequests.length === 0 ? (
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-8 text-center text-sm text-[#73766F] dark:text-[#A3A89F]">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-8 text-center text-sm text-[#73766F] dark:text-[#A3A89F]">
               No tienes solicitudes nuevas asignadas en este momento.
             </div>
           ) : (
@@ -742,7 +743,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
               return (
                 <div
                   key={req.id}
-                  className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-3"
+                  className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-3"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="flex items-start gap-3">
@@ -752,10 +753,10 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                         sizeClass="w-10 h-10 mt-0.5"
                       />
                       <div>
-                        <div className="text-xs font-semibold uppercase text-[#304B3E] dark:text-[#B96F50]">
+                        <div className="text-xs font-semibold uppercase text-[#214438] dark:text-[#C7582B]">
                           Urgencia: {req.urgency} · Col. {req.colonia} · Mi estado: {myStatus}
                         </div>
-                        <h3 className="text-lg font-bold text-[#252A27] dark:text-[#F5F1E8] mt-0.5">
+                        <h3 className="text-lg font-bold text-[#1D252C] dark:text-[#F7F3EA] mt-0.5">
                           {req.title}
                         </h3>
                         <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">
@@ -767,12 +768,12 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                     {req.optionalBudgetMxn && (
                       <div className="text-right text-xs">
                         <span className="text-[#73766F] dark:text-[#A3A89F]">Presupuesto orientativo</span>
-                        <div className="font-mono-num font-bold text-sm text-[#252A27] dark:text-[#F5F1E8]">{formatMXN(req.optionalBudgetMxn)}</div>
+                        <div className="font-mono-num font-bold text-sm text-[#1D252C] dark:text-[#F7F3EA]">{formatMXN(req.optionalBudgetMxn)}</div>
                       </div>
                     )}
                   </div>
 
-                  <p className="text-sm text-[#252A27]/85 dark:text-[#F5F1E8]/85">
+                  <p className="text-sm text-[#1D252C]/85 dark:text-[#F7F3EA]/85">
                     {req.description}
                   </p>
 
@@ -780,7 +781,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                     <button
                       type="button"
                       onClick={() => handleOpenQuoteBuilder(req.id, existingQuote?.id)}
-                      className="px-4 py-2 rounded-xl bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] dark:text-[#FFFCF7] text-xs font-semibold whitespace-nowrap transition-colors"
+                      className="px-4 py-2 rounded-xl bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] dark:text-[#FFFDFA] text-xs font-semibold whitespace-nowrap transition-colors"
                     >
                       {existingQuote ? 'Editar cotización' : 'Enviar cotización'}
                     </button>
@@ -796,7 +797,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                         setActiveConvId(conv.id);
                         handleSelectTab('mensajes');
                       }}
-                      className="px-3.5 py-2 rounded-xl border border-[#DDD5C8] dark:border-white/15 text-[#252A27] dark:text-[#F5F1E8] text-xs font-medium whitespace-nowrap"
+                      className="px-3.5 py-2 rounded-xl border border-[#DBD4C6] dark:border-white/15 text-[#1D252C] dark:text-[#F7F3EA] text-xs font-medium whitespace-nowrap"
                     >
                       Pedir más información
                     </button>
@@ -827,10 +828,10 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
           {quotingRequestId && (
             <form
               onSubmit={handleSendQuote}
-              className="rounded-xl border border-[#B96F50]/60 bg-[#FFFCF7] dark:bg-[#222825] p-6 space-y-4"
+              className="rounded-xl border border-[#C7582B]/60 bg-[#FFFDFA] dark:bg-[#1A2128] p-6 space-y-4"
             >
               <div className="flex items-center justify-between">
-                <h3 className="text-base font-bold text-[#252A27] dark:text-[#F5F1E8]">
+                <h3 className="text-base font-bold text-[#1D252C] dark:text-[#F7F3EA]">
                   {editingQuoteId ? 'Nueva versión de cotización' : 'Crear cotización transparente'}
                 </h3>
                 <button
@@ -849,7 +850,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                     type="text"
                     value={quoteServiceName}
                     onChange={(e) => setQuoteServiceName(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                    className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                     required
                   />
                 </div>
@@ -859,7 +860,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                     type="text"
                     value={estimatedDuration}
                     onChange={(e) => setEstimatedDuration(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                    className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                     required
                   />
                 </div>
@@ -873,7 +874,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                     min={0}
                     value={laborAmount}
                     onChange={(e) => setLaborAmount(Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                    className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                   />
                 </div>
                 <div>
@@ -883,7 +884,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                     min={0}
                     value={materialsAmount}
                     onChange={(e) => setMaterialsAmount(Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                    className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                   />
                 </div>
                 <div>
@@ -893,7 +894,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                     min={0}
                     value={additionalCharges}
                     onChange={(e) => setAdditionalCharges(Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                    className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                   />
                 </div>
                 <div>
@@ -903,7 +904,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                     min={0}
                     value={discountAmount}
                     onChange={(e) => setDiscountAmount(Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                    className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                   />
                 </div>
               </div>
@@ -915,7 +916,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                     type="date"
                     value={proposedDate}
                     onChange={(e) => setProposedDate(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                    className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                     required
                   />
                 </div>
@@ -925,7 +926,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                     type="time"
                     value={proposedTime}
                     onChange={(e) => setProposedTime(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                    className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                     required
                   />
                 </div>
@@ -935,7 +936,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                     type="date"
                     value={validUntil}
                     onChange={(e) => setValidUntil(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                    className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                     required
                   />
                 </div>
@@ -947,17 +948,17 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   type="text"
                   value={quoteConditions}
                   onChange={(e) => setQuoteConditions(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                   required
                 />
               </div>
 
-              <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#DDD5C8] dark:border-white/10">
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#DBD4C6] dark:border-white/10">
                 <div className="text-sm">
                   {quoteValidation.valid ? (
                     <span>
                       Total cotizado:{' '}
-                      <strong className="font-mono-num text-lg text-[#304B3E] dark:text-[#B96F50]">{formatMXN(quoteValidation.totalAmount)}</strong>
+                      <strong className="font-mono-num text-lg text-[#214438] dark:text-[#C7582B]">{formatMXN(quoteValidation.totalAmount)}</strong>
                     </span>
                   ) : (
                     <span className="text-red-600 text-xs font-semibold">
@@ -968,7 +969,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                 <button
                   type="submit"
                   disabled={!quoteValidation.valid}
-                  className="px-5 py-2.5 rounded-xl bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] dark:text-[#FFFCF7] text-sm font-semibold disabled:opacity-50 transition-colors"
+                  className="px-5 py-2.5 rounded-xl bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] dark:text-[#FFFDFA] text-sm font-semibold disabled:opacity-50 transition-colors"
                 >
                   Enviar cotización al cliente
                 </button>
@@ -978,7 +979,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
 
           <div className="space-y-3">
             {myQuotes.length === 0 ? (
-              <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-8 text-center text-sm text-[#73766F] dark:text-[#A3A89F]">
+              <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-8 text-center text-sm text-[#73766F] dark:text-[#A3A89F]">
                 Aún no has enviado cotizaciones. Selecciona una solicitud entrante para responder.
               </div>
             ) : (
@@ -988,7 +989,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                 return (
                   <div
                     key={q.id}
-                    className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 flex flex-wrap items-center justify-between gap-4 text-sm"
+                    className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 flex flex-wrap items-center justify-between gap-4 text-sm"
                   >
                     <div className="flex items-center gap-3">
                       <UserAvatar
@@ -997,10 +998,10 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                         sizeClass="w-9 h-9"
                       />
                       <div>
-                        <div className="text-xs font-semibold uppercase text-[#304B3E] dark:text-[#B96F50]">
+                        <div className="text-xs font-semibold uppercase text-[#214438] dark:text-[#C7582B]">
                           v{latest.versionNumber} · Estado: {q.status}
                         </div>
-                        <h4 className="font-bold text-[#252A27] dark:text-[#F5F1E8]">
+                        <h4 className="font-bold text-[#1D252C] dark:text-[#F7F3EA]">
                           {q.serviceName}
                         </h4>
                         <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">
@@ -1010,12 +1011,12 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className="font-mono-num text-lg font-bold text-[#304B3E] dark:text-[#B96F50]">{formatMXN(latest.totalAmount)}</span>
+                      <span className="font-mono-num text-lg font-bold text-[#214438] dark:text-[#C7582B]">{formatMXN(latest.totalAmount)}</span>
                       {(q.status === 'sent' || q.status === 'revised') && (
                         <button
                           type="button"
                           onClick={() => handleOpenQuoteBuilder(q.requestId, q.id)}
-                          className="px-3 py-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 text-xs font-semibold"
+                          className="px-3 py-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 text-xs font-semibold"
                         >
                           Revisar / Nueva versión
                         </button>
@@ -1037,14 +1038,14 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
         <div className="space-y-6">
           <form
             onSubmit={handleSaveService}
-            className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-4"
+            className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-4"
           >
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-bold flex items-center gap-2 text-[#252A27] dark:text-[#F5F1E8]">
+              <h3 className="text-base font-bold flex items-center gap-2 text-[#1D252C] dark:text-[#F7F3EA]">
                 {editingServiceId ? (
-                  <Edit3 className="w-4 h-4 text-[#B96F50]" />
+                  <Edit3 className="w-4 h-4 text-[#C7582B]" />
                 ) : (
-                  <Plus className="w-4 h-4 text-[#B96F50]" />
+                  <Plus className="w-4 h-4 text-[#C7582B]" />
                 )}
                 {editingServiceId
                   ? 'Editar servicio seleccionado'
@@ -1066,13 +1067,13 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                 value={srvName}
                 onChange={(e) => setSrvName(e.target.value)}
                 placeholder="Nombre del servicio"
-                className="px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                className="px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                 required
               />
               <select
                 value={srvCategoryId}
                 onChange={(e) => setSrvCategoryId(e.target.value)}
-                className="px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                className="px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               >
                 {db.categories
                   .filter((c) => c.active)
@@ -1085,7 +1086,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
               <select
                 value={srvMode}
                 onChange={(e) => setSrvMode(e.target.value as PricingMode)}
-                className="px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                className="px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               >
                 <option value="fixed">Precio fijo</option>
                 <option value="hourly">Por hora</option>
@@ -1103,7 +1104,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   value={srvPrice}
                   onChange={(e) => setSrvPrice(e.target.value)}
                   placeholder="Tarifa MXN"
-                  className="px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                  className="px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                 />
               )}
               <input
@@ -1112,12 +1113,12 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                 value={srvDuration}
                 onChange={(e) => setSrvDuration(e.target.value)}
                 placeholder="Duración (min)"
-                className="px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                className="px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               />
               <select
                 value={srvStatus}
                 onChange={(e) => setSrvStatus(e.target.value as ServiceStatus)}
-                className="px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                className="px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               >
                 <option value="published">Publicado</option>
                 <option value="draft">Borrador</option>
@@ -1129,14 +1130,14 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
               value={srvConditions}
               onChange={(e) => setSrvConditions(e.target.value)}
               placeholder="Condiciones (ej. Incluye diagnóstico básico)"
-              className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
             />
             <textarea
               value={srvDesc}
               onChange={(e) => setSrvDesc(e.target.value)}
               rows={2}
               placeholder="Qué incluye el servicio, alcance y detalles..."
-              className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               required
             />
             <div className="flex flex-wrap items-center justify-between gap-3">
@@ -1150,7 +1151,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
               </label>
               <button
                 type="submit"
-                className="px-4 py-2 rounded-xl bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] dark:text-[#FFFCF7] text-xs font-semibold transition-colors"
+                className="px-4 py-2 rounded-xl bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] dark:text-[#FFFDFA] text-xs font-semibold transition-colors"
               >
                 {editingServiceId ? 'Actualizar servicio' : 'Guardar servicio'}
               </button>
@@ -1161,20 +1162,20 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
             {myServices.map((srv) => (
               <div
                 key={srv.id}
-                className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4 space-y-2 text-sm"
+                className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4 space-y-2 text-sm"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <span className="text-[11px] font-semibold uppercase text-[#304B3E] dark:text-[#B96F50]">
+                    <span className="text-[11px] font-semibold uppercase text-[#214438] dark:text-[#C7582B]">
                       {srv.status} · {formatPricingLabel(srv.pricingMode, srv.priceAmount)}
                     </span>
-                    <h4 className="font-bold text-[#252A27] dark:text-[#F5F1E8]">{srv.name}</h4>
+                    <h4 className="font-bold text-[#1D252C] dark:text-[#F7F3EA]">{srv.name}</h4>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
                       onClick={() => handleEditService(srv)}
-                      className="text-xs font-medium text-[#252A27] dark:text-[#F5F1E8] hover:underline"
+                      className="text-xs font-medium text-[#1D252C] dark:text-[#F7F3EA] hover:underline"
                     >
                       Editar
                     </button>
@@ -1187,7 +1188,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                         });
                         refreshDb();
                       }}
-                      className="text-xs font-medium text-[#304B3E] dark:text-[#B96F50] hover:underline"
+                      className="text-xs font-medium text-[#214438] dark:text-[#C7582B] hover:underline"
                     >
                       {srv.status === 'published' ? 'Pausar' : 'Publicar'}
                     </button>
@@ -1218,7 +1219,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
         <div className="space-y-6">
           <form
             onSubmit={handleSavePortfolio}
-            className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-4"
+            className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-4"
           >
             <div className="flex items-center justify-between gap-2">
               <h3 className="text-base font-bold">
@@ -1245,7 +1246,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   value={portTitle}
                   onChange={(e) => setPortTitle(e.target.value)}
                   placeholder="Ej. Remodelación hidráulica"
-                  className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                   required
                 />
               </div>
@@ -1254,7 +1255,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                 <select
                   value={portCategoryId}
                   onChange={(e) => setPortCategoryId(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                 >
                   {db.categories
                     .filter((c) => c.active)
@@ -1272,7 +1273,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   value={portService}
                   onChange={(e) => setPortService(e.target.value)}
                   placeholder="Ej. Instalación de tubería"
-                  className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                 />
               </div>
               <div>
@@ -1282,7 +1283,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   value={portColoniaDate}
                   onChange={(e) => setPortColoniaDate(e.target.value)}
                   placeholder="Ej. Noviembre 2026"
-                  className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                 />
               </div>
             </div>
@@ -1296,7 +1297,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   value={portPrice}
                   onChange={(e) => setPortPrice(e.target.value)}
                   placeholder="Ej. 2400"
-                  className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                 />
               </div>
               <div>
@@ -1306,7 +1307,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   value={portDuration}
                   onChange={(e) => setPortDuration(e.target.value)}
                   placeholder="Ej. 4 horas"
-                  className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                 />
               </div>
               <div>
@@ -1316,7 +1317,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   value={portMaterials}
                   onChange={(e) => setPortMaterials(e.target.value)}
                   placeholder="Ej. Cobre 1/2, válvulas esfera"
-                  className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                 />
               </div>
             </div>
@@ -1328,23 +1329,23 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                 onChange={(e) => setPortDesc(e.target.value)}
                 rows={2}
                 placeholder="Describe el reto, solución y acabado logrado..."
-                className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                 required
               />
             </div>
 
             {/* Multi-photo manager */}
-            <div className="rounded-xl border border-dashed border-[#DDD5C8] dark:border-white/25 bg-[#EAE3D6]/55 dark:bg-[#1C211E] p-4 space-y-3">
+            <div className="rounded-xl border border-dashed border-[#DBD4C6] dark:border-white/25 bg-[#ECE7DC]/55 dark:bg-[#161C22] p-4 space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <p className="text-xs font-bold text-[#252A27] dark:text-[#F5F1E8]">
+                  <p className="text-xs font-bold text-[#1D252C] dark:text-[#F7F3EA]">
                     Fotografías del proyecto (<span className="font-mono-num">{portPhotos.length}</span>) *
                   </p>
                   <p className="text-[11px] text-[#73766F] dark:text-[#A3A89F]">
                     Puedes subir 1 o varias fotografías (JPG, PNG o WEBP · Máx. 5 MB c/u), reordenarlas o eliminarlas antes de guardar.
                   </p>
                 </div>
-                <label className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-xs font-semibold cursor-pointer transition-colors">
+                <label className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-xs font-semibold cursor-pointer transition-colors">
                   <Upload className="w-3.5 h-3.5" />
                   <span>{portUploading ? 'Procesando...' : 'Subir una o varias fotos'}</span>
                   <input
@@ -1368,7 +1369,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   {portPhotos.map((photo, idx) => (
                     <div
                       key={`draft-photo-${idx}`}
-                      className="rounded-lg border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] overflow-hidden"
+                      className="rounded-lg border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] overflow-hidden"
                     >
                       <div className="relative h-24">
                         <SafeImage
@@ -1387,7 +1388,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                             onClick={() => movePortfolioPhoto(idx, -1)}
                             disabled={idx === 0}
                             aria-label={`Mover foto ${idx + 1} a la izquierda`}
-                            className="p-1 rounded border border-[#DDD5C8] dark:border-white/15 disabled:opacity-35"
+                            className="p-1 rounded border border-[#DBD4C6] dark:border-white/15 disabled:opacity-35"
                           >
                             <ChevronLeft className="w-3.5 h-3.5" />
                           </button>
@@ -1396,7 +1397,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                             onClick={() => movePortfolioPhoto(idx, 1)}
                             disabled={idx === portPhotos.length - 1}
                             aria-label={`Mover foto ${idx + 1} a la derecha`}
-                            className="p-1 rounded border border-[#DDD5C8] dark:border-white/15 disabled:opacity-35"
+                            className="p-1 rounded border border-[#DBD4C6] dark:border-white/15 disabled:opacity-35"
                           >
                             <ChevronRight className="w-3.5 h-3.5" />
                           </button>
@@ -1418,7 +1419,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
 
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] text-xs font-semibold transition-colors"
+              className="px-4 py-2 rounded-lg bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] text-xs font-semibold transition-colors"
             >
               {editingPortfolioId ? 'Guardar cambios del proyecto' : 'Publicar proyecto en portafolio'}
             </button>
@@ -1430,7 +1431,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
               return (
                 <div
                   key={item.id}
-                  className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] overflow-hidden flex flex-col text-sm"
+                  className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] overflow-hidden flex flex-col text-sm"
                 >
                   {item.photos.length > 0 && (
                     <div className="relative h-40">
@@ -1449,7 +1450,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   <div className="p-4 space-y-2 flex-1 flex flex-col justify-between">
                     <div className="space-y-1.5">
                       <div className="flex items-start justify-between gap-2">
-                        <span className="text-[11px] font-semibold uppercase text-[#304B3E] dark:text-[#B96F50]">
+                        <span className="text-[11px] font-semibold uppercase text-[#214438] dark:text-[#C7582B]">
                           {item.origin === 'oficlick_completed'
                             ? 'Trabajo completado en OFI CLICK'
                             : 'Fotografía aportada al portafolio'}
@@ -1458,7 +1459,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                           <button
                             type="button"
                             onClick={() => handleEditPortfolio(item)}
-                            className="text-xs font-medium text-[#304B3E] dark:text-[#B96F50] hover:underline"
+                            className="text-xs font-medium text-[#214438] dark:text-[#C7582B] hover:underline"
                           >
                             Editar / Agregar fotos
                           </button>
@@ -1493,7 +1494,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                               key={`${item.id}-thumb-${idx}`}
                               type="button"
                               onClick={() => setPreviewGalleryItem(item)}
-                              className="w-12 h-9 rounded overflow-hidden border border-[#DDD5C8] dark:border-white/15 shrink-0"
+                              className="w-12 h-9 rounded overflow-hidden border border-[#DBD4C6] dark:border-white/15 shrink-0"
                             >
                               <SafeImage src={thumb} alt={`Miniatura ${idx + 1}`} className="w-full h-full object-cover" />
                             </button>
@@ -1501,7 +1502,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                         </div>
                       )}
                     </div>
-                    <div className="pt-2 border-t border-[#DDD5C8] dark:border-white/10 flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#73766F] dark:text-[#A3A89F]">
+                    <div className="pt-2 border-t border-[#DBD4C6] dark:border-white/10 flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#73766F] dark:text-[#A3A89F]">
                       <span>
                         {item.approximateDate}
                         {item.approximateDuration ? ` · ${item.approximateDuration}` : ''}
@@ -1514,7 +1515,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                       <button
                         type="button"
                         onClick={() => setPreviewGalleryItem(item)}
-                        className="font-semibold text-[#304B3E] dark:text-[#B96F50] hover:underline"
+                        className="font-semibold text-[#214438] dark:text-[#C7582B] hover:underline"
                       >
                         Ver galería
                       </button>
@@ -1546,7 +1547,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
       {activeTab === 'contrataciones' && (
         <div className="space-y-4">
           {myBookings.length === 0 ? (
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-8 text-center text-sm text-[#73766F] dark:text-[#A3A89F]">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-8 text-center text-sm text-[#73766F] dark:text-[#A3A89F]">
               Aún no tienes contrataciones confirmadas.
             </div>
           ) : (
@@ -1571,24 +1572,24 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
       {activeTab === 'resenas' && (
         <div className="space-y-4">
           {myReviews.length === 0 ? (
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-8 text-center text-sm text-[#73766F] dark:text-[#A3A89F]">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-8 text-center text-sm text-[#73766F] dark:text-[#A3A89F]">
               Aún no recibes reseñas verificadas de clientes.
             </div>
           ) : (
             myReviews.map((rev) => (
               <div
                 key={rev.id}
-                className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-3 text-sm"
+                className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-3 text-sm"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-bold">
                     {rev.clientName} · {rev.serviceName}
                   </span>
-                  <span className="font-semibold text-[#B96F50] font-mono-num">{rev.rating} / 5</span>
+                  <span className="font-semibold text-[#C7582B] font-mono-num">{rev.rating} / 5</span>
                 </div>
                 <p>{rev.comment}</p>
                 {rev.proResponse ? (
-                  <div className="p-3 rounded-lg bg-[#EAE3D6]/70 dark:bg-[#1C211E] text-xs">
+                  <div className="p-3 rounded-lg bg-[#ECE7DC]/70 dark:bg-[#161C22] text-xs">
                     <strong>Tu respuesta:</strong> {rev.proResponse.text}
                   </div>
                 ) : (
@@ -1610,11 +1611,11 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                         setReplyTextMap((prev) => ({ ...prev, [rev.id]: e.target.value }))
                       }
                       placeholder="Responder públicamente a esta reseña..."
-                      className="flex-1 px-3 py-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-xs"
+                      className="flex-1 px-3 py-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-xs"
                     />
                     <button
                       type="submit"
-                      className="px-3 py-1.5 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] text-xs font-semibold transition-colors"
+                      className="px-3 py-1.5 rounded-lg bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] text-xs font-semibold transition-colors"
                     >
                       Responder
                     </button>
@@ -1647,15 +1648,15 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
       {activeTab === 'estadisticas' && (
         <div className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5">
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Visitas al perfil</p>
               <p className="text-2xl font-bold mt-1 font-mono-num">{pro.profileViews}</p>
             </div>
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5">
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Cotizaciones enviadas</p>
               <p className="text-2xl font-bold mt-1 font-mono-num">{myQuotes.length}</p>
             </div>
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5">
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Tasa de conversión</p>
               <p className="text-2xl font-bold mt-1 font-mono-num">
                 {myQuotes.length > 0
@@ -1666,12 +1667,12 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   : '0%'}
               </p>
             </div>
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5">
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">Reseñas verificadas</p>
               <p className="text-2xl font-bold mt-1 font-mono-num">{myReviews.length}</p>
             </div>
           </div>
-          <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+          <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
             <div>
               <span className="text-[#73766F] dark:text-[#A3A89F]">Servicios publicados activos</span>
               <p className="text-lg font-bold mt-0.5 font-mono-num">
@@ -1692,7 +1693,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
 
       {/* 11. Notificaciones */}
       {activeTab === 'notificaciones' && (
-        <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-3">
+        <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold">Notificaciones operativas</h3>
             {unreadNotifs > 0 && (
@@ -1702,7 +1703,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   notificationsService.markAllRead(currentUser.id);
                   refreshDb();
                 }}
-                className="text-xs font-semibold text-[#304B3E] dark:text-[#B96F50]"
+                className="text-xs font-semibold text-[#214438] dark:text-[#C7582B]"
               >
                 Marcar leídas
               </button>
@@ -1714,7 +1715,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
             myNotifications.map((n) => (
               <div
                 key={n.id}
-                className="py-2.5 border-b border-[#DDD5C8] dark:border-white/8 text-xs flex justify-between gap-2"
+                className="py-2.5 border-b border-[#DBD4C6] dark:border-white/8 text-xs flex justify-between gap-2"
               >
                 <div>
                   <p className="font-semibold text-sm">{n.title}</p>
@@ -1763,7 +1764,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
               refreshDb();
               notify('Perfil de freelancer actualizado correctamente.', 'success');
             }}
-            className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-6 space-y-5"
+            className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-6 space-y-5"
           >
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h3 className="text-base font-bold">Información pública del freelancer</h3>
@@ -1789,7 +1790,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                 helperText="Esta imagen se guarda en el espacio público de avatares y es totalmente independiente de tus documentos privados de verificación."
                 uploadButtonLabel="Subir foto de perfil pública"
               />
-              <label className="inline-flex items-start gap-2.5 text-xs text-[#252A27]/90 dark:text-[#F5F1E8]/90 cursor-pointer">
+              <label className="inline-flex items-start gap-2.5 text-xs text-[#1D252C]/90 dark:text-[#F7F3EA]/90 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={avatarPublicConsent}
@@ -1811,7 +1812,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   type="text"
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                  className="w-full px-3.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                   required
                 />
               </div>
@@ -1824,7 +1825,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   value={commercialName}
                   onChange={(e) => setCommercialName(e.target.value)}
                   placeholder="Ej. Plomería Residencial Vargas"
-                  className="w-full px-3.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                  className="w-full px-3.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                 />
               </div>
             </div>
@@ -1835,7 +1836,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
                 rows={3}
-                className="w-full px-3.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                className="w-full px-3.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               />
             </div>
 
@@ -1848,7 +1849,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   max={60}
                   value={yearsExperience}
                   onChange={(e) => setYearsExperience(Number(e.target.value))}
-                  className="w-full px-3.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                  className="w-full px-3.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                 />
               </div>
               <div>
@@ -1856,7 +1857,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                 <select
                   value={primaryColonia}
                   onChange={(e) => setPrimaryColonia(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                  className="w-full px-3.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                 >
                   {regionColonias.map((c) => (
                     <option key={c} value={c}>
@@ -1873,7 +1874,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   max={50}
                   value={maxTravelKm}
                   onChange={(e) => setMaxTravelKm(Number(e.target.value))}
-                  className="w-full px-3.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                  className="w-full px-3.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                 />
               </div>
             </div>
@@ -1890,8 +1891,8 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                         key={cat.id}
                         className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs cursor-pointer transition-colors ${
                           checked
-                            ? 'bg-[#304B3E] text-white border-[#304B3E] dark:bg-[#B96F50] dark:text-white dark:border-[#B96F50]'
-                            : 'border-[#DDD5C8] dark:border-white/15'
+                            ? 'bg-[#214438] text-white border-[#214438] dark:bg-[#C7582B] dark:text-white dark:border-[#C7582B]'
+                            : 'border-[#DBD4C6] dark:border-white/15'
                         }`}
                       >
                         <input
@@ -1917,7 +1918,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
               <label className="block text-xs font-semibold mb-1.5">
                 Colonias adicionales de cobertura
               </label>
-              <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-2 rounded-lg border border-[#DDD5C8] dark:border-white/10">
+              <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-2 rounded-lg border border-[#DBD4C6] dark:border-white/10">
                 {regionColonias
                   .filter((c) => c !== primaryColonia)
                   .map((col) => {
@@ -1927,8 +1928,8 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                         key={col}
                         className={`inline-flex items-center gap-1 px-2.5 py-1 rounded text-[11px] cursor-pointer border transition-colors ${
                           checked
-                            ? 'bg-[#304B3E] text-white border-[#304B3E] dark:bg-[#B96F50] dark:border-[#B96F50]'
-                            : 'border-[#DDD5C8] dark:border-white/15'
+                            ? 'bg-[#214438] text-white border-[#214438] dark:bg-[#C7582B] dark:border-[#C7582B]'
+                            : 'border-[#DBD4C6] dark:border-white/15'
                         }`}
                       >
                         <input
@@ -1958,7 +1959,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                 type="text"
                 value={specialtiesText}
                 onChange={(e) => setSpecialtiesText(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                className="w-full px-3.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               />
             </div>
 
@@ -1991,7 +1992,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
 
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] text-xs font-semibold transition-colors"
+              className="px-4 py-2 rounded-lg bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] text-xs font-semibold transition-colors"
             >
               Guardar perfil profesional
             </button>
@@ -2043,12 +2044,12 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                 'success'
               );
             }}
-            className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-6 space-y-5"
+            className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-6 space-y-5"
           >
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-5 h-5 text-[#304B3E] dark:text-[#B96F50]" />
+                  <ShieldCheck className="w-5 h-5 text-[#214438] dark:text-[#C7582B]" />
                   <h3 className="text-base font-bold">
                     Verificación de identidad y credenciales (uso interno privado)
                   </h3>
@@ -2064,8 +2065,8 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
               </span>
             </div>
 
-            <div className="rounded-lg bg-[#EAE3D6]/70 dark:bg-[#1C211E] p-3 text-xs flex items-start gap-2 text-[#252A27]/85 dark:text-[#F5F1E8]/85">
-              <Lock className="w-4 h-4 shrink-0 text-[#304B3E] dark:text-[#B96F50] mt-0.5" />
+            <div className="rounded-lg bg-[#ECE7DC]/70 dark:bg-[#161C22] p-3 text-xs flex items-start gap-2 text-[#1D252C]/85 dark:text-[#F7F3EA]/85">
+              <Lock className="w-4 h-4 shrink-0 text-[#214438] dark:text-[#C7582B] mt-0.5" />
               <div>
                 <p className="font-semibold">Estado actual: {verificationStage.label}</p>
                 <p className="text-[#73766F] dark:text-[#A3A89F]">{verificationStage.description}</p>
@@ -2073,10 +2074,10 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
             </div>
 
             {/* Step 1: INE / Official ID */}
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 p-4 space-y-3">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 p-4 space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wide text-[#304B3E] dark:text-[#B96F50]">
+                  <h4 className="text-xs font-bold uppercase tracking-wide text-[#214438] dark:text-[#C7582B]">
                     1. Identificación oficial vigente (INE)
                   </h4>
                   <p className="text-[11px] text-[#73766F] dark:text-[#A3A89F]">
@@ -2090,19 +2091,19 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                 value={docLabel}
                 onChange={(e) => setDocLabel(e.target.value)}
                 placeholder="Descripción del documento (ej. INE frente y vuelta)"
-                className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-xs"
+                className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-xs"
               />
 
               {ineDraft ? (
-                <div className="flex flex-col sm:flex-row items-center gap-3 p-3 rounded-lg bg-[#EAE3D6]/55 dark:bg-[#1C211E] border border-[#DDD5C8] dark:border-white/10">
+                <div className="flex flex-col sm:flex-row items-center gap-3 p-3 rounded-lg bg-[#ECE7DC]/55 dark:bg-[#161C22] border border-[#DBD4C6] dark:border-white/10">
                   {ineDraft.mimeType.startsWith('image/') ? (
                     <img
                       src={ineDraft.previewUrl}
                       alt="Vista previa INE"
-                      className="w-28 h-20 object-cover rounded-lg border border-[#DDD5C8]"
+                      className="w-28 h-20 object-cover rounded-lg border border-[#DBD4C6]"
                     />
                   ) : (
-                    <div className="w-28 h-20 rounded-lg bg-[#304B3E]/10 dark:bg-white/10 flex flex-col items-center justify-center text-xs font-semibold text-[#304B3E] dark:text-[#B96F50]">
+                    <div className="w-28 h-20 rounded-lg bg-[#214438]/10 dark:bg-white/10 flex flex-col items-center justify-center text-xs font-semibold text-[#214438] dark:text-[#C7582B]">
                       <FileCheck2 className="w-6 h-6 mb-1" />
                       PDF
                     </div>
@@ -2113,7 +2114,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                       {ineDraft.mimeType} · {formatFileSize(ineDraft.sizeBytes)}
                     </p>
                     <div className="flex items-center gap-2 mt-2">
-                      <label className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#304B3E] text-white dark:bg-[#B96F50] dark:text-white font-semibold cursor-pointer">
+                      <label className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#214438] text-white dark:bg-[#C7582B] dark:text-white font-semibold cursor-pointer">
                         <RefreshCw className="w-3 h-3" />
                         <span>Cambiar INE</span>
                         <input
@@ -2140,8 +2141,8 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   </div>
                 </div>
               ) : (
-                <label className="flex items-center justify-center gap-2 px-4 py-4 rounded-lg border border-dashed border-[#DDD5C8] dark:border-white/25 cursor-pointer text-xs font-semibold hover:bg-[#EAE3D6]/50 dark:hover:bg-[#1C211E]">
-                  <Upload className="w-4 h-4 text-[#B96F50]" />
+                <label className="flex items-center justify-center gap-2 px-4 py-4 rounded-lg border border-dashed border-[#DBD4C6] dark:border-white/25 cursor-pointer text-xs font-semibold hover:bg-[#ECE7DC]/50 dark:hover:bg-[#161C22]">
+                  <Upload className="w-4 h-4 text-[#C7582B]" />
                   <span>Seleccionar INE o identificación oficial (PDF o imagen)</span>
                   <input
                     type="file"
@@ -2157,9 +2158,9 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
             </div>
 
             {/* Step 2: Frontal Face Photo (Private Verification) */}
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 p-4 space-y-3">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 p-4 space-y-3">
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-wide text-[#304B3E] dark:text-[#B96F50]">
+                <h4 className="text-xs font-bold uppercase tracking-wide text-[#214438] dark:text-[#C7582B]">
                   2. Fotografía frontal de rostro (verificación privada)
                 </h4>
                 <p className="text-[11px] text-[#73766F] dark:text-[#A3A89F]">
@@ -2168,11 +2169,11 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
               </div>
 
               {faceDraft ? (
-                <div className="flex flex-col sm:flex-row items-center gap-3 p-3 rounded-lg bg-[#EAE3D6]/55 dark:bg-[#1C211E] border border-[#DDD5C8] dark:border-white/10">
+                <div className="flex flex-col sm:flex-row items-center gap-3 p-3 rounded-lg bg-[#ECE7DC]/55 dark:bg-[#161C22] border border-[#DBD4C6] dark:border-white/10">
                   <img
                     src={faceDraft.previewUrl}
                     alt="Vista previa de rostro frontal privado"
-                    className="w-20 h-20 rounded-full object-cover border-2 border-[#304B3E] dark:border-[#B96F50]"
+                    className="w-20 h-20 rounded-full object-cover border-2 border-[#214438] dark:border-[#C7582B]"
                   />
                   <div className="flex-1 min-w-0 text-xs">
                     <p className="font-semibold truncate">{faceDraft.fileName}</p>
@@ -2180,7 +2181,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                       {faceDraft.mimeType} · {formatFileSize(faceDraft.sizeBytes)}
                     </p>
                     <div className="flex items-center gap-2 mt-2">
-                      <label className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#304B3E] text-white dark:bg-[#B96F50] dark:text-white font-semibold cursor-pointer">
+                      <label className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#214438] text-white dark:bg-[#C7582B] dark:text-white font-semibold cursor-pointer">
                         <RefreshCw className="w-3 h-3" />
                         <span>Cambiar foto frontal</span>
                         <input
@@ -2207,8 +2208,8 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   </div>
                 </div>
               ) : (
-                <label className="flex items-center justify-center gap-2 px-4 py-4 rounded-lg border border-dashed border-[#DDD5C8] dark:border-white/25 cursor-pointer text-xs font-semibold hover:bg-[#EAE3D6]/50 dark:hover:bg-[#1C211E]">
-                  <Camera className="w-4 h-4 text-[#B96F50]" />
+                <label className="flex items-center justify-center gap-2 px-4 py-4 rounded-lg border border-dashed border-[#DBD4C6] dark:border-white/25 cursor-pointer text-xs font-semibold hover:bg-[#ECE7DC]/50 dark:hover:bg-[#161C22]">
+                  <Camera className="w-4 h-4 text-[#C7582B]" />
                   <span>Subir fotografía frontal de rostro (uso privado)</span>
                   <input
                     type="file"
@@ -2230,7 +2231,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
               </p>
             )}
 
-            <label className="inline-flex items-start gap-2 text-xs text-[#252A27]/90 dark:text-[#F5F1E8]/90 cursor-pointer">
+            <label className="inline-flex items-start gap-2 text-xs text-[#1D252C]/90 dark:text-[#F7F3EA]/90 cursor-pointer">
               <input
                 type="checkbox"
                 checked={verConfirmed}
@@ -2246,21 +2247,21 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
               <button
                 type="submit"
                 disabled={!ineDraft || !faceDraft || !verConfirmed}
-                className="px-5 py-2.5 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] text-xs font-semibold disabled:opacity-50 transition-colors"
+                className="px-5 py-2.5 rounded-lg bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] text-xs font-semibold disabled:opacity-50 transition-colors"
               >
                 Enviar documentación privada para revisión
               </button>
             </div>
 
             {myVerifications.length > 0 && (
-              <div className="pt-4 border-t border-[#DDD5C8] dark:border-white/10 space-y-3 text-xs">
+              <div className="pt-4 border-t border-[#DBD4C6] dark:border-white/10 space-y-3 text-xs">
                 <p className="font-bold">Historial de solicitudes de verificación</p>
                 {myVerifications.map((v) => {
                   const stage = getVerificationStageSummary([v], 0);
                   return (
                     <div
                       key={v.id}
-                      className="p-3.5 rounded-xl bg-[#EAE3D6]/60 dark:bg-[#1C211E] border border-[#DDD5C8] dark:border-white/10 space-y-2"
+                      className="p-3.5 rounded-xl bg-[#ECE7DC]/60 dark:bg-[#161C22] border border-[#DBD4C6] dark:border-white/10 space-y-2"
                     >
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <span className="font-semibold">
@@ -2276,7 +2277,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                           return (
                             <div
                               key={d.id}
-                              className="inline-flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/10"
+                              className="inline-flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/10"
                             >
                               <img
                                 src={resolved.url}
@@ -2291,7 +2292,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                         })}
                       </div>
                       {v.reviewReason && (
-                        <p className="text-[#304B3E] dark:text-[#B96F50]">
+                        <p className="text-[#214438] dark:text-[#C7582B]">
                           <strong>Observación administrativa:</strong> {v.reviewReason}
                         </p>
                       )}
@@ -2307,7 +2308,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
       {/* 13. Configuración */}
       {activeTab === 'configuracion' && (
         <div className="space-y-5 max-w-2xl">
-          <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-6 space-y-3">
+          <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-6 space-y-3">
             <h3 className="text-base font-bold">Tema de la interfaz</h3>
             <div className="grid grid-cols-3 gap-3">
               {(['light', 'dark', 'system'] as ThemePreference[]).map((opt) => (
@@ -2317,8 +2318,8 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                   onClick={() => setTheme(opt)}
                   className={`py-2 rounded-lg border text-xs font-semibold transition-colors ${
                     theme === opt
-                      ? 'bg-[#304B3E] text-white border-[#304B3E] dark:bg-[#B96F50] dark:text-white dark:border-[#B96F50]'
-                      : 'border-[#DDD5C8] dark:border-white/15'
+                      ? 'bg-[#214438] text-white border-[#214438] dark:bg-[#C7582B] dark:text-white dark:border-[#C7582B]'
+                      : 'border-[#DBD4C6] dark:border-white/15'
                   }`}
                 >
                   {opt === 'light' ? 'Claro' : opt === 'dark' ? 'Oscuro' : 'Sistema'}
@@ -2327,13 +2328,13 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
             </div>
           </div>
 
-          <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-6 space-y-3">
+          <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-6 space-y-3">
             <h3 className="text-base font-bold">Sesión</h3>
             <div className="flex flex-wrap gap-3">
               <button
                 type="button"
                 onClick={signOut}
-                className="px-4 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 text-xs font-semibold"
+                className="px-4 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 text-xs font-semibold"
               >
                 Cerrar sesión
               </button>
@@ -2383,7 +2384,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
               refreshDb();
               notify('Ticket enviado a soporte.', 'success');
             }}
-            className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-6 space-y-4"
+            className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-6 space-y-4"
           >
             <h3 className="text-base font-bold">Ayuda para freelancers</h3>
             <input
@@ -2391,7 +2392,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
               value={ticketSubject}
               onChange={(e) => setTicketSubject(e.target.value)}
               placeholder="Asunto"
-              className="w-full px-3.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+              className="w-full px-3.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               required
             />
             <textarea
@@ -2399,34 +2400,34 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
               onChange={(e) => setTicketDesc(e.target.value)}
               rows={3}
               placeholder="Describe tu consulta..."
-              className="w-full px-3.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+              className="w-full px-3.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               required
             />
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] text-xs font-semibold transition-colors"
+              className="px-4 py-2 rounded-lg bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#AC4921] text-xs font-semibold transition-colors"
             >
               Enviar ticket
             </button>
           </form>
 
           {myTickets.length > 0 && (
-            <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-3">
+            <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-3">
               <h4 className="text-sm font-bold">Mis tickets enviados</h4>
               {myTickets.map((t) => (
                 <div
                   key={t.id}
-                  className="p-3 rounded-lg bg-[#EAE3D6]/55 dark:bg-[#1C211E] text-xs space-y-1"
+                  className="p-3 rounded-lg bg-[#ECE7DC]/55 dark:bg-[#161C22] text-xs space-y-1"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="font-semibold">{t.subject}</span>
-                    <span className="uppercase font-semibold text-[#304B3E] dark:text-[#B96F50]">
+                    <span className="uppercase font-semibold text-[#214438] dark:text-[#C7582B]">
                       {t.status}
                     </span>
                   </div>
                   <p className="text-[#73766F] dark:text-[#A3A89F]">{t.description}</p>
                   {t.evidenceNote && (
-                    <p className="text-[#304B3E] dark:text-[#B96F50] pt-1">
+                    <p className="text-[#214438] dark:text-[#C7582B] pt-1">
                       <strong>Respuesta de soporte:</strong> {t.evidenceNote}
                     </p>
                   )}
@@ -2447,15 +2448,15 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
           onClick={() => setShowProfilePreviewModal(false)}
         >
           <div
-            className="w-full max-w-2xl rounded-2xl bg-[#FFFCF7] dark:bg-[#171B19] border border-[#DDD5C8] dark:border-white/15 shadow-2xl overflow-hidden my-8"
+            className="w-full max-w-2xl rounded-2xl bg-[#FFFDFA] dark:bg-[#171B19] border border-[#DBD4C6] dark:border-white/15 shadow-2xl overflow-hidden my-8"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="px-5 py-4 border-b border-[#DDD5C8] dark:border-white/10 flex items-center justify-between gap-3">
+            <div className="px-5 py-4 border-b border-[#DBD4C6] dark:border-white/10 flex items-center justify-between gap-3">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-[#304B3E] dark:text-[#B96F50]">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-[#214438] dark:text-[#C7582B]">
                   Vista previa interna · Como te ven tus clientes
                 </p>
-                <h3 className="font-bold text-base text-[#252A27] dark:text-[#F5F1E8]">
+                <h3 className="font-bold text-base text-[#1D252C] dark:text-[#F7F3EA]">
                   {pro.commercialName || pro.displayName}
                 </h3>
               </div>
@@ -2463,7 +2464,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                 type="button"
                 onClick={() => setShowProfilePreviewModal(false)}
                 aria-label="Cerrar vista previa"
-                className="p-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15"
+                className="p-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -2478,19 +2479,19 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                 />
                 <div className="flex-1 min-w-0 space-y-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="font-bold text-lg text-[#252A27] dark:text-[#F5F1E8]">
+                    <span className="font-bold text-lg text-[#1D252C] dark:text-[#F7F3EA]">
                       {pro.displayName}
                     </span>
-                    <span className="px-2 py-0.5 rounded bg-[#304B3E]/12 dark:bg-[#B96F50]/15 text-[#304B3E] dark:text-[#B96F50] text-[11px] font-semibold font-mono-num">
+                    <span className="px-2 py-0.5 rounded bg-[#214438]/12 dark:bg-[#C7582B]/15 text-[#214438] dark:text-[#C7582B] text-[11px] font-semibold font-mono-num">
                       Verificación nivel {pro.verificationLevel}/4
                     </span>
                   </div>
                   <p className="text-xs text-[#73766F] dark:text-[#A3A89F] flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-[#B96F50]" />
+                    <MapPin className="w-3.5 h-3.5 text-[#C7582B]" />
                     Col. {pro.primaryColonia} · <span className="font-mono-num">{pro.yearsExperience}</span> años de experiencia ·{' '}
                     <span className="font-mono-num">{pro.ratingAvg.toFixed(1)}</span> ★ (<span className="font-mono-num">{pro.reviewsCount}</span> reseñas)
                   </p>
-                  <p className="text-xs text-[#252A27]/85 dark:text-[#F5F1E8]/85 pt-1 leading-relaxed">
+                  <p className="text-xs text-[#1D252C]/85 dark:text-[#F7F3EA]/85 pt-1 leading-relaxed">
                     {pro.bio}
                   </p>
                 </div>
@@ -2503,7 +2504,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                     {pro.specialties.map((sp) => (
                       <span
                         key={sp}
-                        className="px-2.5 py-1 rounded bg-[#EAE3D6] dark:bg-white/10 text-xs font-medium"
+                        className="px-2.5 py-1 rounded bg-[#ECE7DC] dark:bg-white/10 text-xs font-medium"
                       >
                         {sp}
                       </span>
@@ -2526,10 +2527,10 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                       .map((srv) => (
                         <div
                           key={srv.id}
-                          className="p-3 rounded-lg border border-[#DDD5C8] dark:border-white/10 bg-[#EAE3D6]/55 dark:bg-[#1C211E] text-xs"
+                          className="p-3 rounded-lg border border-[#DBD4C6] dark:border-white/10 bg-[#ECE7DC]/55 dark:bg-[#161C22] text-xs"
                         >
                           <p className="font-bold">{srv.name}</p>
-                          <p className="text-[#304B3E] dark:text-[#B96F50] font-semibold mt-0.5 font-mono-num">
+                          <p className="text-[#214438] dark:text-[#C7582B] font-semibold mt-0.5 font-mono-num">
                             {formatPricingLabel(srv.pricingMode, srv.priceAmount)}
                           </p>
                         </div>
@@ -2547,7 +2548,7 @@ export const ProPanelPage: React.FC<ProPanelPageProps> = ({ initialTab = 'inicio
                     {myPortfolio.slice(0, 3).map((item) => (
                       <div
                         key={item.id}
-                        className="rounded-lg border border-[#DDD5C8] dark:border-white/10 overflow-hidden bg-[#EAE3D6]/40 dark:bg-[#1C211E]"
+                        className="rounded-lg border border-[#DBD4C6] dark:border-white/10 overflow-hidden bg-[#ECE7DC]/40 dark:bg-[#161C22]"
                       >
                         <SafeImage
                           src={item.photos[0]}

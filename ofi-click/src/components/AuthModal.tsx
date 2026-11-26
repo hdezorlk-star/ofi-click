@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   CheckCircle2,
   Eye,
@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { useOfiClick } from '../context/OfiClickContext';
 import { authService } from '../services/auth.service';
-import { INITIAL_REGIONS } from '../adapters/local/seed-data';
+import { ALL_IZCALLI_COLONIAS } from '../data/izcalliLocations';
 import { GoogleAuthButton } from './GoogleAuthButton';
 import { BrandLogo } from './BrandLogo';
 import type { AdminAccessRequest, PreparedEmailRecord } from '../types/oficlick';
@@ -25,17 +25,20 @@ export const AuthModal: React.FC = () => {
   const {
     authModalOpen,
     authModalMode,
+    passwordRecoveryReady,
+    clearPasswordRecoveryReady,
     pendingActionLabel,
     closeAuthModal,
     completeAuthSuccess,
     openAuthModal,
     refreshDb,
     db,
+    dataMode,
     notify,
   } = useOfiClick();
 
-  const [email, setEmail] = useState('cliente@oficlick.mx');
-  const [password, setPassword] = useState('local1234');
+  const [email, setEmail] = useState(() => (dataMode === 'local' ? 'cliente@oficlick.mx' : ''));
+  const [password, setPassword] = useState(() => (dataMode === 'local' ? 'local1234' : ''));
   const [showPassword, setShowPassword] = useState(false);
 
   // Register state
@@ -46,6 +49,8 @@ export const AuthModal: React.FC = () => {
   const [colonia, setColonia] = useState('Centro Urbano');
   const [commercialName, setCommercialName] = useState('');
   const [categoryId, setCategoryId] = useState('cat-plomeria');
+  const [pendingConfirmEmail, setPendingConfirmEmail] = useState<string | null>(null);
+  const [resendingConfirm, setResendingConfirm] = useState(false);
 
   // Admin access request state (Central Admin only)
   const [adminRegionId, setAdminRegionId] = useState('reg-izcalli');
@@ -56,32 +61,39 @@ export const AuthModal: React.FC = () => {
   const [adminOtpError, setAdminOtpError] = useState('');
 
   // Multi-step password recovery state
-  const [recStep, setRecStep] = useState<'email' | 'code' | 'new_password' | 'done'>('email');
+  const [recStep, setRecStep] = useState<'email' | 'email_sent' | 'code' | 'new_password' | 'done'>('email');
   const [recEmail, setRecEmail] = useState('');
   const [recCode, setRecCode] = useState('');
   const [recNewPassword, setRecNewPassword] = useState('');
   const [recConfirmPassword, setRecConfirmPassword] = useState('');
   const [recMessage, setRecMessage] = useState('');
 
-  // Prepared local email viewer state
+  // Prepared email viewer state (only shown when local templates exist and not sent via SMTP)
   const [previewEmail, setPreviewEmail] = useState<PreparedEmailRecord | null>(null);
   const [showPreviewDrawer, setShowPreviewDrawer] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const regions = db.regions.length > 0 ? db.regions : INITIAL_REGIONS;
+  useEffect(() => {
+    if (passwordRecoveryReady && authModalOpen && authModalMode === 'recovery') {
+      setRecStep('new_password');
+    }
+  }, [passwordRecoveryReady, authModalOpen, authModalMode]);
+
   const colonias = useMemo(() => {
     const targetRegion =
       regRole === 'admin_request'
-        ? regions.find((r) => r.id === adminRegionId) || regions[0]
-        : regions[0];
-    return targetRegion?.colonias || INITIAL_REGIONS[0].colonias;
-  }, [adminRegionId, regRole, regions]);
+        ? db.regions.find((r) => r.id === adminRegionId) || db.regions[0]
+        : db.regions.find((r) => r.id === 'reg-izcalli') || db.regions[0];
+    return targetRegion && targetRegion.colonias.length > 0
+      ? targetRegion.colonias
+      : ALL_IZCALLI_COLONIAS;
+  }, [adminRegionId, regRole, db.regions]);
 
   if (!authModalOpen) return null;
 
   const latestPreparedEmails = previewEmail
-    ? [previewEmail]
-    : db.preparedEmails.slice(0, 2);
+    ? [previewEmail].filter((em) => em.deliveryStatus !== 'sent')
+    : db.preparedEmails.filter((em) => em.deliveryStatus !== 'sent').slice(0, 2);
 
   const resetMessages = () => {
     setErrorMsg('');
@@ -91,12 +103,13 @@ export const AuthModal: React.FC = () => {
 
   const switchTab = (nextMode: 'login' | 'register' | 'recovery' | 'admin') => {
     resetMessages();
+    setPendingConfirmEmail(null);
     if (nextMode === 'register') {
       setAdminStep('form');
       setActiveAdminRequest(null);
     }
     if (nextMode === 'recovery') {
-      setRecStep('email');
+      setRecStep(passwordRecoveryReady ? 'new_password' : 'email');
       setRecCode('');
       setRecNewPassword('');
       setRecConfirmPassword('');
@@ -109,10 +122,7 @@ export const AuthModal: React.FC = () => {
     setErrorMsg('');
     try {
       const profile = await authService.signInWithEmail(email, password);
-      if (
-        authModalMode === 'admin' &&
-        !profile.roles.includes('central_admin')
-      ) {
+      if (authModalMode === 'admin' && !profile.roles.includes('central_admin')) {
         authService.signOut();
         setErrorMsg('Esta cuenta no tiene permisos administrativos autorizados.');
         return;
@@ -140,12 +150,17 @@ export const AuthModal: React.FC = () => {
         });
         setActiveAdminRequest(res.request);
         setPreviewEmail(res.verificationEmail);
-        setShowPreviewDrawer(true);
+        if (dataMode === 'local') {
+          setShowPreviewDrawer(true);
+          setAdminStep('otp');
+          notify('Solicitud administrativa registrada. Verifica el código OTP.', 'info');
+        } else {
+          setAdminStep('pending');
+          notify('Solicitud registrada para validación administrativa.', 'info');
+        }
         setAdminOtpInput('');
         setAdminOtpError('');
-        setAdminStep('otp');
         refreshDb();
-        notify('Solicitud administrativa registrada. Verifica el código OTP preparado abajo.', 'info');
       } catch (err) {
         setErrorMsg(
           err instanceof Error ? err.message : 'No se pudo registrar la solicitud administrativa.'
@@ -155,7 +170,7 @@ export const AuthModal: React.FC = () => {
     }
 
     try {
-      const { profile, welcomeEmail } = await authService.registerAccount({
+      const { profile, welcomeEmail, requiresEmailConfirmation } = await authService.registerAccount({
         fullName,
         email: regEmail,
         password: regPassword,
@@ -167,14 +182,41 @@ export const AuthModal: React.FC = () => {
             : undefined,
         categoryId: regRole === 'independent_pro' ? categoryId : undefined,
       });
+
       setPreviewEmail(welcomeEmail);
+
+      if (requiresEmailConfirmation) {
+        setPendingConfirmEmail(regEmail);
+        notify(
+          `Registro creado. Enviamos un enlace de confirmación a ${regEmail}.`,
+          'success'
+        );
+        refreshDb();
+        return;
+      }
+
       notify(
-        'Cuenta creada exitosamente. Revisa tu correo para confirmar tu registro.',
+        welcomeEmail.deliveryStatus === 'sent'
+          ? 'Cuenta creada y correo de bienvenida enviado.'
+          : 'Cuenta creada exitosamente.',
         'success'
       );
       completeAuthSuccess(profile);
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : 'No se pudo completar el registro.');
+    }
+  };
+
+  const handleResendSignupConfirmation = async () => {
+    if (!pendingConfirmEmail) return;
+    setResendingConfirm(true);
+    setErrorMsg('');
+    const res = await authService.resendSignupConfirmation(pendingConfirmEmail);
+    setResendingConfirm(false);
+    if (res.sent) {
+      notify(res.message, 'success');
+    } else {
+      setErrorMsg(res.message);
     }
   };
 
@@ -190,7 +232,7 @@ export const AuthModal: React.FC = () => {
     setActiveAdminRequest(res.request);
     setAdminStep('pending');
     refreshDb();
-    notify('Correo verificado. Ahora espera autorización o inicializa el acceso local de prototipo.', 'success');
+    notify('Correo verificado. Tu solicitud quedó pendiente de autorización.', 'success');
   };
 
   const handleResendAdminOtp = () => {
@@ -202,7 +244,7 @@ export const AuthModal: React.FC = () => {
       setPreviewEmail(res.verificationEmail);
       setShowPreviewDrawer(true);
       refreshDb();
-      notify('Nuevo código OTP preparado en vista previa local.', 'info');
+      notify('Nuevo código OTP preparado.', 'info');
     } catch (err) {
       setAdminOtpError(err instanceof Error ? err.message : 'No se pudo reenviar el código.');
     }
@@ -231,12 +273,16 @@ export const AuthModal: React.FC = () => {
     setRecMessage('');
     try {
       const res = await authService.requestPasswordRecovery(recEmail);
+      if (!res.sent) {
+        setErrorMsg(res.message);
+        return;
+      }
       setRecMessage(res.message);
       if (res.preparedEmail) {
         setPreviewEmail(res.preparedEmail);
         setShowPreviewDrawer(true);
       }
-      setRecStep('code');
+      setRecStep(dataMode === 'supabase' ? 'email_sent' : 'code');
       refreshDb();
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : 'Correo inválido.');
@@ -265,6 +311,7 @@ export const AuthModal: React.FC = () => {
       const res = await authService.completePasswordReset(recEmail, recCode, recNewPassword);
       setRecMessage(res.message);
       setRecStep('done');
+      clearPasswordRecoveryReady();
       refreshDb();
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : 'No se pudo actualizar la contraseña.');
@@ -280,19 +327,19 @@ export const AuthModal: React.FC = () => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-xs p-4 overflow-y-auto"
       role="dialog"
       aria-modal="true"
       aria-labelledby="auth-modal-title"
     >
-      <div className="w-full max-w-lg rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/10 shadow-2xl p-6 my-8 max-h-[92vh] overflow-y-auto">
+      <div className="w-full max-w-lg rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/12 shadow-2xl p-6 my-8 max-h-[92vh] overflow-y-auto">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-3.5 min-w-0">
             <BrandLogo variant="icon" size="lg" />
             <div className="min-w-0">
               <h2
                 id="auth-modal-title"
-                className="font-display text-xl font-bold text-[#252A27] dark:text-[#F5F1E8]"
+                className="font-display text-xl font-bold text-[#1D252C] dark:text-[#F7F3EA]"
               >
                 {authModalMode === 'register'
                   ? 'Crear cuenta en OFI CLICK'
@@ -303,7 +350,7 @@ export const AuthModal: React.FC = () => {
                   : 'Iniciar sesión en OFI CLICK'}
               </h2>
               {pendingActionLabel && (
-                <p className="mt-1 text-xs text-[#304B3E] dark:text-[#75836A] font-medium">
+                <p className="mt-1 text-xs text-[#214438] dark:text-[#C7582B] font-medium">
                   Inicia sesión o regístrate para {pendingActionLabel}. Al entrar continuarás automáticamente.
                 </p>
               )}
@@ -313,21 +360,21 @@ export const AuthModal: React.FC = () => {
             type="button"
             onClick={closeAuthModal}
             aria-label="Cerrar ventana de acceso"
-            className="p-2 rounded-lg text-[#73766F] hover:bg-black/5 dark:hover:bg-white/10 shrink-0"
+            className="p-2 rounded-lg text-[#5B636B] hover:bg-black/5 dark:hover:bg-white/10 shrink-0"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {authModalMode !== 'admin' && authModalMode !== 'recovery' && (
-          <div className="mt-4 grid grid-cols-2 gap-1 p-1 rounded-xl bg-[#EAE3D6] dark:bg-black/30">
+          <div className="mt-4 grid grid-cols-2 gap-1 p-1 rounded-xl bg-[#ECE7DC] dark:bg-[#12171C]">
             <button
               type="button"
               onClick={() => switchTab('login')}
               className={`py-2 text-xs font-semibold rounded-lg transition-colors ${
                 authModalMode === 'login'
-                  ? 'bg-[#FFFCF7] dark:bg-[#222825] text-[#252A27] dark:text-white shadow-xs'
-                  : 'text-[#73766F]'
+                  ? 'bg-[#FFFDFA] dark:bg-[#232C35] text-[#1D252C] dark:text-white shadow-xs'
+                  : 'text-[#5B636B]'
               }`}
             >
               Iniciar sesión
@@ -337,8 +384,8 @@ export const AuthModal: React.FC = () => {
               onClick={() => switchTab('register')}
               className={`py-2 text-xs font-semibold rounded-lg transition-colors ${
                 authModalMode === 'register'
-                  ? 'bg-[#FFFCF7] dark:bg-[#222825] text-[#252A27] dark:text-white shadow-xs'
-                  : 'text-[#73766F]'
+                  ? 'bg-[#FFFDFA] dark:bg-[#232C35] text-[#1D252C] dark:text-white shadow-xs'
+                  : 'text-[#5B636B]'
               }`}
             >
               Registrarse
@@ -371,7 +418,7 @@ export const AuthModal: React.FC = () => {
               <div className="p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 text-xs text-amber-900 dark:text-amber-200 flex items-start gap-2">
                 <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5" />
                 <span>
-                  Portal operativo de Administrador Central. En producción los permisos administrativos se validan en el servidor mediante Supabase Auth y RLS.
+                  Portal operativo de Administrador Central. Los permisos administrativos se validan en el servidor mediante Supabase Auth y RLS.
                 </span>
               </div>
             )}
@@ -379,19 +426,19 @@ export const AuthModal: React.FC = () => {
             <div>
               <label
                 htmlFor="auth-email"
-                className="block text-xs font-medium text-[#252A27] dark:text-[#F5F1E8] mb-1"
+                className="block text-xs font-medium text-[#1D252C] dark:text-[#F7F3EA] mb-1"
               >
                 Correo electrónico
               </label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-[#73766F] absolute left-3 top-3" />
+                <Mail className="w-4 h-4 text-[#5B636B] absolute left-3 top-3" />
                 <input
                   id="auth-email"
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-black/20 focus:outline-2 focus:outline-[#304B3E]"
+                  className="w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#12171C] focus:outline-2 focus:outline-[#214438]"
                   placeholder="tu@correo.com"
                 />
               </div>
@@ -400,25 +447,26 @@ export const AuthModal: React.FC = () => {
             <div>
               <label
                 htmlFor="auth-password"
-                className="block text-xs font-medium text-[#252A27] dark:text-[#F5F1E8] mb-1"
+                className="block text-xs font-medium text-[#1D252C] dark:text-[#F7F3EA] mb-1"
               >
                 Contraseña
               </label>
               <div className="relative">
-                <Lock className="w-4 h-4 text-[#73766F] absolute left-3 top-3" />
+                <Lock className="w-4 h-4 text-[#5B636B] absolute left-3 top-3" />
                 <input
                   id="auth-password"
                   type={showPassword ? 'text' : 'password'}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-9 pr-10 py-2.5 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-black/20 focus:outline-2 focus:outline-[#304B3E]"
+                  placeholder="••••••••"
+                  className="w-full pl-9 pr-10 py-2.5 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#12171C] focus:outline-2 focus:outline-[#214438]"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
                   aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                  className="absolute right-2.5 top-2.5 p-1 text-[#73766F] hover:text-[#252A27] dark:hover:text-white"
+                  className="absolute right-2.5 top-2.5 p-1 text-[#5B636B] hover:text-[#1D252C] dark:hover:text-white"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -427,14 +475,14 @@ export const AuthModal: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full py-2.5 px-4 rounded-xl bg-[#304B3E] hover:bg-[#243A30] text-white text-sm font-semibold transition-colors"
+              className="w-full py-2.5 px-4 rounded-xl bg-[#214438] hover:bg-[#183329] text-white text-sm font-semibold transition-colors"
             >
               Entrar a mi cuenta
             </button>
 
-            {import.meta.env.DEV && (
-              <div className="pt-2 border-t border-[#DDD5C8] dark:border-white/10">
-                <p className="text-[11px] text-[#73766F] mb-2">
+            {import.meta.env.DEV && dataMode === 'local' && (
+              <div className="pt-2 border-t border-[#DBD4C6] dark:border-white/10">
+                <p className="text-[11px] text-[#5B636B] mb-2">
                   Accesos rápidos locales (solo desarrollo):
                 </p>
                 <div className="flex flex-wrap gap-1.5">
@@ -446,7 +494,7 @@ export const AuthModal: React.FC = () => {
                         setEmail(acc.email);
                         setPassword('local1234');
                       }}
-                      className="px-2.5 py-1 text-[11px] font-medium rounded-md bg-[#EAE3D6] dark:bg-white/10 hover:bg-[#304B3E]/15 text-[#252A27] dark:text-[#F5F1E8]"
+                      className="px-2.5 py-1 text-[11px] font-medium rounded-md bg-[#ECE7DC] dark:bg-white/10 hover:bg-[#214438]/15 text-[#1D252C] dark:text-[#F7F3EA]"
                     >
                       {acc.label}
                     </button>
@@ -462,7 +510,7 @@ export const AuthModal: React.FC = () => {
                   setRecEmail(email);
                   switchTab('recovery');
                 }}
-                className="text-[#304B3E] dark:text-[#75836A] font-medium hover:underline"
+                className="text-[#214438] dark:text-[#C7582B] font-medium hover:underline"
               >
                 ¿Olvidaste tu contraseña?
               </button>
@@ -474,7 +522,7 @@ export const AuthModal: React.FC = () => {
                     setPassword('');
                     switchTab('admin');
                   }}
-                  className="text-[#73766F] hover:text-[#252A27] dark:hover:text-white"
+                  className="text-[#5B636B] hover:text-[#1D252C] dark:hover:text-white"
                 >
                   Acceso operativo / Admin
                 </button>
@@ -482,7 +530,7 @@ export const AuthModal: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => switchTab('login')}
-                  className="text-[#304B3E] dark:text-[#75836A] hover:underline"
+                  className="text-[#214438] dark:text-[#C7582B] hover:underline"
                 >
                   Volver al acceso general
                 </button>
@@ -493,304 +541,333 @@ export const AuthModal: React.FC = () => {
 
         {authModalMode === 'register' && (
           <div className="mt-4 space-y-4">
-            {!(regRole === 'admin_request' && adminStep !== 'form') && (
-              <form onSubmit={handleRegister} className="space-y-3.5">
-                {regRole !== 'admin_request' && (
-                  <GoogleAuthButton
-                    intent="register"
-                    separatorLabel="o crea tu cuenta con correo"
-                  />
-                )}
-                <div>
-                  <span className="block text-xs font-semibold mb-1.5">
-                    Tipo de cuenta
-                  </span>
-                  <div className="grid grid-cols-3 gap-2">
-                    {[
-                      { id: 'client' as const, title: 'Cliente', desc: 'Contratar servicios' },
-                      { id: 'independent_pro' as const, title: 'Freelancer', desc: 'Ofrecer servicios' },
-                      { id: 'admin_request' as const, title: 'Admin central', desc: 'Gestión operativa' },
-                    ].map((opt) => {
-                      const active = regRole === opt.id;
-                      return (
-                        <button
-                          key={opt.id}
-                          type="button"
-                          onClick={() => {
-                            setRegRole(opt.id);
-                            setErrorMsg('');
-                          }}
-                          className={`p-2.5 rounded-xl border text-left transition-colors ${
-                            active
-                              ? 'border-[#304B3E] bg-[#304B3E]/10 dark:border-[#75836A] dark:bg-[#75836A]/20'
-                              : 'border-[#DDD5C8] dark:border-white/15 hover:bg-[#EAE3D6]/50 dark:hover:bg-white/5'
-                          }`}
-                        >
-                          <div className="text-xs font-bold">{opt.title}</div>
-                          <div className="text-[10px] text-[#73766F] dark:text-[#A3A89F]">
-                            {opt.desc}
-                          </div>
-                        </button>
-                      );
-                    })}
+            {pendingConfirmEmail ? (
+              <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/35 border border-emerald-200 dark:border-emerald-800 space-y-3 text-xs">
+                <div className="flex items-start gap-2.5">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <div className="space-y-1">
+                    <p className="font-bold text-sm text-[#1D252C] dark:text-[#F7F3EA]">
+                      Confirma tu correo electrónico
+                    </p>
+                    <p className="text-[#1D252C]/80 dark:text-[#F7F3EA]/80 leading-relaxed">
+                      Enviamos un correo de verificación a <strong>{pendingConfirmEmail}</strong>.
+                      Abre el enlace en tu bandeja principal o carpeta de spam para activar tu cuenta.
+                    </p>
                   </div>
                 </div>
-
-                <div>
-                  <label htmlFor="reg-name" className="block text-xs font-medium mb-1">
-                    Nombre completo *
-                  </label>
-                  <input
-                    id="reg-name"
-                    type="text"
-                    required
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    placeholder="Ej. Laura Hernández"
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-black/20"
-                  />
-                </div>
-
-                {regRole === 'independent_pro' && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label htmlFor="reg-biz" className="block text-xs font-medium mb-1">
-                        Nombre comercial (opcional)
-                      </label>
-                      <input
-                        id="reg-biz"
-                        type="text"
-                        value={commercialName}
-                        onChange={(e) => setCommercialName(e.target.value)}
-                        placeholder="Ej. Electricidad Hernández"
-                        className="w-full px-3 py-2 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-black/20"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="reg-cat" className="block text-xs font-medium mb-1">
-                        Categoría principal
-                      </label>
-                      <select
-                        id="reg-cat"
-                        value={categoryId}
-                        onChange={(e) => setCategoryId(e.target.value)}
-                        className="w-full px-3 py-2 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-black/20"
-                      >
-                        {db.categories
-                          .filter((c) => c.active)
-                          .map((c) => (
-                            <option key={c.id} value={c.id}>
-                              {c.name}
-                            </option>
-                          ))}
-                      </select>
-                    </div>
-                  </div>
-                )}
-
-                {regRole === 'admin_request' && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 rounded-xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40">
-                    <div>
-                      <span className="block text-xs font-medium mb-1">
-                        Nivel solicitado
-                      </span>
-                      <div className="px-3 py-2 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] font-semibold text-[#304B3E] dark:text-[#EAE3D6]">
-                        Administrador Central
-                      </div>
-                    </div>
-                    <div>
-                      <label htmlFor="reg-admin-region" className="block text-xs font-medium mb-1">
-                        Región de referencia
-                      </label>
-                      <select
-                        id="reg-admin-region"
-                        value={adminRegionId}
-                        onChange={(e) => setAdminRegionId(e.target.value)}
-                        className="w-full px-3 py-2 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E]"
-                      >
-                        {regions.map((r) => (
-                          <option key={r.id} value={r.id}>
-                            {r.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                )}
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label htmlFor="reg-email" className="block text-xs font-medium mb-1">
-                      Correo electrónico *
-                    </label>
-                    <input
-                      id="reg-email"
-                      type="email"
-                      required
-                      value={regEmail}
-                      onChange={(e) => setRegEmail(e.target.value)}
-                      placeholder="nombre@correo.com"
-                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-black/20"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="reg-colonia" className="block text-xs font-medium mb-1">
-                      Colonia
-                    </label>
-                    <select
-                      id="reg-colonia"
-                      value={colonia}
-                      onChange={(e) => setColonia(e.target.value)}
-                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-black/20"
-                    >
-                      {colonias.map((c) => (
-                        <option key={c} value={c}>
-                          {c}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="reg-password" className="block text-xs font-medium mb-1">
-                    Contraseña (mín. 6 caracteres) *
-                  </label>
-                  <input
-                    id="reg-password"
-                    type="password"
-                    required
-                    minLength={6}
-                    value={regPassword}
-                    onChange={(e) => setRegPassword(e.target.value)}
-                    placeholder="Crea una contraseña segura"
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-black/20"
-                  />
-                </div>
-
-                {regRole === 'admin_request' && (
-                  <div>
-                    <label htmlFor="reg-admin-just" className="block text-xs font-medium mb-1">
-                      Motivo o función administrativa solicitada *
-                    </label>
-                    <textarea
-                      id="reg-admin-just"
-                      required
-                      minLength={10}
-                      rows={2}
-                      value={adminJustification}
-                      onChange={(e) => setAdminJustification(e.target.value)}
-                      placeholder="Ej. Supervisión de verificaciones, catálogo y moderación en OFI CLICK."
-                      className="w-full px-3 py-2 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-black/20"
-                    />
-                  </div>
-                )}
-
-                {regRole === 'client' && (
-                  <p className="text-[11px] text-[#73766F] dark:text-[#A3A89F]">
-                    Tu foto de perfil es opcional y podrás añadirla en cualquier momento desde la pestaña <strong>Mi perfil</strong>.
-                  </p>
-                )}
-
-                <button
-                  type="submit"
-                  className="w-full py-2.5 px-4 rounded-xl bg-[#304B3E] hover:bg-[#243A30] text-white text-sm font-semibold transition-colors inline-flex items-center justify-center gap-2"
-                >
-                  <UserCheck className="w-4 h-4" />
-                  {regRole === 'admin_request'
-                    ? 'Enviar solicitud administrativa y verificar correo'
-                    : 'Registrarme en OFI CLICK'}
-                </button>
-              </form>
-            )}
-
-            {regRole === 'admin_request' && adminStep === 'otp' && activeAdminRequest && (
-              <form onSubmit={handleVerifyAdminOtp} className="space-y-4">
-                <div className="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/35 border border-amber-200 dark:border-amber-800 text-xs text-amber-950 dark:text-amber-100 space-y-1">
-                  <p className="font-bold">Paso 2 · Verificación de correo electrónico (OTP)</p>
-                  <p>
-                    Ingresa el código de 6 dígitos preparado para{' '}
-                    <strong>{activeAdminRequest.email}</strong> (disponible abajo en la vista previa local).
-                  </p>
-                </div>
-
-                {adminOtpError && (
-                  <div
-                    role="alert"
-                    className="p-3 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-xs text-red-700 dark:text-red-300"
-                  >
-                    {adminOtpError}
-                  </div>
-                )}
-
-                <div>
-                  <label htmlFor="modal-admin-otp" className="block text-xs font-semibold mb-1.5">
-                    Código de verificación (6 dígitos)
-                  </label>
-                  <input
-                    id="modal-admin-otp"
-                    type="text"
-                    inputMode="numeric"
-                    maxLength={6}
-                    required
-                    value={adminOtpInput}
-                    onChange={(e) => setAdminOtpInput(e.target.value)}
-                    placeholder="000000"
-                    className="w-full px-3.5 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-base font-mono-num tracking-[0.25em] text-center"
-                  />
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="submit"
-                    className="flex-1 py-2.5 px-4 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-sm font-semibold transition-colors"
-                  >
-                    Confirmar código OTP
-                  </button>
+                <div className="flex flex-wrap gap-2 pt-1">
                   <button
                     type="button"
-                    onClick={handleResendAdminOtp}
-                    className="px-3.5 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 text-xs font-semibold inline-flex items-center gap-1.5"
+                    disabled={resendingConfirm}
+                    onClick={handleResendSignupConfirmation}
+                    className="px-3.5 py-2 rounded-lg bg-[#214438] hover:bg-[#183329] text-white font-semibold inline-flex items-center gap-1.5 disabled:opacity-60"
                   >
                     <RefreshCw className="w-3.5 h-3.5" />
-                    Reenviar
+                    {resendingConfirm ? 'Reenviando...' : 'Reenviar correo'}
                   </button>
-                </div>
-              </form>
-            )}
-
-            {regRole === 'admin_request' && adminStep === 'pending' && activeAdminRequest && (
-              <div className="space-y-4">
-                <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/35 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-950 dark:text-emerald-100 space-y-2">
-                  <div className="flex items-center gap-2 font-bold">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                    <span>Correo verificado · Estado: pendiente de autorización</span>
-                  </div>
-                  <p>
-                    En producción, un <strong>Administrador Central</strong> debe aprobar esta solicitud antes de asignar privilegios administrativos en Supabase RLS.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-xl border border-[#304B3E]/25 bg-[#EAE3D6]/50 dark:bg-[#1C211E] space-y-2.5 text-xs">
-                  <div className="flex items-center gap-2 font-bold text-[#304B3E] dark:text-[#B96F50]">
-                    <ShieldCheck className="w-4 h-4" />
-                    <span>Inicialización local para prototipo / exposición</span>
-                  </div>
-                  <p className="text-[#73766F] dark:text-[#A3A89F]">
-                    Como estás probando el prototipo local sin servidor Supabase conectado, puedes inicializar tu acceso como{' '}
-                    <strong>Administrador Central</strong>{' '}
-                    de forma auditada para evaluar el panel operativo de inmediato.
-                  </p>
                   <button
                     type="button"
-                    data-testid="init-local-admin-btn"
-                    onClick={handleInitializeLocalAdmin}
-                    className="w-full py-2.5 px-4 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-xs font-semibold transition-colors"
+                    onClick={() => {
+                      setEmail(pendingConfirmEmail);
+                      setPendingConfirmEmail(null);
+                      switchTab('login');
+                    }}
+                    className="px-3.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 font-semibold"
                   >
-                    Inicializar acceso administrativo local (prototipo)
+                    Ir a Iniciar sesión
                   </button>
                 </div>
               </div>
+            ) : (
+              <>
+                {!(regRole === 'admin_request' && adminStep !== 'form') && (
+                  <form onSubmit={handleRegister} className="space-y-3.5">
+                    {regRole !== 'admin_request' && (
+                      <GoogleAuthButton
+                        intent="register"
+                        onboardingRole={regRole}
+                        separatorLabel="o crea tu cuenta con correo"
+                      />
+                    )}
+                    <div>
+                      <span className="block text-xs font-semibold mb-1.5">Tipo de cuenta</span>
+                      <div className="grid grid-cols-3 gap-2">
+                        {[
+                          { id: 'client' as const, title: 'Cliente', desc: 'Contratar servicios' },
+                          { id: 'independent_pro' as const, title: 'Freelancer', desc: 'Ofrecer servicios' },
+                          { id: 'admin_request' as const, title: 'Admin central', desc: 'Gestión operativa' },
+                        ].map((opt) => {
+                          const active = regRole === opt.id;
+                          return (
+                            <button
+                              key={opt.id}
+                              type="button"
+                              onClick={() => {
+                                setRegRole(opt.id);
+                                setErrorMsg('');
+                              }}
+                              className={`p-2.5 rounded-xl border text-left transition-colors ${
+                                active
+                                  ? 'border-[#214438] bg-[#214438]/10 dark:border-[#C7582B] dark:bg-[#C7582B]/20'
+                                  : 'border-[#DBD4C6] dark:border-white/15 hover:bg-[#ECE7DC]/55 dark:hover:bg-white/5'
+                              }`}
+                            >
+                              <div className="text-xs font-bold">{opt.title}</div>
+                              <div className="text-[10px] text-[#5B636B] dark:text-[#A8B0B8]">
+                                {opt.desc}
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div>
+                      <label htmlFor="reg-name" className="block text-xs font-medium mb-1">
+                        Nombre completo *
+                      </label>
+                      <input
+                        id="reg-name"
+                        type="text"
+                        required
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        placeholder="Ej. Laura Hernández"
+                        className="w-full px-3 py-2 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#12171C]"
+                      />
+                    </div>
+
+                    {regRole === 'independent_pro' && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label htmlFor="reg-biz" className="block text-xs font-medium mb-1">
+                            Nombre comercial (opcional)
+                          </label>
+                          <input
+                            id="reg-biz"
+                            type="text"
+                            value={commercialName}
+                            onChange={(e) => setCommercialName(e.target.value)}
+                            placeholder="Ej. Electricidad Hernández"
+                            className="w-full px-3 py-2 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#12171C]"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="reg-cat" className="block text-xs font-medium mb-1">
+                            Categoría principal
+                          </label>
+                          <select
+                            id="reg-cat"
+                            value={categoryId}
+                            onChange={(e) => setCategoryId(e.target.value)}
+                            className="w-full px-3 py-2 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#12171C]"
+                          >
+                            {db.categories
+                              .filter((c) => c.active)
+                              .map((c) => (
+                                <option key={c.id} value={c.id}>
+                                  {c.name}
+                                </option>
+                              ))}
+                          </select>
+                        </div>
+                      </div>
+                    )}
+
+                    {regRole === 'admin_request' && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 rounded-xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40">
+                        <div>
+                          <span className="block text-xs font-medium mb-1">Nivel solicitado</span>
+                          <div className="px-3 py-2 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#12171C] font-semibold text-[#214438] dark:text-[#F7F3EA]">
+                            Administrador Central
+                          </div>
+                        </div>
+                        <div>
+                          <label htmlFor="reg-admin-region" className="block text-xs font-medium mb-1">
+                            Región de referencia
+                          </label>
+                          <select
+                            id="reg-admin-region"
+                            value={adminRegionId}
+                            onChange={(e) => setAdminRegionId(e.target.value)}
+                            className="w-full px-3 py-2 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#12171C]"
+                          >
+                            {db.regions.map((r) => (
+                              <option key={r.id} value={r.id}>
+                                {r.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label htmlFor="reg-email" className="block text-xs font-medium mb-1">
+                          Correo electrónico *
+                        </label>
+                        <input
+                          id="reg-email"
+                          type="email"
+                          required
+                          value={regEmail}
+                          onChange={(e) => setRegEmail(e.target.value)}
+                          placeholder="nombre@correo.com"
+                          className="w-full px-3 py-2 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#12171C]"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="reg-colonia" className="block text-xs font-medium mb-1">
+                          Colonia / Pueblo (Izcalli)
+                        </label>
+                        <select
+                          id="reg-colonia"
+                          value={colonia}
+                          onChange={(e) => setColonia(e.target.value)}
+                          className="w-full px-3 py-2 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#12171C]"
+                        >
+                          {colonias.map((c) => (
+                            <option key={c} value={c}>
+                              {c}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label htmlFor="reg-password" className="block text-xs font-medium mb-1">
+                        Contraseña (mín. 6 caracteres) *
+                      </label>
+                      <input
+                        id="reg-password"
+                        type="password"
+                        required
+                        minLength={6}
+                        value={regPassword}
+                        onChange={(e) => setRegPassword(e.target.value)}
+                        placeholder="Crea una contraseña segura"
+                        className="w-full px-3 py-2 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#12171C]"
+                      />
+                    </div>
+
+                    {regRole === 'admin_request' && (
+                      <div>
+                        <label htmlFor="reg-admin-just" className="block text-xs font-medium mb-1">
+                          Motivo o función administrativa solicitada *
+                        </label>
+                        <textarea
+                          id="reg-admin-just"
+                          required
+                          minLength={10}
+                          rows={2}
+                          value={adminJustification}
+                          onChange={(e) => setAdminJustification(e.target.value)}
+                          placeholder="Ej. Supervisión de verificaciones, catálogo y moderación en OFI CLICK."
+                          className="w-full px-3 py-2 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#12171C]"
+                        />
+                      </div>
+                    )}
+
+                    <button
+                      type="submit"
+                      className="w-full py-2.5 px-4 rounded-xl bg-[#214438] hover:bg-[#183329] text-white text-sm font-semibold transition-colors inline-flex items-center justify-center gap-2"
+                    >
+                      <UserCheck className="w-4 h-4" />
+                      {regRole === 'admin_request'
+                        ? 'Enviar solicitud administrativa'
+                        : 'Registrarme en OFI CLICK'}
+                    </button>
+                  </form>
+                )}
+
+                {regRole === 'admin_request' && adminStep === 'otp' && activeAdminRequest && (
+                  <form onSubmit={handleVerifyAdminOtp} className="space-y-4">
+                    <div className="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/35 border border-amber-200 dark:border-amber-800 text-xs text-amber-950 dark:text-amber-100 space-y-1">
+                      <p className="font-bold">Paso 2 · Verificación de correo electrónico (OTP)</p>
+                      <p>
+                        Ingresa el código de 6 dígitos para{' '}
+                        <strong>{activeAdminRequest.email}</strong>.
+                      </p>
+                    </div>
+
+                    {adminOtpError && (
+                      <div
+                        role="alert"
+                        className="p-3 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-xs text-red-700 dark:text-red-300"
+                      >
+                        {adminOtpError}
+                      </div>
+                    )}
+
+                    <div>
+                      <label htmlFor="modal-admin-otp" className="block text-xs font-semibold mb-1.5">
+                        Código de verificación (6 dígitos)
+                      </label>
+                      <input
+                        id="modal-admin-otp"
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={6}
+                        required
+                        value={adminOtpInput}
+                        onChange={(e) => setAdminOtpInput(e.target.value)}
+                        placeholder="000000"
+                        className="w-full px-3.5 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#12171C] text-base font-mono-num tracking-[0.25em] text-center"
+                      />
+                    </div>
+
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        type="submit"
+                        className="flex-1 py-2.5 px-4 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-sm font-semibold transition-colors"
+                      >
+                        Confirmar código OTP
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleResendAdminOtp}
+                        className="px-3.5 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 text-xs font-semibold inline-flex items-center gap-1.5"
+                      >
+                        <RefreshCw className="w-3.5 h-3.5" />
+                        Reenviar
+                      </button>
+                    </div>
+                  </form>
+                )}
+
+                {regRole === 'admin_request' && adminStep === 'pending' && activeAdminRequest && (
+                  <div className="space-y-4">
+                    <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/35 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-950 dark:text-emerald-100 space-y-2">
+                      <div className="flex items-center gap-2 font-bold">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                        <span>Solicitud registrada · Estado: pendiente de autorización</span>
+                      </div>
+                      <p>
+                        Un <strong>Administrador Central</strong> autorizado debe aprobar esta solicitud antes de otorgar permisos administrativos en Supabase RLS.
+                      </p>
+                    </div>
+
+                    {dataMode === 'local' && (
+                      <div className="p-4 rounded-xl border border-[#214438]/25 bg-[#ECE7DC]/55 dark:bg-[#12171C] space-y-2.5 text-xs">
+                        <div className="flex items-center gap-2 font-bold text-[#214438] dark:text-[#C7582B]">
+                          <ShieldCheck className="w-4 h-4" />
+                          <span>Inicialización local para prototipo</span>
+                        </div>
+                        <button
+                          type="button"
+                          data-testid="init-local-admin-btn"
+                          onClick={handleInitializeLocalAdmin}
+                          className="w-full py-2.5 px-4 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-xs font-semibold transition-colors"
+                        >
+                          Inicializar acceso administrativo local (prototipo)
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}
@@ -798,14 +875,14 @@ export const AuthModal: React.FC = () => {
         {authModalMode === 'recovery' && (
           <div className="mt-4 space-y-4">
             <div className="flex items-center justify-between text-xs">
-              <span className="font-semibold flex items-center gap-1.5 text-[#304B3E] dark:text-[#B96F50]">
+              <span className="font-semibold flex items-center gap-1.5 text-[#214438] dark:text-[#C7582B]">
                 <KeyRound className="w-4 h-4" />
                 Restablecer contraseña
               </span>
               <button
                 type="button"
                 onClick={() => switchTab('login')}
-                className="text-[#73766F] hover:underline"
+                className="text-[#5B636B] hover:underline"
               >
                 Volver a iniciar sesión
               </button>
@@ -813,8 +890,10 @@ export const AuthModal: React.FC = () => {
 
             {recStep === 'email' && (
               <form onSubmit={handleRequestRecovery} className="space-y-4">
-                <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">
-                  Ingresa tu correo para preparar un código temporal de recuperación en entorno local.
+                <p className="text-xs text-[#5B636B] dark:text-[#A8B0B8]">
+                  {dataMode === 'supabase'
+                    ? 'Ingresa tu correo registrado y te enviaremos un enlace seguro para restablecer tu contraseña.'
+                    : 'Ingresa tu correo para preparar un código temporal de recuperación en entorno local.'}
                 </p>
                 <div>
                   <label htmlFor="rec-email" className="block text-xs font-medium mb-1">
@@ -827,16 +906,36 @@ export const AuthModal: React.FC = () => {
                     value={recEmail}
                     onChange={(e) => setRecEmail(e.target.value)}
                     placeholder="tu@correo.com"
-                    className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-black/20"
+                    className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#12171C]"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-2.5 px-4 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-sm font-semibold transition-colors"
+                  className="w-full py-2.5 px-4 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-sm font-semibold transition-colors"
                 >
-                  Solicitar código de recuperación
+                  {dataMode === 'supabase'
+                    ? 'Enviar enlace de recuperación'
+                    : 'Solicitar código de recuperación'}
                 </button>
               </form>
+            )}
+
+            {recStep === 'email_sent' && (
+              <div className="p-4 rounded-xl bg-[#ECE7DC]/70 dark:bg-[#12171C] border border-[#DBD4C6] dark:border-white/12 text-xs space-y-2.5">
+                <p className="font-bold text-[#1D252C] dark:text-[#F7F3EA]">
+                  Revisa tu correo electrónico
+                </p>
+                <p className="text-[#5B636B] dark:text-[#A8B0B8] leading-relaxed">
+                  Haz clic en el enlace de recuperación que enviamos a <strong>{recEmail}</strong>. Al abrirlo regresarás automáticamente aquí para capturar tu nueva contraseña.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setRecStep('email')}
+                  className="text-xs font-semibold text-[#214438] dark:text-[#C7582B] hover:underline"
+                >
+                  Enviar a otro correo
+                </button>
+              </div>
             )}
 
             {recStep === 'code' && (
@@ -854,20 +953,20 @@ export const AuthModal: React.FC = () => {
                     value={recCode}
                     onChange={(e) => setRecCode(e.target.value)}
                     placeholder="000000"
-                    className="w-full px-3.5 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-base font-mono-num tracking-[0.25em] text-center"
+                    className="w-full px-3.5 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#12171C] text-base font-mono-num tracking-[0.25em] text-center"
                   />
                 </div>
                 <div className="flex gap-2">
                   <button
                     type="submit"
-                    className="flex-1 py-2.5 px-4 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-sm font-semibold transition-colors"
+                    className="flex-1 py-2.5 px-4 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-sm font-semibold transition-colors"
                   >
                     Validar código
                   </button>
                   <button
                     type="button"
                     onClick={() => setRecStep('email')}
-                    className="px-3 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 text-xs font-semibold"
+                    className="px-3 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 text-xs font-semibold"
                   >
                     Cambiar correo
                   </button>
@@ -888,7 +987,7 @@ export const AuthModal: React.FC = () => {
                     minLength={6}
                     value={recNewPassword}
                     onChange={(e) => setRecNewPassword(e.target.value)}
-                    className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-black/20"
+                    className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#12171C]"
                   />
                 </div>
                 <div>
@@ -902,12 +1001,12 @@ export const AuthModal: React.FC = () => {
                     minLength={6}
                     value={recConfirmPassword}
                     onChange={(e) => setRecConfirmPassword(e.target.value)}
-                    className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-black/20"
+                    className="w-full px-3 py-2.5 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#12171C]"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-2.5 px-4 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-sm font-semibold transition-colors"
+                  className="w-full py-2.5 px-4 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-sm font-semibold transition-colors"
                 >
                   Guardar nueva contraseña
                 </button>
@@ -922,7 +1021,7 @@ export const AuthModal: React.FC = () => {
                   setPassword('');
                   switchTab('login');
                 }}
-                className="w-full py-2.5 px-4 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-sm font-semibold transition-colors"
+                className="w-full py-2.5 px-4 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-sm font-semibold transition-colors"
               >
                 Ir a Iniciar sesión
               </button>
@@ -930,14 +1029,14 @@ export const AuthModal: React.FC = () => {
           </div>
         )}
 
-        {/* Honest Local Prepared Email Outbox Preview (for OTP / Recovery verification in local prototype) */}
-        {(authModalMode === 'register' || authModalMode === 'recovery') &&
+        {dataMode === 'local' &&
+          (authModalMode === 'register' || authModalMode === 'recovery') &&
           latestPreparedEmails.length > 0 && (
-            <div className="mt-4 pt-3 border-t border-[#DDD5C8] dark:border-white/10 text-xs space-y-2">
+            <div className="mt-4 pt-3 border-t border-[#DBD4C6] dark:border-white/10 text-xs space-y-2">
               <div className="flex items-center justify-between gap-2">
-                <span className="font-semibold text-[#304B3E] dark:text-[#B96F50] flex items-center gap-1.5">
+                <span className="font-semibold text-[#214438] dark:text-[#C7582B] flex items-center gap-1.5">
                   <Mail className="w-3.5 h-3.5" />
-                  Plantilla preparada (solo entorno local, sin envío SMTP)
+                  Plantilla preparada (entorno local)
                 </span>
                 <button
                   type="button"
@@ -952,12 +1051,12 @@ export const AuthModal: React.FC = () => {
                   {latestPreparedEmails.map((em) => (
                     <div
                       key={em.id}
-                      className="p-2.5 rounded-lg bg-[#EAE3D6]/70 dark:bg-[#1C211E] border border-[#DDD5C8] dark:border-white/10 space-y-1"
+                      className="p-2.5 rounded-lg bg-[#ECE7DC]/70 dark:bg-[#12171C] border border-[#DBD4C6] dark:border-white/10 space-y-1"
                     >
                       <div className="font-semibold text-[11px]">
                         Asunto: {em.subject} · Para: {em.toEmail}
                       </div>
-                      <pre className="whitespace-pre-wrap font-sans text-[11px] text-[#252A27]/85 dark:text-[#F5F1E8]/85">
+                      <pre className="whitespace-pre-wrap font-sans text-[11px] text-[#1D252C]/85 dark:text-[#F7F3EA]/85">
                         {em.textBody}
                       </pre>
                     </div>

@@ -140,20 +140,20 @@ export const Header: React.FC = () => {
   const firstName = currentUser ? currentUser.fullName.split(' ')[0] : '';
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[#DDD5C8] dark:border-white/10 bg-[#F5F1E8]/95 dark:bg-[#171B19]/95 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-[#DBD4C6] dark:border-white/10 bg-[#F7F3EA]/95 dark:bg-[#12171C]/95 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-6">
         <button
           type="button"
           onClick={() => navigate({ page: 'landing' })}
           aria-label="OFI CLICK Inicio"
-          className="whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-[#304B3E] rounded-lg"
+          className="whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-[#214438] rounded-lg"
         >
           <BrandLogo variant="horizontal" size="md" />
         </button>
 
         <nav
           aria-label="Navegación pública principal"
-          className="hidden md:flex items-center gap-6 text-sm font-medium text-[#252A27]/80 dark:text-[#F5F1E8]/80"
+          className="hidden md:flex items-center gap-6 text-sm font-medium text-[#1D252C]/80 dark:text-[#F7F3EA]/80"
         >
           {navLinks.map((item) => {
             const active = route.page === item.id;
@@ -164,8 +164,8 @@ export const Header: React.FC = () => {
                 onClick={() => navigate(item.route)}
                 className={`whitespace-nowrap shrink-0 transition-colors ${
                   active
-                    ? 'text-[#304B3E] dark:text-[#75836A] font-semibold underline decoration-[#B96F50] decoration-2 underline-offset-8'
-                    : 'hover:text-[#304B3E] dark:hover:text-white'
+                    ? 'text-[#214438] dark:text-[#75836A] font-semibold underline decoration-[#C7582B] decoration-2 underline-offset-8'
+                    : 'hover:text-[#214438] dark:hover:text-white'
                 }`}
               >
                 {item.label}
@@ -184,7 +184,7 @@ export const Header: React.FC = () => {
                 aria-expanded={accountMenuOpen}
                 aria-label={`Menú de cuenta de ${currentUser.fullName}`}
                 data-testid="header-account-menu-trigger"
-                className="inline-flex items-center gap-2.5 pl-1.5 pr-3 py-1.5 rounded-full bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/15 hover:border-[#304B3E] dark:hover:border-[#75836A] transition-colors whitespace-nowrap shrink-0 shadow-2xs"
+                className="inline-flex items-center gap-2.5 pl-1.5 pr-3 py-1.5 rounded-full bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/15 hover:border-[#214438] dark:hover:border-[#75836A] transition-colors whitespace-nowrap shrink-0 shadow-2xs"
               >
                 <div className="relative">
                   <UserAvatar
@@ -195,11 +195,11 @@ export const Header: React.FC = () => {
                   {unreadNotifs + unreadMsgs > 0 && (
                     <span
                       aria-hidden="true"
-                      className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#B96F50] ring-2 ring-[#FFFCF7] dark:ring-[#222825]"
+                      className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#C7582B] ring-2 ring-[#FFFDFA] dark:ring-[#1A2128]"
                     />
                   )}
                 </div>
-                <span className="text-xs font-semibold text-[#252A27] dark:text-[#F5F1E8] max-w-[110px] truncate">
+                <span className="text-xs font-semibold text-[#1D252C] dark:text-[#F7F3EA] max-w-[110px] truncate">
                   {firstName}
                 </span>
                 <ChevronDown
@@ -215,16 +215,16 @@ export const Header: React.FC = () => {
                   role="menu"
                   aria-label="Opciones de cuenta"
                   data-testid="header-account-dropdown"
-                  className="absolute right-0 mt-2 w-64 rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/15 shadow-xl py-2 z-50"
+                  className="absolute right-0 mt-2 w-64 rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/15 shadow-xl py-2 z-50"
                 >
-                  <div className="px-4 py-2.5 border-b border-[#DDD5C8] dark:border-white/10 flex items-center gap-3">
+                  <div className="px-4 py-2.5 border-b border-[#DBD4C6] dark:border-white/10 flex items-center gap-3">
                     <UserAvatar
                       src={currentUser.avatarUrl}
                       name={currentUser.fullName}
                       sizeClass="w-9 h-9"
                     />
                     <div className="min-w-0">
-                      <p className="text-xs font-bold text-[#252A27] dark:text-[#F5F1E8] truncate">
+                      <p className="text-xs font-bold text-[#1D252C] dark:text-[#F7F3EA] truncate">
                         {currentUser.fullName}
                       </p>
                       <p className="text-[11px] text-[#73766F] dark:text-[#A3A89F] truncate">
@@ -240,16 +240,16 @@ export const Header: React.FC = () => {
                         type="button"
                         role="menuitem"
                         onClick={() => navigatePanelTab(item.tab)}
-                        className="w-full px-4 py-2 text-left text-xs font-medium text-[#252A27] dark:text-[#F5F1E8] hover:bg-[#EAE3D6]/70 dark:hover:bg-white/10 flex items-center justify-between gap-2 transition-colors"
+                        className="w-full px-4 py-2 text-left text-xs font-medium text-[#1D252C] dark:text-[#F7F3EA] hover:bg-[#ECE7DC]/70 dark:hover:bg-white/10 flex items-center justify-between gap-2 transition-colors"
                       >
                         <span className="flex items-center gap-2.5">
-                          <span className="text-[#304B3E] dark:text-[#75836A]">
+                          <span className="text-[#214438] dark:text-[#75836A]">
                             {item.icon}
                           </span>
                           <span>{item.label}</span>
                         </span>
                         {item.badge !== undefined && item.badge > 0 && (
-                          <span className="font-mono-num px-1.5 py-0.5 rounded bg-[#B96F50] text-white text-[10px] font-bold">
+                          <span className="font-mono-num px-1.5 py-0.5 rounded bg-[#C7582B] text-white text-[10px] font-bold">
                             {item.badge}
                           </span>
                         )}
@@ -257,7 +257,7 @@ export const Header: React.FC = () => {
                     ))}
                   </div>
 
-                  <div className="pt-1 mt-1 border-t border-[#DDD5C8] dark:border-white/10">
+                  <div className="pt-1 mt-1 border-t border-[#DBD4C6] dark:border-white/10">
                     <button
                       type="button"
                       role="menuitem"
@@ -278,7 +278,7 @@ export const Header: React.FC = () => {
             <button
               type="button"
               onClick={() => openAuthModal('login')}
-              className="hidden md:inline-flex items-center px-4 py-2 text-xs font-semibold rounded-xl bg-[#304B3E] hover:bg-[#243A30] text-white transition-colors whitespace-nowrap shrink-0"
+              className="hidden md:inline-flex items-center px-4 py-2 text-xs font-semibold rounded-xl bg-[#214438] hover:bg-[#183329] text-white transition-colors whitespace-nowrap shrink-0"
             >
               Iniciar sesión
             </button>
@@ -289,7 +289,7 @@ export const Header: React.FC = () => {
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={mobileOpen}
-            className="md:hidden min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg text-[#252A27] dark:text-[#F5F1E8] hover:bg-black/5 dark:hover:bg-white/10"
+            className="md:hidden min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg text-[#1D252C] dark:text-[#F7F3EA] hover:bg-black/5 dark:hover:bg-white/10"
           >
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -297,7 +297,7 @@ export const Header: React.FC = () => {
       </div>
 
       {mobileOpen && (
-        <div className="md:hidden border-t border-[#DDD5C8] dark:border-white/10 bg-[#F5F1E8] dark:bg-[#171B19] px-4 py-4 space-y-1.5 max-h-[82vh] overflow-y-auto">
+        <div className="md:hidden border-t border-[#DBD4C6] dark:border-white/10 bg-[#F7F3EA] dark:bg-[#12171C] px-4 py-4 space-y-1.5 max-h-[82vh] overflow-y-auto">
           {navLinks.map((item) => {
             const active = route.page === item.id;
             return (
@@ -310,15 +310,15 @@ export const Header: React.FC = () => {
                 }}
                 className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium ${
                   active
-                    ? 'bg-[#304B3E]/12 text-[#304B3E] dark:bg-[#75836A]/20 dark:text-[#EAE3D6] font-semibold'
-                    : 'hover:bg-[#EAE3D6]/70 dark:hover:bg-white/10'
+                    ? 'bg-[#214438]/12 text-[#214438] dark:bg-[#75836A]/20 dark:text-[#ECE7DC] font-semibold'
+                    : 'hover:bg-[#ECE7DC]/70 dark:hover:bg-white/10'
                 }`}
               >
                 {item.label}
               </button>
             );
           })}
-          <div className="pt-3 border-t border-[#DDD5C8] dark:border-white/10 space-y-2">
+          <div className="pt-3 border-t border-[#DBD4C6] dark:border-white/10 space-y-2">
             {currentUser ? (
               <>
                 <div className="flex items-center gap-3 px-2 py-1.5">
@@ -328,7 +328,7 @@ export const Header: React.FC = () => {
                     sizeClass="w-9 h-9"
                   />
                   <div className="min-w-0">
-                    <p className="text-xs font-bold text-[#252A27] dark:text-[#F5F1E8] truncate">
+                    <p className="text-xs font-bold text-[#1D252C] dark:text-[#F7F3EA] truncate">
                       {currentUser.fullName}
                     </p>
                     <p className="text-[11px] text-[#73766F] truncate">{currentUser.email}</p>
@@ -340,16 +340,16 @@ export const Header: React.FC = () => {
                       key={item.id}
                       type="button"
                       onClick={() => navigatePanelTab(item.tab)}
-                      className="flex items-center justify-between gap-1.5 px-3 py-2 rounded-lg bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/12 text-xs font-medium text-[#252A27] dark:text-[#F5F1E8]"
+                      className="flex items-center justify-between gap-1.5 px-3 py-2 rounded-lg bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/12 text-xs font-medium text-[#1D252C] dark:text-[#F7F3EA]"
                     >
                       <span className="flex items-center gap-1.5 truncate">
-                        <span className="text-[#304B3E] dark:text-[#75836A] shrink-0">
+                        <span className="text-[#214438] dark:text-[#75836A] shrink-0">
                           {item.icon}
                         </span>
                         <span className="truncate">{item.label}</span>
                       </span>
                       {item.badge !== undefined && item.badge > 0 && (
-                        <span className="font-mono-num px-1.5 py-0.5 rounded bg-[#B96F50] text-white text-[10px] font-bold">
+                        <span className="font-mono-num px-1.5 py-0.5 rounded bg-[#C7582B] text-white text-[10px] font-bold">
                           {item.badge}
                         </span>
                       )}
@@ -375,7 +375,7 @@ export const Header: React.FC = () => {
                   setMobileOpen(false);
                   openAuthModal('login');
                 }}
-                className="w-full py-2.5 px-4 rounded-xl bg-[#304B3E] text-white text-sm font-semibold"
+                className="w-full py-2.5 px-4 rounded-xl bg-[#214438] text-white text-sm font-semibold"
               >
                 Iniciar sesión o registrarse
               </button>

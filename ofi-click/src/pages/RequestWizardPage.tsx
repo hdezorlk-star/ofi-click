@@ -14,6 +14,7 @@ import { useOfiClick } from '../context/OfiClickContext';
 import { requestsService } from '../services/requests.service';
 import { findCompatibleProfessionals, formatMXN } from '../utils/marketplace';
 import type { RequestDistributionMode, UrgencyLevel } from '../types/oficlick';
+import { ALL_IZCALLI_COLONIAS } from '../data/izcalliLocations';
 
 interface RequestWizardPageProps {
   preselectedProId?: string;
@@ -38,7 +39,7 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
 
   const izcalliColonias = useMemo(() => {
     const reg = db.regions.find((r) => r.id === 'reg-izcalli');
-    return reg?.colonias || ['Centro Urbano', 'Ensueños', 'Atlanta', 'Cumbre Norte'];
+    return reg && reg.colonias.length > 0 ? reg.colonias : ALL_IZCALLI_COLONIAS;
   }, [db.regions]);
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -176,12 +177,12 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
           <button
             type="button"
             onClick={() => navigate({ page: 'explore' })}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#73766F] hover:text-[#252A27] dark:hover:text-[#F5F1E8] mb-2"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#73766F] hover:text-[#1D252C] dark:hover:text-[#F7F3EA] mb-2"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Volver a explorar profesionales
           </button>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#252A27] dark:text-[#F5F1E8]">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#1D252C] dark:text-[#F7F3EA]">
             Solicitar servicio en Cuautitlán Izcalli
           </h1>
           <p className="text-sm text-[#73766F] dark:text-[#A3A89F] mt-1">
@@ -196,10 +197,10 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
               key={n}
               className={`px-3 py-1.5 rounded-lg border ${
                 step === n
-                  ? 'bg-[#304B3E] text-white border-[#304B3E] dark:bg-[#75836A] dark:border-[#75836A]'
+                  ? 'bg-[#214438] text-white border-[#214438] dark:bg-[#75836A] dark:border-[#75836A]'
                   : step > n
-                  ? 'bg-[#75836A]/20 text-[#304B3E] dark:text-[#F5F1E8] border-[#75836A]'
-                  : 'border-[#DDD5C8] dark:border-white/15 text-[#73766F]'
+                  ? 'bg-[#75836A]/20 text-[#214438] dark:text-[#F7F3EA] border-[#75836A]'
+                  : 'border-[#DBD4C6] dark:border-white/15 text-[#73766F]'
               }`}
             >
               Paso {n}
@@ -210,14 +211,14 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
 
       {/* Step 1: Service & Location */}
       {step === 1 && (
-        <div className="rounded-2xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-6 space-y-5 shadow-xs">
-          <h2 className="text-lg font-bold text-[#252A27] dark:text-[#F5F1E8]">
+        <div className="rounded-2xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-6 space-y-5 shadow-xs">
+          <h2 className="text-lg font-bold text-[#1D252C] dark:text-[#F7F3EA]">
             1. ¿Qué necesitas resolver?
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-[#252A27] dark:text-[#F5F1E8] mb-1.5">
+              <label className="block text-xs font-semibold text-[#1D252C] dark:text-[#F7F3EA] mb-1.5">
                 Categoría del servicio
               </label>
               <select
@@ -226,7 +227,7 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
                   setCategoryId(e.target.value);
                   setServiceId('');
                 }}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               >
                 {activeCategories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
@@ -237,7 +238,7 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#252A27] dark:text-[#F5F1E8] mb-1.5">
+              <label className="block text-xs font-semibold text-[#1D252C] dark:text-[#F7F3EA] mb-1.5">
                 Servicio específico del catálogo (opcional)
               </label>
               <select
@@ -247,7 +248,7 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
                   const found = categoryServices.find((s) => s.id === e.target.value);
                   if (found && !title) setTitle(found.name);
                 }}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               >
                 <option value="">Servicio personalizado / diagnóstico</option>
                 {categoryServices.map((srv) => (
@@ -260,7 +261,7 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#252A27] dark:text-[#F5F1E8] mb-1.5">
+            <label className="block text-xs font-semibold text-[#1D252C] dark:text-[#F7F3EA] mb-1.5">
               Título breve de tu solicitud *
             </label>
             <input
@@ -268,13 +269,13 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Ej. Fuga en tubería bajo tarja de cocina"
-              className="w-full px-3.5 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+              className="w-full px-3.5 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               required
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#252A27] dark:text-[#F5F1E8] mb-1.5">
+            <label className="block text-xs font-semibold text-[#1D252C] dark:text-[#F7F3EA] mb-1.5">
               Descripción detallada *
             </label>
             <textarea
@@ -282,20 +283,20 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
               placeholder="Describe el problema, medidas aproximadas, acceso o si ya cuentas con material..."
-              className="w-full px-3.5 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+              className="w-full px-3.5 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               required
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-[#252A27] dark:text-[#F5F1E8] mb-1.5">
+              <label className="block text-xs font-semibold text-[#1D252C] dark:text-[#F7F3EA] mb-1.5">
                 Colonia en Cuautitlán Izcalli *
               </label>
               <select
                 value={colonia}
                 onChange={(e) => setColonia(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               >
                 {izcalliColonias.map((col) => (
                   <option key={col} value={col}>
@@ -306,7 +307,7 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-[#252A27] dark:text-[#F5F1E8] mb-1.5">
+              <label className="block text-xs font-semibold text-[#1D252C] dark:text-[#F7F3EA] mb-1.5">
                 Dirección exacta (privada, solo visible al aceptar cita)
               </label>
               <input
@@ -314,17 +315,17 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
                 value={privateAddress}
                 onChange={(e) => setPrivateAddress(e.target.value)}
                 placeholder="Calle, número exterior/interior y referencias"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#252A27] dark:text-[#F5F1E8] mb-1.5">
+            <label className="block text-xs font-semibold text-[#1D252C] dark:text-[#F7F3EA] mb-1.5">
               Fotos de referencia (opcional, máx. 5 MB por archivo)
             </label>
-            <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-dashed border-[#B96F50]/60 cursor-pointer text-xs font-medium hover:bg-[#EAE3D6]/50 dark:hover:bg-white/5">
-              <Upload className="w-4 h-4 text-[#B96F50]" />
+            <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-dashed border-[#C7582B]/60 cursor-pointer text-xs font-medium hover:bg-[#ECE7DC]/50 dark:hover:bg-white/5">
+              <Upload className="w-4 h-4 text-[#C7582B]" />
               <span>Adjuntar fotos del espacio o falla</span>
               <input
                 type="file"
@@ -339,7 +340,7 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
                 {photos.map((name, i) => (
                   <span
                     key={`${name}-${i}`}
-                    className="px-2.5 py-1 rounded bg-[#EAE3D6] dark:bg-[#1C211E] text-xs"
+                    className="px-2.5 py-1 rounded bg-[#ECE7DC] dark:bg-[#161C22] text-xs"
                   >
                     {name}
                   </span>
@@ -358,7 +359,7 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
                 }
                 setStep(2);
               }}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-sm font-semibold transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-sm font-semibold transition-colors"
             >
               Continuar a fecha y urgencia
               <ArrowRight className="w-4 h-4" />
@@ -369,8 +370,8 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
 
       {/* Step 2: Schedule, Urgency, Budget */}
       {step === 2 && (
-        <div className="rounded-2xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-6 space-y-5 shadow-xs">
-          <h2 className="text-lg font-bold text-[#252A27] dark:text-[#F5F1E8]">
+        <div className="rounded-2xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-6 space-y-5 shadow-xs">
+          <h2 className="text-lg font-bold text-[#1D252C] dark:text-[#F7F3EA]">
             2. Fecha deseada, urgencia y presupuesto
           </h2>
 
@@ -381,7 +382,7 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
                 type="date"
                 value={desiredDate}
                 onChange={(e) => setDesiredDate(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
                 required
               />
             </div>
@@ -391,7 +392,7 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
               <select
                 value={desiredTimeSlot}
                 onChange={(e) => setDesiredTimeSlot(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               >
                 <option value="09:00 - 12:00">Mañana (09:00 - 12:00)</option>
                 <option value="10:00 - 13:00">Media mañana (10:00 - 13:00)</option>
@@ -419,8 +420,8 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
                     onClick={() => setUrgency(u.id)}
                     className={`px-3 py-2 rounded-lg border text-xs font-semibold transition-colors ${
                       urgency === u.id
-                        ? 'bg-[#304B3E] text-white border-[#304B3E] dark:bg-[#75836A]'
-                        : 'border-[#DDD5C8] dark:border-white/15'
+                        ? 'bg-[#214438] text-white border-[#214438] dark:bg-[#75836A]'
+                        : 'border-[#DBD4C6] dark:border-white/15'
                     }`}
                   >
                     {u.label}
@@ -439,7 +440,7 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
                 value={optionalBudget}
                 onChange={(e) => setOptionalBudget(e.target.value)}
                 placeholder="Ej. 1500"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+                className="w-full px-3.5 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               />
             </div>
           </div>
@@ -462,7 +463,7 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
               value={preferences}
               onChange={(e) => setPreferences(e.target.value)}
               placeholder="Ej. Prefiero facturación, materiales incluidos o visita diagnóstica previa"
-              className="w-full px-3.5 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+              className="w-full px-3.5 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
             />
           </div>
 
@@ -470,14 +471,14 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
             <button
               type="button"
               onClick={() => setStep(1)}
-              className="px-4 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 text-sm font-medium"
+              className="px-4 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 text-sm font-medium"
             >
               Atrás
             </button>
             <button
               type="button"
               onClick={() => setStep(3)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-sm font-semibold transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-sm font-semibold transition-colors"
             >
               Elegir profesionales destinatarios
               <ArrowRight className="w-4 h-4" />
@@ -488,9 +489,9 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
 
       {/* Step 3: Manual vs OFI CLICK Compatible Recommendation (NO arbitrary limit!) */}
       {step === 3 && (
-        <div className="rounded-2xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-6 space-y-5 shadow-xs">
+        <div className="rounded-2xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-6 space-y-5 shadow-xs">
           <div>
-            <h2 className="text-lg font-bold text-[#252A27] dark:text-[#F5F1E8]">
+            <h2 className="text-lg font-bold text-[#1D252C] dark:text-[#F7F3EA]">
               3. Selecciona quién recibe tu solicitud
             </h2>
             <p className="text-xs text-[#73766F] dark:text-[#A3A89F] mt-1">
@@ -505,12 +506,12 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
               onClick={() => setDistributionMode('recommended')}
               className={`p-4 rounded-xl border text-left transition-colors ${
                 distributionMode === 'recommended'
-                  ? 'border-[#304B3E] bg-[#304B3E]/8 dark:border-[#B96F50] dark:bg-[#1C211E]'
-                  : 'border-[#DDD5C8] dark:border-white/12'
+                  ? 'border-[#214438] bg-[#214438]/8 dark:border-[#C7582B] dark:bg-[#161C22]'
+                  : 'border-[#DBD4C6] dark:border-white/12'
               }`}
             >
-              <div className="flex items-center gap-2 font-semibold text-sm text-[#252A27] dark:text-[#F5F1E8]">
-                <Sparkles className="w-4 h-4 text-[#B96F50]" />
+              <div className="flex items-center gap-2 font-semibold text-sm text-[#1D252C] dark:text-[#F7F3EA]">
+                <Sparkles className="w-4 h-4 text-[#C7582B]" />
                 Recomendación compatible de OFI CLICK
               </div>
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F] mt-1">
@@ -524,12 +525,12 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
               onClick={() => setDistributionMode('manual')}
               className={`p-4 rounded-xl border text-left transition-colors ${
                 distributionMode === 'manual'
-                  ? 'border-[#304B3E] bg-[#304B3E]/8 dark:border-[#B96F50] dark:bg-[#1C211E]'
-                  : 'border-[#DDD5C8] dark:border-white/12'
+                  ? 'border-[#214438] bg-[#214438]/8 dark:border-[#C7582B] dark:bg-[#161C22]'
+                  : 'border-[#DBD4C6] dark:border-white/12'
               }`}
             >
-              <div className="flex items-center gap-2 font-semibold text-sm text-[#252A27] dark:text-[#F5F1E8]">
-                <Users className="w-4 h-4 text-[#304B3E] dark:text-[#9CB08D]" />
+              <div className="flex items-center gap-2 font-semibold text-sm text-[#1D252C] dark:text-[#F7F3EA]">
+                <Users className="w-4 h-4 text-[#214438] dark:text-[#9CB08D]" />
                 Selección manual directa
               </div>
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F] mt-1">
@@ -555,7 +556,7 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
                         : candidateList.map((p) => p.id)
                     )
                   }
-                  className="text-[#304B3E] dark:text-[#B96F50] hover:underline"
+                  className="text-[#214438] dark:text-[#C7582B] hover:underline"
                 >
                   {selectedProIds.length === candidateList.length
                     ? 'Deseleccionar todos'
@@ -586,17 +587,17 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
                       onClick={() => toggleRecipient(pro.id)}
                       className={`p-3.5 rounded-xl border text-left flex items-start justify-between gap-3 transition-colors ${
                         checked
-                          ? 'border-[#304B3E] bg-[#EAE3D6]/55 dark:border-[#B96F50] dark:bg-[#1C211E]'
-                          : 'border-[#DDD5C8] dark:border-white/12'
+                          ? 'border-[#214438] bg-[#ECE7DC]/55 dark:border-[#C7582B] dark:bg-[#161C22]'
+                          : 'border-[#DBD4C6] dark:border-white/12'
                       }`}
                     >
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
-                          <span className="font-semibold text-sm text-[#252A27] dark:text-[#F5F1E8] truncate">
+                          <span className="font-semibold text-sm text-[#1D252C] dark:text-[#F7F3EA] truncate">
                             {pro.commercialName || pro.displayName}
                           </span>
                           {pro.verificationLevel >= 3 && (
-                            <ShieldCheck className="w-3.5 h-3.5 text-[#304B3E] dark:text-[#9CB08D] shrink-0" />
+                            <ShieldCheck className="w-3.5 h-3.5 text-[#214438] dark:text-[#9CB08D] shrink-0" />
                           )}
                         </div>
                         <p className="text-xs text-[#73766F] dark:text-[#A3A89F] mt-0.5 truncate">
@@ -607,8 +608,8 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
                       <span
                         className={`w-5 h-5 rounded flex items-center justify-center shrink-0 border ${
                           checked
-                            ? 'bg-[#304B3E] border-[#304B3E] text-white dark:bg-[#75836A] dark:border-[#75836A]'
-                            : 'border-[#DDD5C8] dark:border-white/30'
+                            ? 'bg-[#214438] border-[#214438] text-white dark:bg-[#75836A] dark:border-[#75836A]'
+                            : 'border-[#DBD4C6] dark:border-white/30'
                         }`}
                       >
                         {checked && <Check className="w-3.5 h-3.5" />}
@@ -621,9 +622,9 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
           </div>
 
           {/* Summary Box */}
-          <div className="p-4 rounded-xl bg-[#EAE3D6]/60 dark:bg-[#1C211E] border border-[#DDD5C8]/70 dark:border-white/10 text-xs space-y-1.5">
-            <div className="font-semibold text-[#252A27] dark:text-[#F5F1E8] flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-[#B96F50]" />
+          <div className="p-4 rounded-xl bg-[#ECE7DC]/60 dark:bg-[#161C22] border border-[#DBD4C6]/70 dark:border-white/10 text-xs space-y-1.5">
+            <div className="font-semibold text-[#1D252C] dark:text-[#F7F3EA] flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-[#C7582B]" />
               Resumen de envío
             </div>
             <p className="text-[#73766F] dark:text-[#A3A89F]">
@@ -641,14 +642,14 @@ export const RequestWizardPage: React.FC<RequestWizardPageProps> = ({
             <button
               type="button"
               onClick={() => setStep(2)}
-              className="px-4 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 text-sm font-medium"
+              className="px-4 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 text-sm font-medium"
             >
               Atrás
             </button>
             <button
               type="button"
               onClick={handleConfirmSend}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-sm font-semibold transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-sm font-semibold transition-colors"
             >
               <CheckCircle2 className="w-4 h-4" />
               Confirmar y enviar solicitud ({selectedProIds.length})

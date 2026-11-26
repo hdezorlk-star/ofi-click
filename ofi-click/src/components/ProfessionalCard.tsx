@@ -26,7 +26,7 @@ export const VerificationLabel: React.FC<{ level: ProfessionalProfile['verificat
 }) => {
   if (level === 4) {
     return (
-      <span className="inline-flex items-center gap-1 text-xs font-medium text-[#304B3E] dark:text-[#9CB08D]">
+      <span className="inline-flex items-center gap-1 text-xs font-medium text-[#214438] dark:text-[#9CB08D]">
         <ShieldCheck className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
         Credenciales revisadas
       </span>
@@ -50,8 +50,8 @@ export const AvailabilityLabel: React.FC<{
   status: ProfessionalProfile['availabilityStatus'];
 }> = ({ status }) => {
   const map = {
-    available: { label: 'Disponible', cls: 'text-[#304B3E] dark:text-emerald-400' },
-    busy: { label: 'Agenda parcial', cls: 'text-[#B96F50] dark:text-amber-400' },
+    available: { label: 'Disponible', cls: 'text-[#214438] dark:text-emerald-400' },
+    busy: { label: 'Agenda parcial', cls: 'text-[#C7582B] dark:text-amber-400' },
     unavailable: { label: 'No disponible', cls: 'text-[#73766F]' },
   }[status];
   return <span className={`text-xs font-medium ${map.cls}`}>{map.label}</span>;
@@ -98,14 +98,14 @@ export const ProfessionalCard: React.FC<ProfessionalCardProps> = ({
       onClick={onSelect}
       onMouseEnter={() => onHover?.(true)}
       onMouseLeave={() => onHover?.(false)}
-      className={`rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border transition-all duration-200 p-5 shadow-xs hover:shadow-sm ${
+      className={`rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border transition-all duration-200 p-5 shadow-xs hover:shadow-sm ${
         highlighted
-          ? 'border-[#304B3E] dark:border-[#B96F50] ring-2 ring-[#304B3E]/15 dark:ring-[#B96F50]/20'
-          : 'border-[#DDD5C8] dark:border-white/10 hover:border-[#75836A] dark:hover:border-white/25'
+          ? 'border-[#214438] dark:border-[#C7582B] ring-2 ring-[#214438]/15 dark:ring-[#C7582B]/20'
+          : 'border-[#DBD4C6] dark:border-white/10 hover:border-[#75836A] dark:hover:border-white/25'
       }`}
     >
       <div className="flex flex-col sm:flex-row gap-4">
-        <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0 border border-[#DDD5C8] dark:border-white/10">
+        <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0 border border-[#DBD4C6] dark:border-white/10">
           <SafeImage
             src={getPublicProAvatar(pro)}
             alt={pro.commercialName || pro.displayName}
@@ -117,7 +117,7 @@ export const ProfessionalCard: React.FC<ProfessionalCardProps> = ({
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <h3 className="font-display font-bold text-base text-[#252A27] dark:text-[#F5F1E8] truncate">
+              <h3 className="font-display font-bold text-base text-[#1D252C] dark:text-[#F7F3EA] truncate">
                 {pro.commercialName || pro.displayName}
               </h3>
               <p className="text-xs text-[#73766F] dark:text-[#A3A89F] mt-0.5 truncate">
@@ -136,8 +136,8 @@ export const ProfessionalCard: React.FC<ProfessionalCardProps> = ({
                 aria-label={`${isFav ? 'Quitar de' : 'Guardar en'} favoritos a ${pro.displayName}`}
                 className={`min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg border transition-colors ${
                   isFav
-                    ? 'border-[#B96F50] bg-[#B96F50]/12 text-[#B96F50]'
-                    : 'border-[#DDD5C8] dark:border-white/10 text-[#73766F] hover:text-[#252A27] dark:hover:text-white'
+                    ? 'border-[#C7582B] bg-[#C7582B]/12 text-[#C7582B]'
+                    : 'border-[#DBD4C6] dark:border-white/10 text-[#73766F] hover:text-[#1D252C] dark:hover:text-white'
                 }`}
               >
                 <Bookmark className={`w-4 h-4 ${isFav ? 'fill-current' : ''}`} />
@@ -151,8 +151,8 @@ export const ProfessionalCard: React.FC<ProfessionalCardProps> = ({
                 aria-label={`${isCompared ? 'Quitar de' : 'Agregar a'} comparación a ${pro.displayName}`}
                 className={`min-h-[40px] px-2.5 flex items-center gap-1 rounded-lg border text-xs font-medium transition-colors ${
                   isCompared
-                    ? 'border-[#304B3E] bg-[#304B3E] text-white'
-                    : 'border-[#DDD5C8] dark:border-white/10 text-[#73766F] hover:text-[#252A27] dark:hover:text-white'
+                    ? 'border-[#214438] bg-[#214438] text-white'
+                    : 'border-[#DBD4C6] dark:border-white/10 text-[#73766F] hover:text-[#1D252C] dark:hover:text-white'
                 }`}
               >
                 <ArrowLeftRight className="w-3.5 h-3.5" />
@@ -161,14 +161,14 @@ export const ProfessionalCard: React.FC<ProfessionalCardProps> = ({
             </div>
           </div>
 
-          <p className="mt-2 text-sm text-[#252A27]/85 dark:text-[#F5F1E8]/85 line-clamp-2 leading-relaxed">
+          <p className="mt-2 text-sm text-[#1D252C]/85 dark:text-[#F7F3EA]/85 line-clamp-2 leading-relaxed">
             {pro.bio}
           </p>
 
           {/* Clean unboxed metadata line */}
           <div className="mt-3 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-[#73766F] dark:text-[#A3A89F]">
-            <span className="inline-flex items-center gap-1 font-semibold text-[#252A27] dark:text-[#F5F1E8] font-mono-num">
-              <Star className="w-3.5 h-3.5 text-[#B96F50] fill-[#B96F50]" aria-hidden="true" />
+            <span className="inline-flex items-center gap-1 font-semibold text-[#1D252C] dark:text-[#F7F3EA] font-mono-num">
+              <Star className="w-3.5 h-3.5 text-[#C7582B] fill-[#C7582B]" aria-hidden="true" />
               {pro.ratingAvg.toFixed(1)}
               <span className="font-normal text-[#73766F] dark:text-[#A3A89F]">
                 ({pro.reviewsCount})
@@ -188,10 +188,10 @@ export const ProfessionalCard: React.FC<ProfessionalCardProps> = ({
             <VerificationLabel level={pro.verificationLevel} />
           </div>
 
-          <div className="mt-4 pt-3 border-t border-[#DDD5C8] dark:border-white/10 flex flex-wrap items-center justify-between gap-3">
+          <div className="mt-4 pt-3 border-t border-[#DBD4C6] dark:border-white/10 flex flex-wrap items-center justify-between gap-3">
             <div className="text-xs">
               <span className="text-[#73766F] dark:text-[#A3A89F]">Precio orientativo: </span>
-              <span className="font-display font-bold text-sm text-[#252A27] dark:text-[#F5F1E8] font-mono-num">
+              <span className="font-display font-bold text-sm text-[#1D252C] dark:text-[#F7F3EA] font-mono-num">
                 {minPrice ? `Desde ${formatMXN(minPrice)}` : 'Bajo cotización'}
               </span>
             </div>
@@ -203,14 +203,14 @@ export const ProfessionalCard: React.FC<ProfessionalCardProps> = ({
                   e.stopPropagation();
                   navigate({ page: 'pro-profile', proId: pro.id });
                 }}
-                className="px-3.5 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#EAE3D6]/50 dark:bg-white/5 text-xs font-semibold text-[#252A27] dark:text-[#F5F1E8] hover:bg-[#EAE3D6] dark:hover:bg-white/10 transition-colors whitespace-nowrap"
+                className="px-3.5 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#ECE7DC]/50 dark:bg-white/5 text-xs font-semibold text-[#1D252C] dark:text-[#F7F3EA] hover:bg-[#ECE7DC] dark:hover:bg-white/10 transition-colors whitespace-nowrap"
               >
                 Consultar perfil
               </button>
               <button
                 type="button"
                 onClick={handleRequest}
-                className="px-3.5 py-2 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-xs font-semibold transition-colors whitespace-nowrap"
+                className="px-3.5 py-2 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-xs font-semibold transition-colors whitespace-nowrap"
               >
                 Solicitar servicio
               </button>

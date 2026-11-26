@@ -21,7 +21,7 @@ export const SafeImage: React.FC<SafeImageProps> = ({
       <div
         role="img"
         aria-label={alt}
-        className={`flex flex-col items-center justify-center bg-gradient-to-br from-[#F5F1E8] to-[#EAE3D6] dark:from-[#222825] dark:to-[#1C211E] text-[#73766F] dark:text-[#A3A89F] p-4 text-center ${className}`}
+        className={`flex flex-col items-center justify-center bg-gradient-to-br from-[#F7F3EA] to-[#ECE7DC] dark:from-[#1A2128] dark:to-[#161C22] text-[#73766F] dark:text-[#A3A89F] p-4 text-center ${className}`}
       >
         <ImageIcon className="w-6 h-6 opacity-60 mb-1.5" aria-hidden="true" />
         <span className="text-xs font-medium leading-tight max-w-[16ch] truncate">

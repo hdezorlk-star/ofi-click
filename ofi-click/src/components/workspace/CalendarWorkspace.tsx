@@ -117,10 +117,10 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
   return (
     <div className="space-y-6">
       {/* Availability status + quick controls */}
-      <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5">
+      <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h3 className="text-base font-semibold text-[#252A27] dark:text-[#F5F1E8]">
+            <h3 className="text-base font-semibold text-[#1D252C] dark:text-[#F7F3EA]">
               Disponibilidad y atención urgente
             </h3>
             <p className="text-xs text-[#73766F] dark:text-[#A3A89F] mt-0.5">
@@ -131,25 +131,25 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value as AvailabilityStatus)}
-              className="px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#EAE3D6]/50 dark:bg-[#1C211E] text-sm font-medium text-[#252A27] dark:text-[#F5F1E8]"
+              className="px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#ECE7DC]/50 dark:bg-[#161C22] text-sm font-medium text-[#1D252C] dark:text-[#F7F3EA]"
             >
               <option value="available">Disponible</option>
               <option value="busy">Agenda ocupada</option>
               <option value="unavailable">No disponible temporalmente</option>
             </select>
-            <label className="inline-flex items-center gap-2 text-xs font-medium text-[#252A27] dark:text-[#F5F1E8] cursor-pointer">
+            <label className="inline-flex items-center gap-2 text-xs font-medium text-[#1D252C] dark:text-[#F7F3EA] cursor-pointer">
               <input
                 type="checkbox"
                 checked={urgentAttention}
                 onChange={(e) => setUrgentAttention(e.target.checked)}
-                className="rounded border-[#DDD5C8]"
+                className="rounded border-[#DBD4C6]"
               />
               Atiende urgencias hoy
             </label>
             <button
               type="button"
               onClick={handleSaveSchedule}
-              className="px-4 py-2 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white dark:bg-[#B96F50] dark:hover:bg-[#a65e41] text-sm font-semibold whitespace-nowrap transition-colors"
+              className="px-4 py-2 rounded-lg bg-[#214438] hover:bg-[#183329] text-white dark:bg-[#C7582B] dark:hover:bg-[#A8431B] text-sm font-semibold whitespace-nowrap transition-colors"
             >
               Guardar disponibilidad
             </button>
@@ -158,11 +158,11 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
       </div>
 
       {/* Calendar Views: Day / Week / Month */}
-      <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-4">
+      <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <CalendarIcon className="w-5 h-5 text-[#B96F50]" />
-            <h3 className="text-base font-semibold text-[#252A27] dark:text-[#F5F1E8]">
+            <CalendarIcon className="w-5 h-5 text-[#C7582B]" />
+            <h3 className="text-base font-semibold text-[#1D252C] dark:text-[#F7F3EA]">
               Agenda operativa
             </h3>
           </div>
@@ -172,9 +172,9 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="px-3 py-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-xs text-[#252A27] dark:text-[#F5F1E8]"
+              className="px-3 py-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-xs text-[#1D252C] dark:text-[#F7F3EA]"
             />
-            <div className="inline-flex rounded-lg border border-[#DDD5C8] dark:border-white/15 overflow-hidden">
+            <div className="inline-flex rounded-lg border border-[#DBD4C6] dark:border-white/15 overflow-hidden">
               {(['day', 'week', 'month'] as CalendarViewMode[]).map((mode) => (
                 <button
                   key={mode}
@@ -182,8 +182,8 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
                   onClick={() => setViewMode(mode)}
                   className={`px-3 py-1.5 text-xs font-semibold whitespace-nowrap ${
                     viewMode === mode
-                      ? 'bg-[#304B3E] text-white dark:bg-[#B96F50] dark:text-white'
-                      : 'text-[#73766F] hover:bg-[#EAE3D6]/50 dark:hover:bg-white/5'
+                      ? 'bg-[#214438] text-white dark:bg-[#C7582B] dark:text-white'
+                      : 'text-[#73766F] hover:bg-[#ECE7DC]/50 dark:hover:bg-white/5'
                   }`}
                 >
                   {mode === 'day' ? 'Día' : mode === 'week' ? 'Semana' : 'Mes'}
@@ -196,7 +196,7 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
         {/* Legend */}
         <div className="flex flex-wrap items-center gap-4 text-xs text-[#73766F] dark:text-[#A3A89F]">
           <span className="inline-flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-xs bg-[#304B3E] dark:bg-[#B96F50]" />
+            <span className="w-2.5 h-2.5 rounded-xs bg-[#214438] dark:bg-[#C7582B]" />
             Contratación confirmada (fecha bloqueada)
           </span>
           <span className="inline-flex items-center gap-1.5">
@@ -210,15 +210,15 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
         </div>
 
         {viewMode === 'day' && (
-          <div className="space-y-2 border-t border-[#DDD5C8] dark:border-white/10 pt-4">
-            <p className="text-sm font-semibold text-[#252A27] dark:text-[#F5F1E8]">
+          <div className="space-y-2 border-t border-[#DBD4C6] dark:border-white/10 pt-4">
+            <p className="text-sm font-semibold text-[#1D252C] dark:text-[#F7F3EA]">
               Eventos del {selectedDate}
             </p>
             {(() => {
               const { confirmed, pending, blocks } = getEventsForDate(selectedDate);
               if (confirmed.length === 0 && pending.length === 0 && blocks.length === 0) {
                 return (
-                  <p className="text-sm text-[#73766F] dark:text-[#A3A89F] py-6 text-center bg-[#EAE3D6]/40 dark:bg-[#1C211E] rounded-lg">
+                  <p className="text-sm text-[#73766F] dark:text-[#A3A89F] py-6 text-center bg-[#ECE7DC]/40 dark:bg-[#161C22] rounded-lg">
                     Sin compromisos ni bloqueos registrados para este día.
                   </p>
                 );
@@ -228,7 +228,7 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
                   {confirmed.map((b) => (
                     <div
                       key={b.id}
-                      className="p-3 rounded-lg bg-[#304B3E] text-white dark:bg-[#B96F50] dark:text-white flex items-center justify-between gap-3 text-xs"
+                      className="p-3 rounded-lg bg-[#214438] text-white dark:bg-[#C7582B] dark:text-white flex items-center justify-between gap-3 text-xs"
                     >
                       <div>
                         <strong>{b.scheduledTime}</strong> · {b.serviceTitle} ({b.colonia})
@@ -250,7 +250,7 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
                   {blocks.map((bl) => (
                     <div
                       key={bl.id}
-                      className="p-3 rounded-lg bg-[#75836A]/15 dark:bg-[#75836A]/30 text-[#252A27] dark:text-[#F5F1E8] flex items-center justify-between gap-3 text-xs"
+                      className="p-3 rounded-lg bg-[#75836A]/15 dark:bg-[#75836A]/30 text-[#1D252C] dark:text-[#F7F3EA] flex items-center justify-between gap-3 text-xs"
                     >
                       <div>
                         <strong>
@@ -285,18 +285,18 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
                   onClick={() => setSelectedDate(dateStr)}
                   className={`cursor-pointer rounded-lg border p-2.5 min-h-[120px] transition-colors ${
                     isSelected
-                      ? 'border-[#B96F50] bg-[#EAE3D6]/60 dark:bg-[#1C211E]'
-                      : 'border-[#DDD5C8] dark:border-white/10 hover:border-[#304B3E]/40'
+                      ? 'border-[#C7582B] bg-[#ECE7DC]/60 dark:bg-[#161C22]'
+                      : 'border-[#DBD4C6] dark:border-white/10 hover:border-[#214438]/40'
                   }`}
                 >
-                  <div className="text-xs font-semibold text-[#252A27] dark:text-[#F5F1E8] mb-2">
+                  <div className="text-xs font-semibold text-[#1D252C] dark:text-[#F7F3EA] mb-2">
                     {dateStr.slice(5)}
                   </div>
                   <div className="space-y-1">
                     {confirmed.map((b) => (
                       <div
                         key={b.id}
-                        className="px-2 py-1 rounded bg-[#304B3E] text-white dark:bg-[#B96F50] dark:text-white text-[11px] truncate"
+                        className="px-2 py-1 rounded bg-[#214438] text-white dark:bg-[#C7582B] dark:text-white text-[11px] truncate"
                         title={b.serviceTitle}
                       >
                         {b.scheduledTime} {b.serviceTitle}
@@ -314,7 +314,7 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
                     {blocks.map((bl) => (
                       <div
                         key={bl.id}
-                        className="px-2 py-1 rounded bg-[#75836A]/20 text-[#304B3E] dark:text-[#EAE3D6] text-[11px] truncate"
+                        className="px-2 py-1 rounded bg-[#75836A]/20 text-[#214438] dark:text-[#ECE7DC] text-[11px] truncate"
                         title={bl.reason}
                       >
                         {bl.startTime} {bl.reason}
@@ -342,16 +342,16 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
                   }}
                   className={`p-2 rounded-lg border text-left transition-colors ${
                     dateStr === selectedDate
-                      ? 'border-[#B96F50] bg-[#EAE3D6] dark:bg-[#1C211E]'
-                      : 'border-[#DDD5C8] dark:border-white/10 hover:bg-[#EAE3D6]/40'
+                      ? 'border-[#C7582B] bg-[#ECE7DC] dark:bg-[#161C22]'
+                      : 'border-[#DBD4C6] dark:border-white/10 hover:bg-[#ECE7DC]/40'
                   }`}
                 >
-                  <div className="text-xs font-semibold text-[#252A27] dark:text-[#F5F1E8]">
+                  <div className="text-xs font-semibold text-[#1D252C] dark:text-[#F7F3EA]">
                     {dateStr.slice(8)}
                   </div>
                   <div className="mt-1 flex items-center gap-1 min-h-[14px]">
                     {confirmed.length > 0 && (
-                      <span className="w-2 h-2 rounded-xs bg-[#304B3E] dark:bg-[#B96F50]" />
+                      <span className="w-2 h-2 rounded-xs bg-[#214438] dark:bg-[#C7582B]" />
                     )}
                     {pending.length > 0 && (
                       <span className="w-2 h-2 rounded-xs bg-amber-500" />
@@ -374,10 +374,10 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <form
           onSubmit={handleAddBlock}
-          className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-4"
+          className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-4"
         >
-          <h4 className="text-sm font-semibold text-[#252A27] dark:text-[#F5F1E8] flex items-center gap-2">
-            <Plus className="w-4 h-4 text-[#B96F50]" />
+          <h4 className="text-sm font-semibold text-[#1D252C] dark:text-[#F7F3EA] flex items-center gap-2">
+            <Plus className="w-4 h-4 text-[#C7582B]" />
             Bloquear horario manualmente
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -387,7 +387,7 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
                 type="date"
                 value={blockDate}
                 onChange={(e) => setBlockDate(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-xs"
+                className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-xs"
                 required
               />
             </div>
@@ -397,7 +397,7 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
                 type="time"
                 value={blockStart}
                 onChange={(e) => setBlockStart(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-xs"
+                className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-xs"
                 required
               />
             </div>
@@ -407,7 +407,7 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
                 type="time"
                 value={blockEnd}
                 onChange={(e) => setBlockEnd(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-xs"
+                className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-xs"
                 required
               />
             </div>
@@ -419,24 +419,24 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
               value={blockReason}
               onChange={(e) => setBlockReason(e.target.value)}
               placeholder="Ej. Compra de material o cita personal"
-              className="w-full px-3 py-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-sm"
+              className="w-full px-3 py-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-sm"
               required
             />
           </div>
           <button
             type="submit"
-            className="px-4 py-2 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-xs font-semibold whitespace-nowrap transition-colors"
+            className="px-4 py-2 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-xs font-semibold whitespace-nowrap transition-colors"
           >
             Agregar bloqueo
           </button>
 
           {personalBlocks.length > 0 && (
-            <div className="pt-2 border-t border-[#DDD5C8] dark:border-white/10 space-y-1.5">
+            <div className="pt-2 border-t border-[#DBD4C6] dark:border-white/10 space-y-1.5">
               <p className="text-xs font-medium text-[#73766F]">Bloqueos activos:</p>
               {personalBlocks.map((bl) => (
                 <div
                   key={bl.id}
-                  className="flex items-center justify-between text-xs py-1 px-2 rounded bg-[#EAE3D6]/50 dark:bg-[#1C211E]"
+                  className="flex items-center justify-between text-xs py-1 px-2 rounded bg-[#ECE7DC]/50 dark:bg-[#161C22]"
                 >
                   <span>
                     {bl.date} ({bl.startTime}-{bl.endTime}) · {bl.reason}
@@ -455,16 +455,16 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
         </form>
 
         {/* Weekly Schedule Table */}
-        <div className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-5 space-y-3">
+        <div className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-5 space-y-3">
           <div className="flex items-center justify-between">
-            <h4 className="text-sm font-semibold text-[#252A27] dark:text-[#F5F1E8] flex items-center gap-2">
-              <Clock className="w-4 h-4 text-[#B96F50]" />
+            <h4 className="text-sm font-semibold text-[#1D252C] dark:text-[#F7F3EA] flex items-center gap-2">
+              <Clock className="w-4 h-4 text-[#C7582B]" />
               Horario laboral semanal
             </h4>
             <button
               type="button"
               onClick={handleSaveSchedule}
-              className="text-xs font-semibold text-[#304B3E] dark:text-[#B96F50] hover:underline"
+              className="text-xs font-semibold text-[#214438] dark:text-[#C7582B] hover:underline"
             >
               Guardar horarios
             </button>
@@ -473,9 +473,9 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
             {schedule.map((day, idx) => (
               <div
                 key={day.day}
-                className="flex flex-wrap items-center justify-between gap-2 text-xs py-1.5 border-b border-[#DDD5C8]/70 dark:border-white/8 last:border-none"
+                className="flex flex-wrap items-center justify-between gap-2 text-xs py-1.5 border-b border-[#DBD4C6]/70 dark:border-white/8 last:border-none"
               >
-                <label className="inline-flex items-center gap-2 min-w-[100px] font-medium text-[#252A27] dark:text-[#F5F1E8]">
+                <label className="inline-flex items-center gap-2 min-w-[100px] font-medium text-[#1D252C] dark:text-[#F7F3EA]">
                   <input
                     type="checkbox"
                     checked={day.enabled}
@@ -497,7 +497,7 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
                         next[idx] = { ...next[idx], start: e.target.value };
                         setSchedule(next);
                       }}
-                      className="px-2 py-1 rounded border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E]"
+                      className="px-2 py-1 rounded border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22]"
                     />
                     <span>a</span>
                     <input
@@ -508,7 +508,7 @@ export const CalendarWorkspace: React.FC<CalendarWorkspaceProps> = ({ pro }) => 
                         next[idx] = { ...next[idx], end: e.target.value };
                         setSchedule(next);
                       }}
-                      className="px-2 py-1 rounded border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E]"
+                      className="px-2 py-1 rounded border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22]"
                     />
                   </div>
                 ) : (

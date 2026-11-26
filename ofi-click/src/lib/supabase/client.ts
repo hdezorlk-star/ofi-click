@@ -4,8 +4,16 @@ const env = (typeof import.meta !== 'undefined' && import.meta.env)
   ? (import.meta.env as Record<string, string | undefined>)
   : (typeof process !== 'undefined' && process.env ? (process.env as Record<string, string | undefined>) : {});
 
-const supabaseUrl = env?.VITE_SUPABASE_URL;
-const supabaseAnonKey = env?.VITE_SUPABASE_ANON_KEY;
+export function normalizeSupabaseUrl(rawUrl?: string): string | undefined {
+  const trimmed = rawUrl?.trim();
+  if (!trimmed) return undefined;
+  return trimmed
+    .replace(/\/+$/, '')
+    .replace(/\/(rest|auth|storage|realtime)\/v1$/i, '');
+}
+
+const supabaseUrl = normalizeSupabaseUrl(env?.VITE_SUPABASE_URL);
+const supabaseAnonKey = env?.VITE_SUPABASE_ANON_KEY?.trim();
 
 let cachedClient: SupabaseClient | null = null;
 

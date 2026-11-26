@@ -19,7 +19,7 @@ import { BrandLogo } from '../components/BrandLogo';
 import { PhotoUploadBox } from '../components/media/PhotoUploadBox';
 import { useOfiClick } from '../context/OfiClickContext';
 import { authService } from '../services/auth.service';
-import { INITIAL_REGIONS } from '../adapters/local/seed-data';
+import { ALL_IZCALLI_COLONIAS } from '../data/izcalliLocations';
 import { GoogleAuthButton } from '../components/GoogleAuthButton';
 import type { AdminAccessRequest, PreparedEmailRecord } from '../types/oficlick';
 
@@ -29,6 +29,7 @@ type RegisterRoleChoice = 'client' | 'independent_pro' | 'admin_request';
 export const AccessPage: React.FC = () => {
   const {
     db,
+    dataMode,
     theme,
     resolvedTheme,
     setTheme,
@@ -84,14 +85,15 @@ export const AccessPage: React.FC = () => {
     [db.categories]
   );
 
-  const selectedAdminColonias = useMemo(
-    () =>
-      db.regions.find((r) => r.id === adminRegionId)?.colonias ||
-      INITIAL_REGIONS[0].colonias,
-    [db.regions, adminRegionId]
-  );
+  const selectedAdminColonias = useMemo(() => {
+    const reg = db.regions.find((r) => r.id === adminRegionId);
+    return reg && reg.colonias.length > 0 ? reg.colonias : ALL_IZCALLI_COLONIAS;
+  }, [db.regions, adminRegionId]);
 
-  const clientProColonias = INITIAL_REGIONS[0].colonias;
+  const clientProColonias = useMemo(() => {
+    const reg = db.regions.find((r) => r.id === 'reg-izcalli');
+    return reg && reg.colonias.length > 0 ? reg.colonias : ALL_IZCALLI_COLONIAS;
+  }, [db.regions]);
 
   const switchMode = (next: AccessMode) => {
     setMode(next);
@@ -145,7 +147,7 @@ export const AccessPage: React.FC = () => {
     }
 
     try {
-      const { profile, welcomeEmail } = await authService.registerAccount({
+      const { profile, welcomeEmail, requiresEmailConfirmation } = await authService.registerAccount({
         fullName: regFullName,
         email: regEmail,
         colonia: regColonia,
@@ -161,8 +163,19 @@ export const AccessPage: React.FC = () => {
       });
       setPreviewEmail(welcomeEmail);
       setClientAvatarUrl(undefined);
+      if (requiresEmailConfirmation) {
+        notify(
+          `Registro creado. Revisa tu bandeja de ${regEmail} y abre el enlace de confirmación.`,
+          'success'
+        );
+        switchMode('login');
+        setLoginEmail(regEmail);
+        return;
+      }
       notify(
-        'Cuenta creada correctamente. Revisa tu correo para confirmar tu registro.',
+        welcomeEmail.deliveryStatus === 'sent'
+          ? 'Cuenta creada y correo de bienvenida enviado.'
+          : 'Cuenta creada correctamente.',
         'success'
       );
       completeAuthSuccess(profile);
@@ -214,10 +227,14 @@ export const AccessPage: React.FC = () => {
     setRecMessage('');
     try {
       const res = await authService.requestPasswordRecovery(recEmail);
+      if (!res.sent) {
+        setRecError(res.message);
+        return;
+      }
       setRecMessage(res.message);
       setPreviewEmail(res.preparedEmail ?? null);
       setRecCode('');
-      setRecStep('code');
+      setRecStep(dataMode === 'supabase' ? 'done' : 'code');
       refreshDb();
     } catch (err) {
       setRecError(err instanceof Error ? err.message : 'Ingresa un correo válido.');
@@ -259,23 +276,23 @@ export const AccessPage: React.FC = () => {
     : db.preparedEmails.slice(0, 3);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F5F1E8] dark:bg-[#171B19] text-[#252A27] dark:text-[#F5F1E8]">
+    <div className="min-h-screen flex flex-col bg-[#F7F3EA] dark:bg-[#12171C] text-[#1D252C] dark:text-[#F7F3EA]">
       {/* Minimal branded top header */}
-      <header className="border-b border-[#DDD5C8] dark:border-white/10 bg-[#F5F1E8]/95 dark:bg-[#171B19]/95 backdrop-blur-md">
+      <header className="border-b border-[#DBD4C6] dark:border-white/10 bg-[#F7F3EA]/95 dark:bg-[#12171C]/95 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
           <BrandLogo variant="horizontal" size="md" />
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => setShowLegalModal('privacy')}
-              className="hidden sm:inline-flex px-3 py-1.5 rounded-lg text-xs font-medium text-[#73766F] hover:text-[#252A27] dark:text-[#A3A89F] dark:hover:text-[#F5F1E8]"
+              className="hidden sm:inline-flex px-3 py-1.5 rounded-lg text-xs font-medium text-[#73766F] hover:text-[#1D252C] dark:text-[#A3A89F] dark:hover:text-[#F7F3EA]"
             >
               Privacidad
             </button>
             <button
               type="button"
               onClick={() => setShowLegalModal('terms')}
-              className="hidden sm:inline-flex px-3 py-1.5 rounded-lg text-xs font-medium text-[#73766F] hover:text-[#252A27] dark:text-[#A3A89F] dark:hover:text-[#F5F1E8]"
+              className="hidden sm:inline-flex px-3 py-1.5 rounded-lg text-xs font-medium text-[#73766F] hover:text-[#1D252C] dark:text-[#A3A89F] dark:hover:text-[#F7F3EA]"
             >
               Términos
             </button>
@@ -283,12 +300,12 @@ export const AccessPage: React.FC = () => {
               type="button"
               onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
               aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
-              className="p-2 rounded-lg border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] hover:border-[#304B3E]/40 transition-colors"
+              className="p-2 rounded-lg border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] hover:border-[#214438]/40 transition-colors"
             >
               {resolvedTheme === 'dark' ? (
-                <Sun className="w-4 h-4 text-[#B96F50]" />
+                <Sun className="w-4 h-4 text-[#C7582B]" />
               ) : (
-                <Moon className="w-4 h-4 text-[#252A27]" />
+                <Moon className="w-4 h-4 text-[#1D252C]" />
               )}
             </button>
           </div>
@@ -301,25 +318,25 @@ export const AccessPage: React.FC = () => {
           <section className="lg:col-span-5 space-y-6 lg:pt-4">
             <div className="flex items-center gap-4">
               <BrandLogo variant="icon" size="xl" />
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#304B3E]/10 dark:bg-[#75836A]/20 text-[#304B3E] dark:text-[#A8B89A] text-xs font-semibold">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#214438]/10 dark:bg-[#75836A]/20 text-[#214438] dark:text-[#A8B89A] text-xs font-semibold">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 <span>Cuautitlán Izcalli · Acceso oficial</span>
               </div>
             </div>
 
             <div className="space-y-3">
-              <h1 className="font-display font-bold text-3xl sm:text-4xl tracking-tight leading-tight text-[#252A27] dark:text-[#F5F1E8]">
+              <h1 className="font-display font-bold text-3xl sm:text-4xl tracking-tight leading-tight text-[#1D252C] dark:text-[#F7F3EA]">
                 Encuentra talento. Haz que suceda.
               </h1>
-              <p className="text-sm sm:text-base text-[#252A27]/75 dark:text-[#F5F1E8]/75 leading-relaxed">
+              <p className="text-sm sm:text-base text-[#1D252C]/75 dark:text-[#F7F3EA]/75 leading-relaxed">
                 Inicia sesión o crea tu cuenta en OFI CLICK para acceder directamente a tu espacio
                 de trabajo según tu rol autorizado.
               </p>
             </div>
 
             <div className="space-y-3 pt-2">
-              <div className="rounded-xl border border-[#DDD5C8] dark:border-white/10 bg-[#FFFCF7] dark:bg-[#222825] p-4 flex items-start gap-3">
-                <UserCheck className="w-5 h-5 text-[#304B3E] dark:text-[#75836A] shrink-0 mt-0.5" />
+              <div className="rounded-xl border border-[#DBD4C6] dark:border-white/10 bg-[#FFFDFA] dark:bg-[#1A2128] p-4 flex items-start gap-3">
+                <UserCheck className="w-5 h-5 text-[#214438] dark:text-[#75836A] shrink-0 mt-0.5" />
                 <div>
                   <h2 className="text-sm font-bold">Clientes</h2>
                   <p className="text-xs text-[#73766F] dark:text-[#A3A89F] mt-0.5">
@@ -328,8 +345,8 @@ export const AccessPage: React.FC = () => {
                   </p>
                 </div>
               </div>
-              <div className="rounded-xl border border-[#DDD5C8] dark:border-white/10 bg-[#FFFCF7] dark:bg-[#222825] p-4 flex items-start gap-3">
-                <Wrench className="w-5 h-5 text-[#B96F50] shrink-0 mt-0.5" />
+              <div className="rounded-xl border border-[#DBD4C6] dark:border-white/10 bg-[#FFFDFA] dark:bg-[#1A2128] p-4 flex items-start gap-3">
+                <Wrench className="w-5 h-5 text-[#C7582B] shrink-0 mt-0.5" />
                 <div>
                   <h2 className="text-sm font-bold">Freelancers / Trabajadores independientes</h2>
                   <p className="text-xs text-[#73766F] dark:text-[#A3A89F] mt-0.5">
@@ -338,8 +355,8 @@ export const AccessPage: React.FC = () => {
                   </p>
                 </div>
               </div>
-              <div className="rounded-xl border border-[#DDD5C8] dark:border-white/10 bg-[#FFFCF7] dark:bg-[#222825] p-4 flex items-start gap-3">
-                <ShieldAlert className="w-5 h-5 text-[#304B3E] dark:text-[#75836A] shrink-0 mt-0.5" />
+              <div className="rounded-xl border border-[#DBD4C6] dark:border-white/10 bg-[#FFFDFA] dark:bg-[#1A2128] p-4 flex items-start gap-3">
+                <ShieldAlert className="w-5 h-5 text-[#214438] dark:text-[#75836A] shrink-0 mt-0.5" />
                 <div>
                   <h2 className="text-sm font-bold">Administración</h2>
                   <p className="text-xs text-[#73766F] dark:text-[#A3A89F] mt-0.5">
@@ -353,10 +370,10 @@ export const AccessPage: React.FC = () => {
 
           {/* Right Auth Card */}
           <section className="lg:col-span-7 space-y-4">
-            <div className="rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/12 shadow-xl p-6 sm:p-8">
+            <div className="rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/12 shadow-xl p-6 sm:p-8">
               {/* Primary Two-Option Toggle: Iniciar sesión / Registrarse */}
               <div
-                className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-[#EAE3D6] dark:bg-[#1C211E]"
+                className="grid grid-cols-2 gap-1.5 p-1 rounded-xl bg-[#ECE7DC] dark:bg-[#161C22]"
                 role="tablist"
                 aria-label="Opciones de acceso"
               >
@@ -367,8 +384,8 @@ export const AccessPage: React.FC = () => {
                   onClick={() => switchMode('login')}
                   className={`py-2.5 px-4 rounded-lg text-sm font-semibold transition-colors ${
                     mode === 'login'
-                      ? 'bg-[#FFFCF7] dark:bg-[#2A312D] text-[#252A27] dark:text-[#F5F1E8] shadow-xs'
-                      : 'text-[#73766F] hover:text-[#252A27] dark:text-[#A3A89F] dark:hover:text-[#F5F1E8]'
+                      ? 'bg-[#FFFDFA] dark:bg-[#2A312D] text-[#1D252C] dark:text-[#F7F3EA] shadow-xs'
+                      : 'text-[#73766F] hover:text-[#1D252C] dark:text-[#A3A89F] dark:hover:text-[#F7F3EA]'
                   }`}
                 >
                   Iniciar sesión
@@ -380,8 +397,8 @@ export const AccessPage: React.FC = () => {
                   onClick={() => switchMode('register')}
                   className={`py-2.5 px-4 rounded-lg text-sm font-semibold transition-colors ${
                     mode === 'register'
-                      ? 'bg-[#FFFCF7] dark:bg-[#2A312D] text-[#252A27] dark:text-[#F5F1E8] shadow-xs'
-                      : 'text-[#73766F] hover:text-[#252A27] dark:text-[#A3A89F] dark:hover:text-[#F5F1E8]'
+                      ? 'bg-[#FFFDFA] dark:bg-[#2A312D] text-[#1D252C] dark:text-[#F7F3EA] shadow-xs'
+                      : 'text-[#73766F] hover:text-[#1D252C] dark:text-[#A3A89F] dark:hover:text-[#F7F3EA]'
                   }`}
                 >
                   Registrarse
@@ -428,7 +445,7 @@ export const AccessPage: React.FC = () => {
                         value={loginEmail}
                         onChange={(e) => setLoginEmail(e.target.value)}
                         placeholder="tu@correo.com"
-                        className="w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] focus:outline-2 focus:outline-[#304B3E]"
+                        className="w-full pl-9 pr-3 py-2.5 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] focus:outline-2 focus:outline-[#214438]"
                       />
                     </div>
                   </div>
@@ -450,13 +467,13 @@ export const AccessPage: React.FC = () => {
                         value={loginPassword}
                         onChange={(e) => setLoginPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full pl-9 pr-10 py-2.5 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] focus:outline-2 focus:outline-[#304B3E]"
+                        className="w-full pl-9 pr-10 py-2.5 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] focus:outline-2 focus:outline-[#214438]"
                       />
                       <button
                         type="button"
                         onClick={() => setShowLoginPw((v) => !v)}
                         aria-label={showLoginPw ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                        className="absolute right-2.5 top-2.5 p-1 text-[#73766F] hover:text-[#252A27] dark:hover:text-white"
+                        className="absolute right-2.5 top-2.5 p-1 text-[#73766F] hover:text-[#1D252C] dark:hover:text-white"
                       >
                         {showLoginPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
@@ -465,7 +482,7 @@ export const AccessPage: React.FC = () => {
 
                   <button
                     type="submit"
-                    className="w-full py-2.5 px-4 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-sm font-semibold transition-colors"
+                    className="w-full py-2.5 px-4 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-sm font-semibold transition-colors"
                   >
                     Entrar a mi panel
                   </button>
@@ -480,14 +497,14 @@ export const AccessPage: React.FC = () => {
                         setRecMessage('');
                         switchMode('recovery');
                       }}
-                      className="text-[#304B3E] dark:text-[#B96F50] font-medium hover:underline"
+                      className="text-[#214438] dark:text-[#C7582B] font-medium hover:underline"
                     >
                       ¿Olvidaste tu contraseña?
                     </button>
                     <button
                       type="button"
                       onClick={() => switchMode('register')}
-                      className="text-[#73766F] hover:text-[#252A27] dark:text-[#A3A89F] dark:hover:text-white"
+                      className="text-[#73766F] hover:text-[#1D252C] dark:text-[#A3A89F] dark:hover:text-white"
                     >
                       ¿Aún no tienes cuenta? Regístrate
                     </button>
@@ -513,6 +530,7 @@ export const AccessPage: React.FC = () => {
                       {regRole !== 'admin_request' && (
                         <GoogleAuthButton
                           intent="register"
+                          onboardingRole={regRole}
                           separatorLabel="o completa el registro con correo"
                         />
                       )}
@@ -555,11 +573,11 @@ export const AccessPage: React.FC = () => {
                               }}
                               className={`text-left p-3 rounded-xl border transition-colors ${
                                 selected
-                                  ? 'border-[#304B3E] bg-[#304B3E]/8 dark:border-[#75836A] dark:bg-[#75836A]/18'
-                                  : 'border-[#DDD5C8] dark:border-white/15 hover:bg-[#EAE3D6]/55 dark:hover:bg-white/5'
+                                  ? 'border-[#214438] bg-[#214438]/8 dark:border-[#75836A] dark:bg-[#75836A]/18'
+                                  : 'border-[#DBD4C6] dark:border-white/15 hover:bg-[#ECE7DC]/55 dark:hover:bg-white/5'
                               }`}
                             >
-                              <div className="text-xs font-bold text-[#252A27] dark:text-[#F5F1E8]">
+                              <div className="text-xs font-bold text-[#1D252C] dark:text-[#F7F3EA]">
                                 {opt.title}
                               </div>
                               <div className="text-[11px] text-[#73766F] dark:text-[#A3A89F] mt-0.5">
@@ -581,8 +599,8 @@ export const AccessPage: React.FC = () => {
 
                       <form onSubmit={handleStandardRegisterSubmit} className="space-y-4">
                         {regRole === 'admin_request' && (
-                          <div className="p-3 rounded-xl bg-[#EAE3D6]/70 dark:bg-[#1C211E] border border-[#B96F50]/35 text-xs text-[#252A27] dark:text-[#F5F1E8] flex items-start gap-2.5">
-                            <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5 text-[#B96F50]" />
+                          <div className="p-3 rounded-xl bg-[#ECE7DC]/70 dark:bg-[#161C22] border border-[#C7582B]/35 text-xs text-[#1D252C] dark:text-[#F7F3EA] flex items-start gap-2.5">
+                            <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5 text-[#C7582B]" />
                             <span>
                               Seleccionar <strong>Administrador</strong> inicia una solicitud de
                               acceso. Confirmar tu correo no otorga permisos administrativos; se
@@ -603,7 +621,7 @@ export const AccessPage: React.FC = () => {
                               value={regFullName}
                               onChange={(e) => setRegFullName(e.target.value)}
                               placeholder="Ej. Laura Hernández"
-                              className="w-full px-3 py-2 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E]"
+                              className="w-full px-3 py-2 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22]"
                             />
                           </div>
 
@@ -618,7 +636,7 @@ export const AccessPage: React.FC = () => {
                               value={regEmail}
                               onChange={(e) => setRegEmail(e.target.value)}
                               placeholder="nombre@correo.com"
-                              className="w-full px-3 py-2 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E]"
+                              className="w-full px-3 py-2 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22]"
                             />
                           </div>
                         </div>
@@ -635,7 +653,7 @@ export const AccessPage: React.FC = () => {
                                 value={regCommercialName}
                                 onChange={(e) => setRegCommercialName(e.target.value)}
                                 placeholder="Ej. Electricidad Residencial Hernández"
-                                className="w-full px-3 py-2 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E]"
+                                className="w-full px-3 py-2 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22]"
                               />
                             </div>
                             <div>
@@ -646,7 +664,7 @@ export const AccessPage: React.FC = () => {
                                 id="reg-cat"
                                 value={regCategoryId}
                                 onChange={(e) => setRegCategoryId(e.target.value)}
-                                className="w-full px-3 py-2 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E]"
+                                className="w-full px-3 py-2 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22]"
                               >
                                 {activeCategories.map((c) => (
                                   <option key={c.id} value={c.id}>
@@ -664,7 +682,7 @@ export const AccessPage: React.FC = () => {
                               <span className="block text-xs font-semibold mb-1">
                                 Nivel administrativo solicitado
                               </span>
-                              <div className="w-full px-3 py-2 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#EAE3D6]/40 dark:bg-[#1C211E] font-semibold text-[#304B3E] dark:text-[#EAE3D6]">
+                              <div className="w-full px-3 py-2 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#ECE7DC]/40 dark:bg-[#161C22] font-semibold text-[#214438] dark:text-[#ECE7DC]">
                                 Administrador Central
                               </div>
                             </div>
@@ -685,7 +703,7 @@ export const AccessPage: React.FC = () => {
                                     [];
                                   if (cols.length > 0) setRegColonia(cols[0]);
                                 }}
-                                className="w-full px-3 py-2 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E]"
+                                className="w-full px-3 py-2 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22]"
                               >
                                 {db.regions.map((r) => (
                                   <option key={r.id} value={r.id}>
@@ -711,7 +729,7 @@ export const AccessPage: React.FC = () => {
                               id="reg-colonia"
                               value={regColonia}
                               onChange={(e) => setRegColonia(e.target.value)}
-                              className="w-full px-3 py-2 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E]"
+                              className="w-full px-3 py-2 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22]"
                             >
                               {(regRole === 'admin_request'
                                 ? selectedAdminColonias
@@ -739,7 +757,7 @@ export const AccessPage: React.FC = () => {
                               value={regPassword}
                               onChange={(e) => setRegPassword(e.target.value)}
                               placeholder="Crea una contraseña segura"
-                              className="w-full px-3 py-2 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E]"
+                              className="w-full px-3 py-2 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22]"
                             />
                           </div>
                         </div>
@@ -766,14 +784,14 @@ export const AccessPage: React.FC = () => {
                               value={adminJustification}
                               onChange={(e) => setAdminJustification(e.target.value)}
                               placeholder="Indica tu rol operativo o motivo de solicitud para revisión de Administración Central..."
-                              className="w-full px-3 py-2 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E]"
+                              className="w-full px-3 py-2 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22]"
                             />
                           </div>
                         )}
 
                         <button
                           type="submit"
-                          className="w-full py-2.5 px-4 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-sm font-semibold transition-colors inline-flex items-center justify-center gap-2"
+                          className="w-full py-2.5 px-4 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-sm font-semibold transition-colors inline-flex items-center justify-center gap-2"
                         >
                           <UserPlus className="w-4 h-4" />
                           <span>
@@ -793,14 +811,14 @@ export const AccessPage: React.FC = () => {
                         <h2 className="font-display text-lg font-bold">
                           Verifica tu correo electrónico
                         </h2>
-                        <span className="px-2.5 py-0.5 rounded bg-[#304B3E]/12 text-[#304B3E] dark:text-[#A8B89A] text-[11px] font-semibold">
+                        <span className="px-2.5 py-0.5 rounded bg-[#214438]/12 text-[#214438] dark:text-[#A8B89A] text-[11px] font-semibold">
                           Código de un solo uso
                         </span>
                       </div>
 
                       <p className="text-xs text-[#73766F] dark:text-[#A3A89F] leading-relaxed">
                         Preparamos un código de verificación de 6 dígitos para{' '}
-                        <strong className="text-[#252A27] dark:text-[#F5F1E8]">
+                        <strong className="text-[#1D252C] dark:text-[#F7F3EA]">
                           {activeAdminRequest.email}
                         </strong>
                         . Ingresa el código dentro de los próximos 10 minutos para confirmar la
@@ -832,7 +850,7 @@ export const AccessPage: React.FC = () => {
                           value={adminOtpInput}
                           onChange={(e) => setAdminOtpInput(e.target.value)}
                           placeholder="000000"
-                          className="w-full px-3.5 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-base font-mono-num tracking-[0.25em] text-center"
+                          className="w-full px-3.5 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-base font-mono-num tracking-[0.25em] text-center"
                         />
                         {adminOtpAttemptsLeft !== null && (
                           <p className="mt-1 text-[11px] text-[#73766F]">
@@ -844,14 +862,14 @@ export const AccessPage: React.FC = () => {
                       <div className="flex flex-wrap gap-2">
                         <button
                           type="submit"
-                          className="flex-1 py-2.5 px-4 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-sm font-semibold transition-colors"
+                          className="flex-1 py-2.5 px-4 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-sm font-semibold transition-colors"
                         >
                           Confirmar correo
                         </button>
                         <button
                           type="button"
                           onClick={handleResendAdminOtp}
-                          className="py-2.5 px-3.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 text-xs font-semibold hover:bg-[#EAE3D6]/50"
+                          className="py-2.5 px-3.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 text-xs font-semibold hover:bg-[#ECE7DC]/50"
                         >
                           Reenviar código
                         </button>
@@ -871,13 +889,13 @@ export const AccessPage: React.FC = () => {
                   {/* Admin Step 3: Email Verified, Pending Authorization (NEVER grants access) */}
                   {adminStep === 'pending' && activeAdminRequest && (
                     <div className="space-y-4">
-                      <div className="p-4 rounded-xl bg-[#304B3E]/10 dark:bg-[#75836A]/18 border border-[#75836A]/35 flex items-start gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-[#304B3E] dark:text-[#A8B89A] shrink-0 mt-0.5" />
+                      <div className="p-4 rounded-xl bg-[#214438]/10 dark:bg-[#75836A]/18 border border-[#75836A]/35 flex items-start gap-3">
+                        <CheckCircle2 className="w-5 h-5 text-[#214438] dark:text-[#A8B89A] shrink-0 mt-0.5" />
                         <div className="space-y-1 text-xs">
-                          <h2 className="text-sm font-bold text-[#252A27] dark:text-[#F5F1E8]">
+                          <h2 className="text-sm font-bold text-[#1D252C] dark:text-[#F7F3EA]">
                             Correo confirmado · Solicitud pendiente de autorización administrativa
                           </h2>
-                          <p className="text-[#252A27]/85 dark:text-[#F5F1E8]/85 leading-relaxed">
+                          <p className="text-[#1D252C]/85 dark:text-[#F7F3EA]/85 leading-relaxed">
                             Registramos la solicitud de{' '}
                             <strong>{activeAdminRequest.fullName}</strong> (
                             {activeAdminRequest.email}) con estado{' '}
@@ -886,8 +904,8 @@ export const AccessPage: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="p-4 rounded-xl bg-[#EAE3D6]/70 dark:bg-[#1C211E] border border-[#DDD5C8] dark:border-white/10 text-xs space-y-1.5">
-                        <p className="font-semibold text-[#252A27] dark:text-[#F5F1E8]">
+                      <div className="p-4 rounded-xl bg-[#ECE7DC]/70 dark:bg-[#161C22] border border-[#DBD4C6] dark:border-white/10 text-xs space-y-1.5">
+                        <p className="font-semibold text-[#1D252C] dark:text-[#F7F3EA]">
                           ¿Qué sigue?
                         </p>
                         <p className="text-[#73766F] dark:text-[#A3A89F] leading-relaxed">
@@ -905,7 +923,7 @@ export const AccessPage: React.FC = () => {
                             setActiveAdminRequest(null);
                             switchMode('login');
                           }}
-                          className="px-4 py-2.5 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-xs font-semibold transition-colors"
+                          className="px-4 py-2.5 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-xs font-semibold transition-colors"
                         >
                           Volver a Iniciar sesión
                         </button>
@@ -915,7 +933,7 @@ export const AccessPage: React.FC = () => {
                             setAdminStep('form');
                             setActiveAdminRequest(null);
                           }}
-                          className="px-4 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 text-xs font-semibold hover:bg-[#EAE3D6]/50"
+                          className="px-4 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 text-xs font-semibold hover:bg-[#ECE7DC]/50"
                         >
                           Crear otra cuenta
                         </button>
@@ -930,7 +948,7 @@ export const AccessPage: React.FC = () => {
                 <div className="mt-6 space-y-4">
                   <div className="flex items-center justify-between gap-2">
                     <h2 className="font-display text-xl font-bold flex items-center gap-2">
-                      <KeyRound className="w-5 h-5 text-[#304B3E] dark:text-[#B96F50]" />
+                      <KeyRound className="w-5 h-5 text-[#214438] dark:text-[#C7582B]" />
                       Recuperar contraseña
                     </h2>
                     <button
@@ -952,7 +970,7 @@ export const AccessPage: React.FC = () => {
                   )}
 
                   {recMessage && (
-                    <div className="p-3 rounded-lg bg-[#304B3E]/10 dark:bg-[#75836A]/20 border border-[#75836A]/35 text-xs text-[#252A27] dark:text-[#F5F1E8]">
+                    <div className="p-3 rounded-lg bg-[#214438]/10 dark:bg-[#75836A]/20 border border-[#75836A]/35 text-xs text-[#1D252C] dark:text-[#F7F3EA]">
                       {recMessage}
                     </div>
                   )}
@@ -977,12 +995,12 @@ export const AccessPage: React.FC = () => {
                           value={recEmail}
                           onChange={(e) => setRecEmail(e.target.value)}
                           placeholder="tu@correo.com"
-                          className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E]"
+                          className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22]"
                         />
                       </div>
                       <button
                         type="submit"
-                        className="w-full py-2.5 px-4 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-sm font-semibold transition-colors"
+                        className="w-full py-2.5 px-4 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-sm font-semibold transition-colors"
                       >
                         Solicitar código de recuperación
                       </button>
@@ -1007,20 +1025,20 @@ export const AccessPage: React.FC = () => {
                           value={recCode}
                           onChange={(e) => setRecCode(e.target.value)}
                           placeholder="000000"
-                          className="w-full px-3.5 py-2.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E] text-base font-mono-num tracking-[0.25em] text-center"
+                          className="w-full px-3.5 py-2.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22] text-base font-mono-num tracking-[0.25em] text-center"
                         />
                       </div>
                       <div className="flex gap-2">
                         <button
                           type="submit"
-                          className="flex-1 py-2.5 px-4 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-sm font-semibold transition-colors"
+                          className="flex-1 py-2.5 px-4 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-sm font-semibold transition-colors"
                         >
                           Validar código
                         </button>
                         <button
                           type="button"
                           onClick={() => setRecStep('email')}
-                          className="py-2.5 px-3 rounded-lg border border-[#DDD5C8] dark:border-white/15 text-xs font-semibold hover:bg-[#EAE3D6]/50"
+                          className="py-2.5 px-3 rounded-lg border border-[#DBD4C6] dark:border-white/15 text-xs font-semibold hover:bg-[#ECE7DC]/50"
                         >
                           Cambiar correo
                         </button>
@@ -1044,7 +1062,7 @@ export const AccessPage: React.FC = () => {
                           minLength={6}
                           value={recNewPassword}
                           onChange={(e) => setRecNewPassword(e.target.value)}
-                          className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E]"
+                          className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22]"
                         />
                       </div>
                       <div>
@@ -1061,12 +1079,12 @@ export const AccessPage: React.FC = () => {
                           minLength={6}
                           value={recConfirmPassword}
                           onChange={(e) => setRecConfirmPassword(e.target.value)}
-                          className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#1C211E]"
+                          className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#161C22]"
                         />
                       </div>
                       <button
                         type="submit"
-                        className="w-full py-2.5 px-4 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-sm font-semibold transition-colors"
+                        className="w-full py-2.5 px-4 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-sm font-semibold transition-colors"
                       >
                         Guardar nueva contraseña
                       </button>
@@ -1082,7 +1100,7 @@ export const AccessPage: React.FC = () => {
                           setLoginPassword('');
                           switchMode('login');
                         }}
-                        className="w-full py-2.5 px-4 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-sm font-semibold transition-colors"
+                        className="w-full py-2.5 px-4 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-sm font-semibold transition-colors"
                       >
                         Ir a Iniciar sesión
                       </button>
@@ -1096,11 +1114,11 @@ export const AccessPage: React.FC = () => {
             {latestPreparedEmails.length > 0 && (
               <div
                 data-testid="local-email-preview"
-                className="rounded-xl border border-[#DDD5C8] dark:border-white/12 bg-[#FFFCF7] dark:bg-[#222825] p-4 text-xs space-y-2"
+                className="rounded-xl border border-[#DBD4C6] dark:border-white/12 bg-[#FFFDFA] dark:bg-[#1A2128] p-4 text-xs space-y-2"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-[#304B3E] dark:text-[#B96F50]" />
+                    <Mail className="w-4 h-4 text-[#214438] dark:text-[#C7582B]" />
                     <span className="font-bold">
                       Correos automáticos preparados (vista previa local)
                     </span>
@@ -1108,7 +1126,7 @@ export const AccessPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setShowPreviewDrawer((v) => !v)}
-                    className="text-[#304B3E] dark:text-[#B96F50] font-semibold hover:underline"
+                    className="text-[#214438] dark:text-[#C7582B] font-semibold hover:underline"
                   >
                     {showPreviewDrawer ? 'Ocultar vista previa' : 'Ver plantilla preparada'}
                   </button>
@@ -1123,13 +1141,13 @@ export const AccessPage: React.FC = () => {
                     {latestPreparedEmails.map((em) => (
                       <div
                         key={em.id}
-                        className="p-3 rounded-lg bg-[#EAE3D6]/65 dark:bg-[#1C211E] border border-[#DDD5C8] dark:border-white/10 space-y-1"
+                        className="p-3 rounded-lg bg-[#ECE7DC]/65 dark:bg-[#161C22] border border-[#DBD4C6] dark:border-white/10 space-y-1"
                       >
                         <div className="flex flex-wrap justify-between gap-1 font-semibold">
                           <span>Asunto: {em.subject}</span>
                           <span className="text-[#73766F]">Para: {em.toEmail}</span>
                         </div>
-                        <pre className="whitespace-pre-wrap font-sans text-[11px] text-[#252A27]/85 dark:text-[#F5F1E8]/85 leading-relaxed">
+                        <pre className="whitespace-pre-wrap font-sans text-[11px] text-[#1D252C]/85 dark:text-[#F7F3EA]/85 leading-relaxed">
                           {em.textBody}
                         </pre>
                       </div>
@@ -1142,7 +1160,7 @@ export const AccessPage: React.FC = () => {
         </div>
       </main>
 
-      <footer className="border-t border-[#DDD5C8] dark:border-white/10 py-5 px-4 sm:px-6 text-xs text-[#73766F] dark:text-[#A3A89F]">
+      <footer className="border-t border-[#DBD4C6] dark:border-white/10 py-5 px-4 sm:px-6 text-xs text-[#73766F] dark:text-[#A3A89F]">
         <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-2">
           <span>© 2026 OFI CLICK México · Cuautitlán Izcalli, Estado de México</span>
           <span>Precios en MXN · Acceso seguro por rol autorizado</span>
@@ -1157,7 +1175,7 @@ export const AccessPage: React.FC = () => {
           onClick={() => setShowLegalModal(null)}
         >
           <div
-            className="w-full max-w-lg rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/12 p-6 space-y-3 text-sm"
+            className="w-full max-w-lg rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/12 p-6 space-y-3 text-sm"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="font-display font-bold text-lg">
@@ -1171,7 +1189,7 @@ export const AccessPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowLegalModal(null)}
-              className="px-4 py-2 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-xs font-semibold transition-colors"
+              className="px-4 py-2 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-xs font-semibold transition-colors"
             >
               Entendido
             </button>

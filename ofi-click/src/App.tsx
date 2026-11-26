@@ -69,6 +69,35 @@ const GoogleMapsQuotaBanner: React.FC = () => {
   );
 };
 
+const SupabaseConfigBanner: React.FC = () => {
+  const { configWarning } = useOfiClick();
+  const [dismissed, setDismissed] = useState(false);
+
+  if (!configWarning || dismissed) return null;
+
+  return (
+    <div
+      role="alert"
+      className="bg-[#C7582B] text-white px-4 py-2.5 text-xs border-b border-[#AC4921]"
+    >
+      <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <AlertTriangle className="w-4 h-4 shrink-0 text-[#F7F3EA]" />
+          <span className="font-medium leading-snug">{configWarning}</span>
+        </div>
+        <button
+          type="button"
+          onClick={() => setDismissed(true)}
+          aria-label="Cerrar aviso de configuración"
+          className="p-1 rounded hover:bg-black/15"
+        >
+          <X className="w-3.5 h-3.5" />
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const ToastContainer: React.FC = () => {
   const { toasts, dismissToast } = useOfiClick();
   if (toasts.length === 0) return null;
@@ -83,10 +112,10 @@ const ToastContainer: React.FC = () => {
           key={t.id}
           className={`pointer-events-auto flex items-start gap-2.5 rounded-xl px-4 py-3 text-xs font-medium shadow-lg border ${
             t.type === 'success'
-              ? 'bg-emerald-950 text-emerald-50 border-emerald-700'
+              ? 'bg-[#1D3B30] text-[#F7F3EA] border-[#2D5A49]'
               : t.type === 'error'
               ? 'bg-red-950 text-red-50 border-red-700'
-              : 'bg-[#222825] text-[#F5F1E8] border-white/15'
+              : 'bg-[#1D252C] text-[#F7F3EA] border-white/15'
           }`}
         >
           {t.type === 'success' ? (
@@ -94,7 +123,7 @@ const ToastContainer: React.FC = () => {
           ) : t.type === 'error' ? (
             <AlertTriangle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
           ) : (
-            <Info className="w-4 h-4 text-[#B96F50] shrink-0 mt-0.5" />
+            <Info className="w-4 h-4 text-[#E58359] shrink-0 mt-0.5" />
           )}
           <span className="flex-1 leading-relaxed">{t.message}</span>
           <button
@@ -183,7 +212,8 @@ const AppShell: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F5F1E8] dark:bg-[#171B19] text-[#252A27] dark:text-[#F5F1E8] transition-colors">
+    <div className="min-h-screen flex flex-col bg-[#F7F3EA] dark:bg-[#12171C] text-[#1D252C] dark:text-[#F7F3EA] transition-colors">
+      <SupabaseConfigBanner />
       <GoogleMapsQuotaBanner />
       {showPublicChrome && <Header />}
       <div className="flex-1">{renderPage()}</div>

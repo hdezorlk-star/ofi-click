@@ -20,13 +20,13 @@ export const ComparePage: React.FC = () => {
           <button
             type="button"
             onClick={() => navigate({ page: 'explore' })}
-            className="p-2 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#FFFCF7] dark:bg-[#222825] hover:bg-[#EAE3D6] dark:hover:bg-white/10"
+            className="p-2 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#FFFDFA] dark:bg-[#1A2128] hover:bg-[#ECE7DC] dark:hover:bg-white/10"
             aria-label="Volver a explorar"
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
           <div>
-            <h1 className="font-display font-bold text-2xl text-[#252A27] dark:text-[#F5F1E8]">
+            <h1 className="font-display font-bold text-2xl text-[#1D252C] dark:text-[#F7F3EA]">
               Comparar profesionales ({selectedPros.length}/3)
             </h1>
             <p className="text-xs text-[#73766F] dark:text-[#A3A89F]">
@@ -47,8 +47,8 @@ export const ComparePage: React.FC = () => {
       </div>
 
       {selectedPros.length === 0 ? (
-        <div className="rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/10 p-10 text-center">
-          <p className="font-display font-semibold text-base text-[#252A27] dark:text-[#F5F1E8]">
+        <div className="rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/10 p-10 text-center">
+          <p className="font-display font-semibold text-base text-[#1D252C] dark:text-[#F7F3EA]">
             Aún no has seleccionado perfiles para comparar
           </p>
           <p className="text-sm text-[#73766F] dark:text-[#A3A89F] mt-1">
@@ -57,16 +57,16 @@ export const ComparePage: React.FC = () => {
           <button
             type="button"
             onClick={() => navigate({ page: 'explore' })}
-            className="mt-4 px-4 py-2 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-xs font-semibold transition-colors"
+            className="mt-4 px-4 py-2 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-xs font-semibold transition-colors"
           >
             Ir al explorador
           </button>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/10 shadow-xs">
+        <div className="overflow-x-auto rounded-2xl bg-[#FFFDFA] dark:bg-[#1A2128] border border-[#DBD4C6] dark:border-white/10 shadow-xs">
           <table className="w-full text-left text-sm border-collapse min-w-[680px]">
             <thead>
-              <tr className="border-b border-[#DDD5C8] dark:border-white/10 bg-[#EAE3D6]/40 dark:bg-white/5">
+              <tr className="border-b border-[#DBD4C6] dark:border-white/10 bg-[#ECE7DC]/40 dark:bg-white/5">
                 <th className="p-4 w-48 text-xs font-semibold text-[#73766F] dark:text-[#A3A89F]">Criterio</th>
                 {selectedPros.map((pro) => (
                   <th key={pro.id} className="p-4 align-top">
@@ -75,10 +75,10 @@ export const ComparePage: React.FC = () => {
                         <SafeImage
                           src={getPublicProAvatar(pro)}
                           alt={pro.displayName}
-                          className="w-11 h-11 rounded-lg object-cover border border-[#DDD5C8] dark:border-white/10"
+                          className="w-11 h-11 rounded-lg object-cover border border-[#DBD4C6] dark:border-white/10"
                         />
                         <div>
-                          <p className="font-display font-bold text-sm text-[#252A27] dark:text-[#F5F1E8]">
+                          <p className="font-display font-bold text-sm text-[#1D252C] dark:text-[#F7F3EA]">
                             {pro.commercialName || pro.displayName}
                           </p>
                           <button
@@ -95,7 +95,7 @@ export const ComparePage: React.FC = () => {
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#DDD5C8] dark:divide-white/10">
+            <tbody className="divide-y divide-[#DBD4C6] dark:divide-white/10">
               <tr>
                 <td className="p-4 font-medium text-xs text-[#73766F] dark:text-[#A3A89F]">Especialidades</td>
                 {selectedPros.map((pro) => (
@@ -107,7 +107,7 @@ export const ComparePage: React.FC = () => {
               <tr>
                 <td className="p-4 font-medium text-xs text-[#73766F] dark:text-[#A3A89F]">Calificación</td>
                 {selectedPros.map((pro) => (
-                  <td key={pro.id} className="p-4 font-mono-num font-semibold text-[#B96F50]">
+                  <td key={pro.id} className="p-4 font-mono-num font-semibold text-[#C7582B]">
                     ★ {pro.ratingAvg.toFixed(1)}
                   </td>
                 ))}
@@ -125,7 +125,7 @@ export const ComparePage: React.FC = () => {
                 {selectedPros.map((pro) => {
                   const min = getProMinPublishedPrice(pro.id, db.services);
                   return (
-                    <td key={pro.id} className="p-4 font-mono-num font-semibold text-[#304B3E] dark:text-[#EAE3D6]">
+                    <td key={pro.id} className="p-4 font-mono-num font-semibold text-[#214438] dark:text-[#ECE7DC]">
                       {min ? `Desde ${formatMXN(min)}` : 'Cotización personalizada'}
                     </td>
                   );
@@ -188,7 +188,7 @@ export const ComparePage: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => navigate({ page: 'pro-profile', proId: pro.id })}
-                        className="px-3 py-1.5 rounded-lg border border-[#DDD5C8] dark:border-white/15 bg-[#EAE3D6]/50 dark:bg-white/5 text-xs font-semibold"
+                        className="px-3 py-1.5 rounded-lg border border-[#DBD4C6] dark:border-white/15 bg-[#ECE7DC]/50 dark:bg-white/5 text-xs font-semibold"
                       >
                         Ver perfil
                       </button>
@@ -203,7 +203,7 @@ export const ComparePage: React.FC = () => {
                             })
                           )
                         }
-                        className="px-3 py-1.5 rounded-lg bg-[#304B3E] hover:bg-[#243A30] text-white text-xs font-semibold transition-colors"
+                        className="px-3 py-1.5 rounded-lg bg-[#214438] hover:bg-[#183329] text-white text-xs font-semibold transition-colors"
                       >
                         Solicitar
                       </button>
