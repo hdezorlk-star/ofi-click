@@ -1,0 +1,59 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --oficlick-bg: #F7F3EA;
+  --oficlick-bg-alt: #ECE7DC;
+  --oficlick-surface: #FFFDFA;
+  --oficlick-slate: #1D252C;
+  --oficlick-green: #214438;
+  --oficlick-green-hover: #183329;
+  --oficlick-olive: #5B6B5F;
+  --oficlick-terracotta: #C7582B;
+  --oficlick-charcoal: #1D252C;
+  --oficlick-muted: #5B636B;
+  --oficlick-border: #DBD4C6;
+}
+
+@layer base {
+  html {
+    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+    background-color: #F7F3EA;
+    color: #1D252C;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  html.dark {
+    background-color: #12171C;
+    color: #F7F3EA;
+  }
+
+  body {
+    overflow-x: clip;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+
+  .font-mono-num {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

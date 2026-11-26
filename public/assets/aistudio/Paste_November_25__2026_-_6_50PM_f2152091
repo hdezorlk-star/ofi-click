@@ -1,0 +1,871 @@
+# OFI CLICK — AUDITORÍA, CORRECCIÓN INTEGRAL Y FUNCIONALIDAD COMPLETA DE LA APLICACIÓN
+
+Trabaja directamente sobre el proyecto existente OFI CLICK.
+
+La aplicación ya cuenta con un diseño aprobado, marketplace público, perfiles, freelancers, roles, portafolio, verificación de profesionales, solicitudes, cotizaciones, mapas, chat, paneles administrativos y diversas funciones implementadas.
+
+Estamos preparando Ofi Click para una exposición académica importante. Necesitamos que la aplicación funcione correctamente en sus procesos internos, que las secciones estén conectadas entre sí y que los errores existentes se corrijan.
+
+Esta tarea consiste en realizar una revisión integral, corregir problemas, mejorar las conexiones internas y completar las funcionalidades que actualmente no están funcionando correctamente.
+
+# REGLA PRINCIPAL: NO DESTRUIR EL PROYECTO
+
+Antes de modificar código, inspecciona el proyecto existente.
+
+NO RECONSTRUYAS LA APLICACIÓN DESDE CERO.
+
+NO CAMBIES ARBITRARIAMENTE EL DISEÑO.
+
+NO ELIMINES FUNCIONES QUE YA ESTÁN IMPLEMENTADAS.
+
+NO ELIMINES COMPONENTES SIN REVISAR SUS DEPENDENCIAS.
+
+NO CAMBIES LA IDENTIDAD VISUAL.
+
+NO CAMBIES LA PALETA DE COLORES.
+
+NO CAMBIES LA TIPOGRAFÍA.
+
+NO RECONSTRUYAS LOS PANELES QUE YA ESTÁN APROBADOS.
+
+NO ELIMINES EL PORTAFOLIO EXISTENTE.
+
+NO ELIMINES LA VERIFICACIÓN DEL FREELANCER.
+
+NO ELIMINES LAS FOTOGRAFÍAS DE TRABAJOS.
+
+NO ELIMINES LAS FUNCIONES DE SOLICITUDES, COTIZACIONES, CHAT, AGENDA O CONTRATACIONES.
+
+NO ELIMINES LOS ROLES EXISTENTES.
+
+NO CONECTES SUPABASE TODAVÍA.
+
+Conserva todo lo que funciona correctamente.
+
+Modifica únicamente lo necesario para corregir, integrar y completar la aplicación.
+
+# 1. ELIMINAR EL INICIO DE SESIÓN OBLIGATORIO AL ABRIR LA APLICACIÓN
+
+Anteriormente se implementó un inicio de sesión obligatorio al abrir Ofi Click.
+
+Esta modificación no fue aprobada y debe revertirse.
+
+Quiero que Ofi Click vuelva a tener su experiencia de marketplace público desde el primer momento.
+
+Al abrir la aplicación, el usuario deberá poder entrar y explorar libremente la página pública sin necesidad de registrarse o iniciar sesión.
+
+La página inicial debe conservar la experiencia que teníamos anteriormente.
+
+El visitante podrá:
+- Consultar la página de inicio.
+- Explorar servicios.
+- Consultar categorías.
+- Consultar cómo funciona Ofi Click.
+- Explorar profesionales.
+- Buscar profesionales.
+- Consultar perfiles públicos.
+- Consultar portafolios públicos.
+- Consultar reseñas públicas.
+- Utilizar los filtros públicos.
+- Explorar el mapa y los resultados.
+
+NO obligues a iniciar sesión para navegar por el marketplace.
+
+## Autenticación contextual
+
+El inicio de sesión y registro deberán aparecer únicamente cuando el usuario intente realizar una acción que requiera una cuenta.
+
+Por ejemplo:
+- Enviar una solicitud.
+- Contratar un servicio.
+- Enviar un mensaje.
+- Guardar un profesional en favoritos.
+- Dejar una reseña.
+- Realizar una acción que requiera una cuenta.
+
+Cuando el visitante intente una acción protegida:
+
+1. Identifica la acción que intentaba realizar.
+2. Solicita iniciar sesión o registrarse.
+3. Permite completar la autenticación.
+4. Después de autenticarse, regresa al usuario a la acción que intentaba realizar.
+5. No obligues al usuario a comenzar nuevamente el proceso.
+
+La autenticación deberá integrarse de forma contextual, sin interrumpir innecesariamente la navegación pública.
+
+Conserva el sistema de autenticación y las funciones de roles de desarrollo existentes, adaptándolos a este nuevo flujo.
+
+## Experiencia del freelancer
+
+Conserva la separación del panel del freelancer.
+
+Cuando un freelancer utilice su panel de trabajo, deberá permanecer en su espacio de trabajo interno, sin acceso a la navegación pública del marketplace desde ese panel.
+
+No cambies esta regla.
+
+# 2. ELIMINAR LA FOTO FRONTAL OBLIGATORIA DEL CLIENTE
+
+En el rol de cliente, elimina el requisito de fotografía frontal de rostro.
+
+El cliente ya no deberá estar obligado a subir una fotografía frontal para registrarse o utilizar las funciones de su cuenta.
+
+Elimina exclusivamente la obligatoriedad de esta fotografía en el flujo del cliente.
+
+No elimines:
+- Nombre.
+- Correo.
+- Datos de perfil actuales.
+- Campos existentes que sean necesarios.
+- Validaciones actuales.
+- Fotografía opcional de perfil si existe un mecanismo independiente para ella.
+- Funciones del perfil.
+- Configuración.
+- Solicitudes.
+- Contrataciones.
+- Mensajes.
+- Favoritos.
+- Reseñas.
+- Notificaciones.
+
+No confundas la eliminación de la foto frontal obligatoria con la eliminación del perfil.
+
+No elimines la fotografía frontal ni la verificación del freelancer.
+
+La verificación del freelancer permanece como actualmente está implementada.
+
+# 3. CORREGIR EL MÓDULO DE SERVICIOS CONTRATADOS DEL CLIENTE
+
+Actualmente, cuando el cliente contrata un servicio, la contratación se realiza correctamente, pero el cliente no puede consultar adecuadamente los servicios que ha contratado ni realizar su seguimiento.
+
+Este problema debe corregirse.
+
+El módulo de servicios contratados debe convertirse en un sistema funcional de seguimiento de contrataciones.
+
+## 3.1 Integración de contratación con el panel del cliente
+
+Cuando un cliente acepte una cotización y se confirme una contratación, dicha contratación deberá aparecer automáticamente en su panel de cliente.
+
+No debe requerir registros manuales adicionales.
+
+La contratación deberá relacionarse correctamente con:
+- Cliente.
+- Freelancer.
+- Solicitud original.
+- Cotización aceptada.
+- Servicio.
+- Precio acordado.
+- Fecha.
+- Horario.
+- Ubicación.
+- Descripción.
+- Estado.
+- Conversación asociada cuando corresponda.
+
+No dupliques contrataciones.
+
+No generes contrataciones sin una relación válida con la solicitud y cotización correspondiente, cuando el flujo requiera cotización.
+
+## 3.2 Página de servicios contratados
+
+Desarrolla y corrige la página existente de servicios contratados.
+
+El cliente deberá poder visualizar:
+
+- Servicios contratados.
+- Servicios próximos.
+- Servicios en curso.
+- Servicios finalizados.
+- Servicios cancelados cuando corresponda.
+- Fecha.
+- Horario.
+- Freelancer.
+- Fotografía de perfil del profesional.
+- Nombre del profesional.
+- Servicio.
+- Descripción.
+- Precio acordado.
+- Ubicación.
+- Estado.
+- Información de seguimiento.
+- Conversación relacionada.
+- Detalles de contratación.
+
+Organiza la información de manera clara y profesional.
+
+## 3.3 Detalle de cada contratación
+
+Cada servicio contratado deberá abrir una página o vista de detalle.
+
+Esta vista deberá mostrar:
+
+- Información del servicio.
+- Información del freelancer.
+- Fecha y horario.
+- Precio acordado.
+- Ubicación.
+- Descripción.
+- Cotización aceptada.
+- Estado actual.
+- Historial de cambios.
+- Conversación.
+- Acciones disponibles según el estado.
+
+## 3.4 Seguimiento de estados
+
+Conserva el sistema de estados existente y asegúrate de que funcione correctamente.
+
+Los estados deberán reflejar las operaciones reales del flujo de contratación, incluyendo los estados que actualmente maneja la aplicación:
+
+- Confirmada.
+- Programada.
+- En camino, cuando corresponda.
+- En progreso.
+- Finalización pendiente de confirmación.
+- Completada.
+- Cancelada.
+- Reprogramada, cuando corresponda.
+
+No inventes estados incompatibles con la arquitectura existente.
+
+El cliente debe poder observar claramente qué está ocurriendo con su servicio.
+
+## 3.5 Acciones del cliente
+
+Desde el detalle de una contratación, el cliente deberá poder realizar las acciones permitidas por el estado actual:
+
+- Abrir conversación.
+- Consultar información.
+- Solicitar reprogramación.
+- Cancelar cuando corresponda.
+- Confirmar finalización.
+- Reportar un problema.
+- Dejar reseña cuando el servicio sea elegible.
+
+Las acciones deberán actualizar la contratación y reflejarse también en el panel del freelancer.
+
+## 3.6 Integración con el panel del freelancer
+
+Cuando una contratación se cree, modifique, reprograma, cancele o complete:
+
+El panel del freelancer deberá reflejar los cambios correspondientes.
+
+No debe existir una contratación que tenga estados diferentes entre el cliente y el freelancer.
+
+Ambos paneles deberán consultar el mismo registro lógico de contratación en la arquitectura local.
+
+# 4. CORREGIR EL MAPA Y LOS FILTROS POR SERVICIO
+
+El mapa es una de las funciones centrales de Ofi Click.
+
+Actualmente necesitamos mejorar la selección de servicios mediante filtros para que los resultados del mapa correspondan exclusivamente al servicio que el usuario busca.
+
+## 4.1 Filtro de servicio
+
+Implementa un filtro funcional de categorías y servicios.
+
+El usuario deberá poder seleccionar el servicio específico que requiere.
+
+Ejemplos:
+
+- Plomería.
+- Electricidad.
+- Albañilería.
+- Cerrajería.
+- Carpintería.
+- Pintura.
+- Limpieza.
+- Jardinería.
+- Aire acondicionado.
+- Instalación de pisos.
+- Impermeabilización.
+- Herrería.
+- Reparación de electrodomésticos.
+- Computación.
+- Armado de muebles.
+- Mudanzas.
+- Vidriería.
+- Mantenimiento general.
+- Otras categorías existentes en Ofi Click.
+
+Utiliza el catálogo real de categorías y servicios de la aplicación.
+
+No inventes categorías duplicadas.
+
+## 4.2 Resultados del mapa
+
+Cuando el usuario seleccione un servicio:
+
+El mapa deberá mostrar únicamente los freelancers que ofrecen el servicio seleccionado y que cumplan con los demás filtros activos.
+
+Por ejemplo:
+
+Si el usuario selecciona Plomería, el mapa no debe mostrar profesionales de carpintería, electricidad o limpieza que no cumplan con el filtro.
+
+Los resultados deberán filtrarse correctamente por:
+- Servicio seleccionado.
+- Categoría.
+- Zona.
+- Disponibilidad, cuando el filtro esté activo.
+- Precio, cuando el filtro esté activo.
+- Calificación, cuando el filtro esté activo.
+- Otros filtros existentes.
+
+No muestres resultados que no correspondan a los filtros.
+
+## 4.3 Mapa y lista sincronizados
+
+El mapa y la lista de resultados deben funcionar simultáneamente.
+
+Cuando el usuario cambie un filtro:
+- Actualiza la lista.
+- Actualiza los marcadores.
+- Mantén ambos resultados sincronizados.
+
+Cuando el usuario seleccione un marcador:
+- Identifica al profesional.
+- Resalta el resultado correspondiente en la lista.
+- Permite abrir su perfil.
+
+Cuando el usuario seleccione un profesional de la lista:
+- Resalta su marcador.
+- Permite consultar sus detalles.
+
+## 4.4 Filtros combinados
+
+Permite combinar filtros.
+
+Ejemplo:
+
+Servicio: Plomería.
+
+Zona: determinada colonia.
+
+Disponibilidad: disponible.
+
+Calificación: mínimo seleccionado.
+
+El mapa y la lista deberán mostrar únicamente profesionales que coincidan con la combinación de filtros.
+
+## 4.5 Estados del mapa
+
+Implementa correctamente:
+
+- Cargando resultados.
+- Resultados encontrados.
+- Sin resultados.
+- Error.
+- Filtros activos.
+- Limpiar filtros.
+- Selección de profesional.
+- Actualización del mapa.
+
+Cuando no existan profesionales que coincidan, muestra un mensaje claro y permite cambiar filtros.
+
+No inventes profesionales para llenar el mapa.
+
+Utiliza los datos existentes del proyecto local.
+
+# 5. CORREGIR LOS ARCHIVOS ADJUNTOS DEL CHAT INTERNO
+
+Actualmente, cuando un usuario integra o adjunta un archivo dentro del chat interno, el otro participante no puede visualizar correctamente el archivo.
+
+Este problema debe corregirse.
+
+No reconstruyas el chat.
+
+Conserva:
+- Conversaciones.
+- Mensajes.
+- Estados de lectura.
+- Notificaciones.
+- Integración con solicitudes.
+- Integración con contrataciones.
+- Diseño actual.
+- Funciones existentes.
+
+Únicamente corrige e integra correctamente los archivos adjuntos.
+
+## 5.1 Adjuntar archivos
+
+Permite utilizar el mecanismo actual de adjuntar archivos.
+
+Conserva las opciones existentes y mejora la funcionalidad cuando sea necesario.
+
+Los archivos deberán relacionarse correctamente con:
+- Conversación.
+- Mensaje.
+- Usuario remitente.
+- Fecha.
+- Nombre.
+- Tipo.
+- Tamaño.
+- Referencia del archivo.
+
+## 5.2 Visualización por ambos participantes
+
+Cuando un participante adjunte un archivo, el otro participante deberá poder visualizarlo correctamente.
+
+No basta con mostrar el nombre del archivo.
+
+Integra una vista de archivo que permita identificar claramente el adjunto.
+
+Para imágenes:
+- Mostrar una vista previa.
+- Permitir abrir la imagen.
+- Permitir visualizarla ampliada.
+
+Para documentos:
+- Mostrar nombre.
+- Tipo.
+- Tamaño cuando corresponda.
+- Icono identificativo.
+- Acción para abrir o consultar el archivo cuando el formato sea compatible.
+- Acción de descarga cuando sea apropiada y segura.
+
+Para archivos no compatibles con vista previa:
+- Mostrar una tarjeta de archivo.
+- Indicar que no se puede visualizar directamente.
+- Permitir abrirlo o descargarlo de manera apropiada.
+
+## 5.3 Integración del archivo con el mensaje
+
+El archivo deberá aparecer dentro del mensaje correspondiente.
+
+No lo muestres como un elemento desconectado de la conversación.
+
+La tarjeta del archivo deberá permanecer relacionada con el mensaje que lo envió.
+
+## 5.4 Persistencia local
+
+Durante esta etapa, los archivos de prueba deben manejarse mediante una arquitectura local apropiada para el prototipo.
+
+No simules almacenamiento permanente de archivos reales si no existe una implementación que lo permita.
+
+Prepara la arquitectura para almacenamiento privado de archivos cuando conectemos Supabase.
+
+No guardes archivos binarios grandes en localStorage.
+
+No expongas documentos sensibles.
+
+## 5.5 Pruebas
+
+Prueba el envío de archivos en ambos sentidos:
+
+Cliente envía archivo → Freelancer lo visualiza.
+
+Freelancer envía archivo → Cliente lo visualiza.
+
+Comprueba que:
+- El archivo aparece dentro del mensaje.
+- La vista previa funciona cuando corresponde.
+- Los archivos no se muestran como enlaces rotos.
+- El mensaje no pierde el archivo.
+- El archivo se relaciona con la conversación correcta.
+- Las acciones de abrir o descargar funcionan cuando el entorno lo permite.
+
+# 6. CORREGIR EL ACCESO AL PANEL ADMINISTRATIVO
+
+Actualmente, el acceso administrativo está bloqueado porque la aplicación solicita autorización de otro administrador.
+
+Sin embargo, todavía no existe un administrador que pueda aprobar la solicitud.
+
+Esto crea un bloqueo circular que impide utilizar el panel administrativo.
+
+Necesitamos corregirlo.
+
+## 6.1 Inicialización del administrador en el prototipo local
+
+Como todavía estamos trabajando sin Supabase y necesitamos preparar la aplicación para una exposición, implementa un mecanismo controlado de inicialización del administrador en el entorno de desarrollo local.
+
+En este prototipo, cuando se complete el formulario de registro administrativo con todos los campos que actualmente solicita la aplicación y se cumplan las validaciones del flujo local, deberá existir un mecanismo de inicialización para habilitar el acceso al panel administrativo sin depender de la aprobación de un administrador inexistente.
+
+No dejes al usuario atrapado en un estado de espera imposible.
+
+Para esta etapa de desarrollo y exposición:
+
+- Permite completar el proceso de inicialización del administrador en el entorno local de demostración.
+- Permite acceder al panel administrativo de desarrollo una vez completado el proceso.
+- Conserva el formulario y los datos que ya solicita el registro administrativo.
+- Conserva los roles de administrador regional y administrador central.
+- Conserva los paneles administrativos.
+- Conserva las funciones existentes.
+- No elimines la estructura de autorización que será necesaria posteriormente.
+
+## 6.2 Limitación de este mecanismo
+
+Este mecanismo de inicialización es exclusivamente para el prototipo local de desarrollo y exposición.
+
+No debe considerarse un sistema de autenticación o autorización de producción.
+
+No debe habilitar la autoasignación de privilegios administrativos en una aplicación pública real.
+
+No implementes este mecanismo como un bypass de seguridad en producción.
+
+Cuando conectemos Supabase, el acceso administrativo deberá sustituirse por un proceso real de aprovisionamiento, autorización y control de permisos.
+
+No uses datos personales reales, documentos reales ni credenciales sensibles para la demostración.
+
+## 6.3 Panel administrativo
+
+Una vez que el administrador pueda acceder correctamente, verifica que el panel administrativo existente funcione.
+
+No reconstruyas el panel.
+
+No elimines módulos.
+
+No cambies el diseño.
+
+Comprueba:
+- Navegación.
+- Dashboard.
+- Usuarios.
+- Profesionales.
+- Verificaciones.
+- Categorías.
+- Solicitudes.
+- Contrataciones.
+- Moderación.
+- Reportes.
+- Soporte.
+- Regiones.
+- Configuración.
+- Seguridad.
+- Auditoría.
+- Notificaciones.
+
+Corrige únicamente los errores que encuentres.
+
+# 7. AUDITORÍA INTEGRAL DE LOS ROLES
+
+No te limites a los errores específicos anteriores.
+
+Quiero que revises toda la aplicación para identificar problemas de integración entre los módulos y los roles.
+
+Los roles actuales deben conservarse.
+
+## Cliente
+
+Comprueba:
+- Marketplace.
+- Búsqueda.
+- Categorías.
+- Mapa.
+- Filtros.
+- Perfiles.
+- Solicitudes.
+- Solicitudes abiertas.
+- Solicitudes directas.
+- Cotizaciones.
+- Comparación de cotizaciones.
+- Contrataciones.
+- Servicios contratados.
+- Seguimiento.
+- Reprogramaciones.
+- Cancelaciones.
+- Chat.
+- Archivos adjuntos.
+- Favoritos.
+- Reseñas.
+- Notificaciones.
+- Perfil.
+- Configuración.
+
+## Freelancer
+
+Comprueba:
+- Dashboard.
+- Solicitudes.
+- Solicitudes abiertas.
+- Respuestas.
+- Cotizaciones.
+- Cotizaciones aceptadas.
+- Contrataciones.
+- Agenda.
+- Disponibilidad.
+- Servicios.
+- Precios.
+- Portafolio.
+- Fotografías.
+- Perfil.
+- Verificación.
+- Mensajes.
+- Archivos adjuntos.
+- Reseñas.
+- Estadísticas.
+- Notificaciones.
+- Configuración.
+
+El freelancer debe permanecer dentro de su panel de trabajo y no debe tener acceso a la navegación pública del marketplace desde su panel.
+
+## Administrador regional
+
+Comprueba:
+- Panel.
+- Usuarios regionales.
+- Profesionales.
+- Moderación.
+- Verificaciones.
+- Solicitudes.
+- Contrataciones.
+- Reportes.
+- Soporte.
+- Configuración regional.
+- Permisos.
+- Navegación.
+
+Respeta el alcance regional.
+
+## Administrador central
+
+Comprueba:
+- Panel global.
+- Usuarios.
+- Roles.
+- Profesionales.
+- Regiones.
+- Verificaciones.
+- Categorías.
+- Solicitudes.
+- Contrataciones.
+- Moderación.
+- Reportes.
+- Soporte.
+- Configuración.
+- Seguridad.
+- Auditoría.
+- Notificaciones.
+
+Respeta los permisos globales que actualmente están definidos.
+
+# 8. AUDITORÍA DE INTEGRACIÓN ENTRE MÓDULOS
+
+Comprueba que los módulos no funcionen de forma aislada.
+
+Quiero que las acciones se reflejen en las secciones correspondientes.
+
+Ejemplos:
+
+Una solicitud creada por el cliente debe aparecer en el panel del freelancer destinatario.
+
+Una cotización enviada por el freelancer debe aparecer en el cliente.
+
+Una cotización aceptada debe generar la contratación correspondiente.
+
+Una contratación debe aparecer en los paneles de ambos participantes.
+
+Una contratación programada debe reflejarse en las agendas correspondientes.
+
+Una reprogramación debe actualizar los datos correspondientes de ambos participantes.
+
+Un mensaje debe aparecer en la conversación correcta.
+
+Un archivo adjunto debe ser visible para ambos participantes.
+
+Una finalización de servicio debe reflejarse en el seguimiento.
+
+Una reseña debe relacionarse con la contratación elegible.
+
+Una notificación debe generarse cuando corresponda.
+
+No dupliques registros.
+
+No generes estados incompatibles.
+
+No permitas que las relaciones entre solicitudes, cotizaciones, contrataciones, mensajes y reseñas se pierdan.
+
+# 9. AUDITORÍA DE INTERFAZ Y EXPERIENCIA
+
+Conserva el diseño aprobado.
+
+Sin embargo, corrige errores visuales o funcionales que afecten la experiencia.
+
+Comprueba:
+- Responsive.
+- Navegación.
+- Menús.
+- Modales.
+- Formularios.
+- Botones.
+- Estados vacíos.
+- Cargas.
+- Errores.
+- Confirmaciones.
+- Notificaciones.
+- Filtros.
+- Listas.
+- Tarjetas.
+- Mapas.
+- Chats.
+- Paneles.
+
+No cambies la estética general.
+
+No rediseñes por gusto.
+
+Realiza mejoras únicamente cuando resuelvan problemas concretos.
+
+# 10. DATOS DE DEMOSTRACIÓN Y FUNCIONALIDAD LOCAL
+
+La aplicación continúa trabajando sin Supabase.
+
+Por tanto:
+
+- Utiliza la arquitectura local existente.
+- Conserva los datos de demostración existentes cuando sean necesarios.
+- Evita generar duplicados.
+- No inventes operaciones que no se hayan realizado.
+- No simules que existe un backend real.
+- No simules pagos reales.
+- No simules correos reales.
+- No simules verificaciones reales.
+- No simules almacenamiento permanente de archivos reales si no está implementado.
+
+Los datos demo deberán permitir probar las operaciones de la aplicación de forma coherente.
+
+Si existen datos demo, asegúrate de que las relaciones entre ellos sean consistentes.
+
+# 11. PRUEBAS FUNCIONALES OBLIGATORIAS
+
+No quiero que solamente modifiques código y afirmes que todo funciona.
+
+Realiza pruebas de las operaciones principales que el entorno permita.
+
+## Escenario A — Cliente
+
+1. Entrar al marketplace público sin iniciar sesión.
+2. Buscar un servicio.
+3. Seleccionar un filtro.
+4. Comprobar el mapa y la lista.
+5. Abrir un perfil.
+6. Intentar solicitar un servicio.
+7. Autenticarse cuando corresponda.
+8. Completar una solicitud.
+9. Recibir una cotización.
+10. Aceptar una cotización.
+11. Comprobar que la contratación aparece en servicios contratados.
+12. Abrir el detalle de la contratación.
+13. Consultar seguimiento.
+14. Abrir chat.
+15. Recibir un archivo.
+16. Consultar el archivo.
+17. Completar el flujo correspondiente.
+18. Dejar reseña cuando sea elegible.
+
+## Escenario B — Freelancer
+
+1. Acceder al panel.
+2. Consultar solicitudes.
+3. Responder una solicitud.
+4. Crear cotización.
+5. Recibir aceptación.
+6. Comprobar contratación.
+7. Consultar agenda.
+8. Consultar servicio contratado.
+9. Abrir conversación.
+10. Enviar archivo.
+11. Comprobar visualización del archivo.
+12. Marcar estados correspondientes.
+13. Comprobar que el cliente recibe los cambios.
+14. Consultar reseña cuando corresponda.
+
+## Escenario C — Mapa
+
+1. Abrir mapa.
+2. Seleccionar un servicio.
+3. Comprobar resultados.
+4. Combinar filtros.
+5. Comprobar lista.
+6. Comprobar marcadores.
+7. Seleccionar profesional.
+8. Cambiar filtros.
+9. Limpiar filtros.
+10. Comprobar estado sin resultados.
+
+## Escenario D — Administrador
+
+1. Completar inicialización local de administrador.
+2. Acceder al panel.
+3. Consultar dashboard.
+4. Consultar usuarios.
+5. Consultar profesionales.
+6. Consultar verificaciones.
+7. Consultar categorías.
+8. Consultar solicitudes.
+9. Consultar contrataciones.
+10. Consultar moderación.
+11. Consultar reportes.
+12. Consultar soporte.
+13. Consultar configuración.
+14. Consultar auditoría cuando corresponda.
+
+## Escenario E — Integración
+
+Comprueba que las operaciones se reflejen correctamente en las secciones relacionadas.
+
+# 12. CORRECCIÓN DE ERRORES
+
+Si durante la auditoría encuentras errores:
+
+- Corrígelos cuando estén dentro del alcance del proyecto.
+- No reemplaces módulos completos sin necesidad.
+- No elimines funciones para evitar errores.
+- No ocultes errores mediante mensajes genéricos.
+- No desactives botones para fingir que el módulo funciona.
+- No sustituyas operaciones por acciones decorativas.
+- No generes datos ficticios al realizar operaciones que deben actualizar registros existentes.
+
+Si un módulo depende de una integración que todavía no existe, identifícalo claramente y prepara la estructura sin afirmar que está conectado.
+
+# 13. INFORME FINAL
+
+Al finalizar, quiero un informe detallado con:
+
+1. Problemas encontrados.
+2. Problemas corregidos.
+3. Archivos modificados.
+4. Funciones conservadas.
+5. Funciones mejoradas.
+6. Funciones pendientes.
+7. Pruebas realizadas.
+8. Pruebas que no pudieron realizarse.
+9. Errores que todavía existen.
+10. Integraciones que todavía no están conectadas.
+
+No afirmes que una prueba fue realizada si no la ejecutaste.
+
+No afirmes que una función funciona si solamente modificaste su interfaz.
+
+# OBJETIVO FINAL
+
+Quiero que OFI CLICK quede como una aplicación funcional y coherente para nuestra exposición.
+
+La aplicación deberá:
+
+- Abrir libremente el marketplace público.
+- Solicitar autenticación únicamente cuando una acción lo requiera.
+- No obligar al cliente a subir una fotografía frontal.
+- Conservar la verificación del freelancer.
+- Conservar el portafolio.
+- Mostrar correctamente servicios contratados.
+- Permitir seguimiento.
+- Filtrar correctamente los profesionales en el mapa.
+- Sincronizar mapa y lista.
+- Permitir que ambos participantes visualicen archivos en el chat.
+- Permitir el acceso al panel administrativo en el prototipo local sin depender de un administrador inexistente.
+- Conservar los roles.
+- Conservar los paneles.
+- Conservar las funciones aprobadas.
+- Corregir errores de integración.
+- Preparar la arquitectura para Supabase en una etapa posterior.
+
+Trabaja sobre el proyecto existente.
+
+No reconstruyas la aplicación.
+
+No cambies el diseño aprobado.
+
+Prioriza estabilidad, funcionalidad, integración y pruebas reales.
+
+Esta aplicación debe quedar preparada para que podamos revisar posteriormente si falta alguna función y, cuando esté suficientemente probada, conectar Supabase.
+
+Comienza con una auditoría del proyecto y ejecuta las correcciones de forma ordenada, sin destruir componentes funcionales.

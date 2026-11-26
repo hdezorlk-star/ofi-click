@@ -1,0 +1,10 @@
+{
+  "name": "OFI CLICK",
+  "description": "Marketplace profesional de servicios en Cuautitlán Izcalli. Encuentra talento. Haz que suceda.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
