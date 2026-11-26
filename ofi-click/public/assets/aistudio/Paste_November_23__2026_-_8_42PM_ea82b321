@@ -1,0 +1,1439 @@
+# HUSTLY — PROMPT MAESTRO DE DESARROLLO
+## Marketplace profesional de servicios | Aplicación web progresiva (PWA)
+
+Actúa como un equipo senior de desarrollo de software integrado por: arquitectos de software, diseñadores UX/UI, especialistas en React y TypeScript, expertos en PostgreSQL y Supabase, especialistas en seguridad, diseñadores de producto y desarrolladores de aplicaciones PWA.
+
+Tu misión es diseñar y desarrollar **HUSTLY**, una plataforma profesional que conecte a personas que necesitan servicios con trabajadores independientes y negocios que ofrecen esos servicios.
+
+No quiero una página estática, una plantilla genérica ni una simple demostración visual. Quiero una aplicación web moderna, completa, atractiva, navegable y funcional, con módulos conectados entre sí y una experiencia de producto comercial.
+
+Debes construir el proyecto de forma organizada, con código mantenible, componentes reutilizables y una arquitectura que permita evolucionar desde un prototipo local hasta una aplicación real con Supabase.
+
+---
+
+# 1. IDENTIDAD DEL PRODUCTO
+
+Nombre: HUSTLY.
+
+Eslogan: "Encuentra talento. Haz que suceda."
+
+Concepto:
+Hustly es un marketplace que permite encontrar profesionales, comparar sus servicios, consultar sus perfiles, enviar solicitudes, recibir cotizaciones, contratar y dar seguimiento a los trabajos.
+
+El lanzamiento inicial será exclusivamente en:
+
+Cuautitlán Izcalli, Estado de México, México.
+
+La arquitectura debe permitir incorporar otros municipios y regiones posteriormente sin reconstruir toda la plataforma.
+
+Idioma inicial: español.
+Moneda: pesos mexicanos (MXN).
+Formato de fechas: español de México.
+
+Hustly debe transmitir:
+- Profesionalismo.
+- Confianza.
+- Seguridad.
+- Cercanía.
+- Modernidad.
+- Calidad.
+- Facilidad de uso.
+
+No debe parecer una página improvisada ni un directorio básico de trabajadores.
+
+# 2. IDENTIDAD VISUAL Y DISEÑO
+
+Utiliza la siguiente paleta:
+
+- Carbón: #202522
+- Oro suave: #C3A16A
+- Beige cálido: #F3EEE5
+- Blanco: #FFFFFF
+- Gris sofisticado: #737A78
+- Azul profesional: #284A60
+
+Distribución recomendada:
+- Fondos cálidos y claros.
+- Texto principal en carbón.
+- Oro suave para acentos, detalles y elementos de marca.
+- Azul petróleo para acciones y elementos de confianza.
+- Blanco para tarjetas y superficies.
+- Gris para información secundaria.
+
+No abuses del dorado.
+
+Logo:
+Diseña una identidad con una H estilizada o un símbolo abstracto que represente conexión, talento y trabajo. Evita iconos genéricos de herramientas.
+
+Incluye versiones del logo:
+- Horizontal.
+- Compacta.
+- Monocromática.
+- Icono de aplicación.
+
+Diseño general:
+- Estética premium y editorial.
+- Jerarquía visual excelente.
+- Tipografía moderna y legible.
+- Espaciado consistente.
+- Tarjetas elegantes.
+- Bordes y sombras discretos.
+- Iconografía uniforme.
+- Animaciones suaves.
+- Estados de carga.
+- Estados vacíos.
+- Mensajes de error.
+- Confirmaciones visuales.
+- Transiciones naturales.
+
+Evita:
+- Diseños excesivamente blancos y vacíos.
+- Dashboards genéricos.
+- Exceso de tarjetas sin jerarquía.
+- Colores chillantes.
+- Elementos decorativos innecesarios.
+- Botones que no hagan nada.
+- Datos de ejemplo mezclados con datos reales.
+
+Implementa modo claro y modo oscuro, con preferencia configurable y posibilidad de respetar el sistema operativo.
+
+# 3. EXPERIENCIA INICIAL PÚBLICA
+
+Hustly debe abrir en un marketplace público.
+
+Los visitantes podrán explorar sin registrarse:
+- Categorías.
+- Servicios.
+- Perfiles profesionales.
+- Negocios.
+- Reseñas.
+- Zonas de servicio.
+- Información pública de los profesionales.
+
+No obligues a iniciar sesión para explorar.
+
+Será obligatorio autenticarse para:
+- Guardar favoritos.
+- Enviar solicitudes.
+- Conversar.
+- Recibir o enviar cotizaciones.
+- Contratar.
+- Publicar servicios.
+- Gestionar perfiles.
+- Realizar acciones administrativas.
+
+Cuando un visitante intente realizar una acción que requiera cuenta, muéstrale el acceso o registro. Después de autenticarse, devuélvelo a la acción que intentaba realizar.
+
+# 4. PÁGINA PRINCIPAL
+
+Construye una landing page comercial de alto nivel.
+
+Debe incluir:
+
+1. Header con logo, navegación y acceso a cuenta.
+2. Hero principal con el texto:
+   "Encuentra al profesional ideal para lo que necesitas".
+3. Buscador destacado de servicios.
+4. Selector de ubicación.
+5. Autocompletado de búsquedas.
+6. Categorías populares.
+7. Profesionales recomendados.
+8. Profesionales mejor calificados.
+9. Servicios populares.
+10. Sección "Cómo funciona Hustly".
+11. Ventajas de utilizar la plataforma.
+12. Invitación para registrarse como profesional.
+13. Preguntas frecuentes.
+14. Footer con contacto, privacidad, términos y soporte.
+
+Ejemplos de búsquedas:
+- Reparar una fuga de agua.
+- Instalar lámparas.
+- Pintar una habitación.
+- Construir una barda.
+- Cambiar una cerradura.
+- Instalar cámaras de seguridad.
+
+El buscador debe ser un elemento central de la experiencia.
+
+# 5. CATEGORÍAS Y SERVICIOS
+
+Implementa un catálogo administrable.
+
+Categorías iniciales:
+
+- Plomería.
+- Electricidad.
+- Albañilería.
+- Cerrajería.
+- Carpintería.
+- Pintura.
+- Aire acondicionado.
+- Limpieza.
+- Herrería y soldadura.
+- Instalación de pisos.
+- Impermeabilización y techos.
+- Jardinería.
+- Mecánica automotriz.
+- Reparación de electrodomésticos.
+- Computación y tecnología.
+- Armado de muebles.
+- Mudanzas y fletes.
+- Vidriería.
+- Cámaras y seguridad.
+- Decoración y diseño.
+- Costura y sastrería.
+- Belleza y cuidado personal.
+- Fotografía y video.
+- Clases y asesorías.
+- Eventos y decoración.
+- Servicios para mascotas.
+- Cocina y catering.
+- Mantenimiento general.
+- Otras categorías.
+
+Cada categoría tendrá:
+- Nombre.
+- Descripción.
+- Icono.
+- Imagen opcional.
+- Subcategorías.
+- Servicios asociados.
+- Filtros específicos.
+- Estado activo o inactivo.
+
+El administrador podrá crear, modificar, ordenar y desactivar categorías.
+
+# 6. BÚSQUEDA DE PROFESIONALES
+
+La búsqueda debe mostrar simultáneamente:
+
+- Mapa interactivo.
+- Lista de resultados.
+
+Ambos deben permanecer sincronizados.
+
+Al seleccionar un profesional en el mapa, resalta su tarjeta. Al seleccionar una tarjeta, destaca su marcador.
+
+Filtros:
+
+- Categoría.
+- Subcategoría.
+- Colonia.
+- Zona.
+- Distancia.
+- Calificación.
+- Cantidad de reseñas.
+- Precio.
+- Disponibilidad.
+- Atención urgente.
+- Servicio a domicilio.
+- Perfil verificado.
+- Experiencia declarada.
+- Trabajos completados.
+- Tipo de profesional.
+
+Ordenamiento:
+- Relevancia.
+- Mejor calificación.
+- Mayor número de reseñas.
+- Cercanía cuando exista ubicación autorizada.
+- Menor precio cuando los precios sean comparables.
+- Mayor experiencia declarada.
+
+Las tarjetas mostrarán:
+- Fotografía.
+- Nombre.
+- Nombre comercial si corresponde.
+- Especialidad.
+- Descripción breve.
+- Calificación.
+- Número de reseñas.
+- Zona de cobertura.
+- Precio desde, cuando exista.
+- Disponibilidad declarada.
+- Indicador de verificación real.
+- Trabajos completados y confirmados.
+- Botón de favoritos.
+- Botón para consultar perfil.
+- Botón para solicitar servicio.
+
+# 7. UBICACIÓN Y MAPAS
+
+La primera región será Cuautitlán Izcalli, Estado de México.
+
+Permite buscar por:
+- Colonia.
+- Calle.
+- Avenida.
+- Dirección.
+- Código postal.
+- Zona.
+
+No establezcas un límite fijo de kilómetros para la búsqueda municipal.
+
+El profesional podrá:
+- Definir su colonia principal.
+- Seleccionar colonias adicionales.
+- Configurar zonas de cobertura.
+- Establecer distancia máxima de traslado.
+- Indicar si ofrece servicio a domicilio.
+- Indicar si atiende en establecimiento o taller.
+- Indicar si está dispuesto a trasladarse.
+
+Utiliza Google Maps Platform como proveedor previsto para:
+- Mapas.
+- Autocompletado.
+- Geocodificación.
+- Marcadores.
+- Distancias.
+- Rutas.
+
+No inventes distancias ni tiempos de traslado.
+
+Privacidad:
+- Nunca publiques el domicilio particular del profesional.
+- Los marcadores deben representar zonas aproximadas de servicio.
+- La dirección exacta del cliente solo será compartida con los participantes autorizados cuando sea necesaria para una contratación.
+- La ubicación en tiempo real será opcional, temporal y consentida.
+- No implementes seguimiento GPS permanente.
+
+Incluye una acción "Cómo llegar" que pueda abrir Google Maps para navegación externa.
+
+Si las claves de Google Maps no están configuradas, muestra un estado de configuración y un mapa alternativo de demostración claramente identificado. No afirmes que una integración real está funcionando cuando no lo está.
+
+# 8. PERFILES PROFESIONALES
+
+Hustly tendrá dos tipos de proveedores:
+
+A. Profesional independiente.
+
+B. Negocio o empresa.
+
+Los perfiles públicos incluirán:
+
+- Fotografía o logotipo.
+- Nombre.
+- Presentación.
+- Especialidades.
+- Categorías.
+- Experiencia declarada.
+- Zona de servicio.
+- Horarios.
+- Disponibilidad.
+- Servicios publicados.
+- Precios o modalidad de cotización.
+- Portafolio.
+- Calificación.
+- Reseñas.
+- Trabajos completados y confirmados.
+- Nivel de verificación.
+- Fecha de registro.
+
+No publiques números de teléfono, correos privados ni domicilios particulares.
+
+## Portafolio
+
+Permite publicar proyectos con:
+- Título.
+- Categoría.
+- Descripción.
+- Fotografías.
+- Fecha aproximada.
+- Servicio realizado.
+- Precio opcional.
+- Materiales opcionales.
+- Duración aproximada.
+- Etiquetas.
+
+Distingue claramente entre fotografías aportadas al portafolio y trabajos que fueron contratados y completados mediante Hustly.
+
+# 9. PRECIOS Y SERVICIOS
+
+Cada profesional o negocio decide si publica precios o trabaja mediante cotización.
+
+Modalidades admitidas:
+- Precio fijo.
+- Precio por hora.
+- Precio por visita.
+- Precio por unidad.
+- Precio desde.
+- Cotización personalizada.
+
+Cada servicio tendrá:
+- Nombre.
+- Categoría.
+- Descripción.
+- Fotografías.
+- Modalidad de precio.
+- Precio cuando corresponda.
+- Duración estimada.
+- Materiales incluidos o no incluidos.
+- Condiciones.
+- Zona de cobertura.
+- Estado publicado, borrador o pausado.
+
+Diferencia claramente los precios orientativos de los precios formalmente cotizados.
+
+Una cotización aceptada debe conservar el importe y las condiciones acordadas.
+
+Si cambia el precio o las condiciones, crea una nueva versión que requiera aceptación del cliente.
+
+# 10. DISPONIBILIDAD Y CALENDARIO
+
+Implementa ambos sistemas de disponibilidad.
+
+A. Estado general:
+- Disponible.
+- Ocupado.
+- No disponible.
+
+B. Calendario detallado:
+- Días laborales.
+- Horarios.
+- Descansos.
+- Bloqueos.
+- Duración estimada de trabajos.
+- Tiempo de traslado.
+- Solicitudes pendientes.
+- Trabajos confirmados.
+- Reprogramaciones.
+
+El profesional configura su disponibilidad.
+
+Una fecha solicitada no queda reservada automáticamente.
+
+La fecha solo se confirma cuando ambas partes aceptan.
+
+Incluye vistas:
+- Día.
+- Semana.
+- Mes.
+
+# 11. SOLICITUDES DE SERVICIO
+
+El cliente podrá crear una solicitud con:
+
+- Categoría.
+- Servicio.
+- Descripción.
+- Fotografías.
+- Ubicación.
+- Fecha deseada.
+- Horario.
+- Nivel de urgencia.
+- Presupuesto opcional.
+- Preferencias adicionales.
+
+Admite dos modalidades de distribución abierta:
+
+A. Selección manual:
+El cliente revisa profesionales compatibles y selecciona a quién enviar la solicitud.
+
+B. Recomendación de Hustly:
+El sistema recomienda profesionales compatibles. El cliente revisa la selección y confirma el envío.
+
+No envíes solicitudes sin confirmación del cliente.
+
+## Regla de destinatarios
+
+Las solicitudes abiertas tendrán **sin límite fijo de destinatarios**.
+
+Todos los profesionales que cumplan los criterios de compatibilidad podrán recibir la solicitud cuando el cliente confirme el envío.
+
+No impongas un límite arbitrario de 3, 5 o 10 profesionales.
+
+Permite que el cliente revise los destinatarios antes de enviar.
+
+Los criterios de compatibilidad serán:
+- Categoría.
+- Especialidad.
+- Zona de cobertura.
+- Disponibilidad declarada.
+- Modalidad de atención.
+- Estado del perfil.
+- Preferencias del cliente.
+
+La solicitud podrá enviarse a un profesional específico o a múltiples profesionales.
+
+Cada profesional podrá:
+- Responder.
+- Rechazar.
+- Solicitar información.
+- Enviar cotización.
+
+Los profesionales no podrán consultar las cotizaciones privadas de sus competidores.
+
+El cliente podrá cerrar la solicitud cuando encuentre una opción adecuada.
+
+# 12. COTIZACIONES Y CONTRATACIONES
+
+Las cotizaciones contendrán:
+- Servicio.
+- Descripción.
+- Mano de obra.
+- Materiales.
+- Cargos adicionales.
+- Descuentos opcionales.
+- Importe total.
+- Duración estimada.
+- Fecha propuesta.
+- Vigencia.
+- Condiciones.
+- Comentarios.
+
+Permite:
+- Enviar.
+- Modificar mediante nuevas versiones.
+- Aceptar.
+- Rechazar.
+- Expirar.
+- Consultar historial.
+
+Aceptar una cotización crea una contratación vinculada con:
+- Cliente.
+- Profesional o negocio.
+- Solicitud.
+- Cotización aceptada.
+- Importe acordado.
+- Fecha y horario.
+- Ubicación.
+- Descripción.
+- Condiciones.
+- Estado.
+
+No implementes pagos integrados en la primera versión.
+
+Los pagos se acordarán directamente entre cliente y profesional, fuera de Hustly.
+
+La plataforma puede registrar el importe acordado, pero nunca debe afirmar que un pago se realizó si no existe una integración que lo confirme.
+
+# 13. SEGUIMIENTO DEL SERVICIO
+
+Estados principales:
+
+1. Solicitud enviada.
+2. En conversación.
+3. Cotización recibida.
+4. Cotización aceptada.
+5. Servicio programado.
+6. En camino, opcional.
+7. En progreso.
+8. Profesional marca como terminado.
+9. Cliente confirma finalización.
+10. Servicio completado.
+
+Estados adicionales:
+- Rechazado.
+- Cancelado.
+- Expirado.
+- En disputa.
+- No realizado.
+
+El profesional podrá adjuntar fotografías y notas al marcar el servicio como terminado.
+
+El cliente podrá confirmar o reportar un problema.
+
+No resuelvas disputas automáticamente.
+
+# 14. CANCELACIONES Y REPROGRAMACIONES
+
+Antes de la contratación:
+- El cliente puede retirar su solicitud.
+- El profesional puede rechazarla.
+
+Después de aceptar una cotización:
+- Solicita motivo de cancelación.
+- Registra quién canceló y cuándo.
+- Conserva el historial.
+- Permite reportar problemas.
+- Permite solicitar reprogramación.
+
+Toda reprogramación requiere aceptación de ambas partes.
+
+No implementes penalizaciones económicas ni reembolsos automáticos en la primera versión.
+
+# 15. RESEÑAS Y CALIFICACIONES
+
+Solo podrán publicar reseñas los clientes que tengan una contratación elegible y completada.
+
+Incluye:
+- Calificación de 1 a 5 estrellas.
+- Comentario.
+- Fecha.
+- Servicio relacionado.
+- Respuesta del profesional.
+- Reportar reseña.
+- Moderación administrativa.
+
+Evita:
+- Reseñas duplicadas.
+- Reseñas sin contratación válida.
+- Manipulación de calificaciones.
+- Reseñas de cuentas no autorizadas.
+
+# 16. FAVORITOS Y COMPARACIÓN
+
+El cliente podrá:
+- Guardar profesionales.
+- Consultar favoritos.
+- Comparar hasta tres perfiles.
+
+La comparación debe mostrar:
+- Especialidad.
+- Calificación.
+- Reseñas.
+- Precio.
+- Modalidad de atención.
+- Disponibilidad.
+- Zona de servicio.
+- Experiencia declarada.
+- Verificación.
+
+# 17. PANEL DEL CLIENTE
+
+Crea un dashboard profesional.
+
+Resumen:
+- Bienvenida.
+- Búsqueda rápida.
+- Recomendaciones.
+- Solicitudes activas.
+- Cotizaciones recibidas.
+- Conversaciones recientes.
+- Próximos servicios.
+- Historial.
+- Favoritos.
+- Notificaciones.
+
+Navegación:
+- Inicio.
+- Explorar.
+- Solicitudes.
+- Servicios contratados.
+- Mensajes.
+- Favoritos.
+- Reseñas.
+- Notificaciones.
+- Perfil.
+- Configuración.
+- Ayuda.
+
+El cliente podrá consultar todo el historial de solicitudes y contrataciones.
+
+# 18. PANEL DEL PROFESIONAL INDEPENDIENTE
+
+Dashboard con:
+- Solicitudes nuevas.
+- Cotizaciones pendientes.
+- Trabajos programados.
+- Trabajos en curso.
+- Trabajos completados.
+- Mensajes.
+- Calificación.
+- Estadísticas.
+- Disponibilidad.
+- Estado del perfil.
+
+Navegación:
+- Dashboard.
+- Solicitudes.
+- Cotizaciones.
+- Calendario.
+- Mensajes.
+- Servicios.
+- Portafolio.
+- Perfil profesional.
+- Reseñas.
+- Estadísticas.
+- Notificaciones.
+- Configuración.
+- Soporte.
+
+Acciones:
+- Aceptar o rechazar solicitudes.
+- Solicitar información.
+- Enviar cotizaciones.
+- Modificar cotizaciones mediante versiones.
+- Administrar servicios.
+- Bloquear horarios.
+- Administrar zonas de cobertura.
+- Publicar proyectos.
+- Marcar trabajos iniciados y terminados.
+- Pausar su perfil.
+
+Estadísticas:
+- Visitas al perfil.
+- Solicitudes recibidas.
+- Cotizaciones enviadas.
+- Cotizaciones aceptadas.
+- Trabajos completados.
+- Tasa de respuesta.
+- Calificación.
+
+Diferencia claramente importes cotizados, importes acordados y dinero efectivamente cobrado. No confundas estos indicadores.
+
+# 19. NEGOCIOS Y EQUIPOS
+
+Un negocio tendrá:
+- Perfil comercial.
+- Logotipo.
+- Descripción.
+- Categorías.
+- Catálogo.
+- Portafolio.
+- Zonas.
+- Horarios.
+- Agenda.
+- Equipo.
+
+Roles internos:
+
+Propietario:
+Control completo del negocio.
+
+Administrador:
+Gestiona equipo, solicitudes, servicios y agenda según permisos.
+
+Trabajador:
+Solo consulta y gestiona trabajos asignados.
+
+Permite:
+- Invitar trabajadores.
+- Asignar trabajos.
+- Consultar disponibilidad.
+- Consultar historial.
+- Gestionar permisos.
+- Retirar integrantes.
+
+Una misma persona podrá tener cuenta de cliente y perfil profesional sin necesitar dos cuentas diferentes.
+
+# 20. VERIFICACIÓN DE PROFESIONALES
+
+Implementa niveles diferenciados:
+
+1. Cuenta registrada.
+2. Correo confirmado.
+3. Perfil profesional revisado.
+4. Credenciales verificadas cuando corresponda.
+
+No muestres insignias de verificación sin evidencia y revisión real.
+
+Los documentos serán privados.
+
+Incluye:
+- Solicitud de documentos.
+- Carga privada.
+- Revisión.
+- Aprobación.
+- Rechazo.
+- Solicitud de correcciones.
+- Historial.
+- Motivo de revisión.
+
+No afirmes que Hustly certifica oficios o licencias por sí misma.
+
+## Publicación automática con revisiones especiales
+
+La publicación del profesional será automática cuando:
+- El perfil esté completo.
+- El correo esté confirmado.
+- No existan alertas que requieran revisión.
+
+Los perfiles incompletos no aparecerán en resultados.
+
+Los perfiles con reportes, alertas o documentación especial pasarán a revisión.
+
+El administrador podrá pausar o retirar perfiles conforme a las reglas de moderación.
+
+# 21. CHAT INTERNO
+
+Implementa chat privado en tiempo real.
+
+Funciones:
+- Mensajes de texto.
+- Fotografías.
+- Archivos permitidos.
+- Mensajes leídos.
+- Mensajes no leídos.
+- Notificaciones.
+- Historial.
+- Conversaciones vinculadas a solicitudes.
+- Cotizaciones dentro del chat.
+- Detalles de contratación.
+- Compartir ubicación cuando sea necesario y autorizado.
+- Reportar.
+- Bloquear.
+
+Las conversaciones solo estarán disponibles para sus participantes.
+
+El acceso administrativo a conversaciones requerirá una razón legítima y deberá quedar registrado.
+
+No implementes llamadas ni videollamadas en la primera versión.
+
+# 22. NOTIFICACIONES
+
+Cliente:
+- Respuesta a solicitud.
+- Nuevo mensaje.
+- Cotización recibida.
+- Cotización modificada.
+- Cotización aceptada.
+- Cotización rechazada.
+- Contratación confirmada.
+- Recordatorios.
+- Reprogramación.
+- Servicio iniciado.
+- Servicio terminado.
+- Reportes.
+- Solicitud de reseña.
+
+Profesional:
+- Nueva solicitud.
+- Nuevo mensaje.
+- Cancelación.
+- Respuesta a cotización.
+- Cambio de fecha.
+- Próximo trabajo.
+- Recordatorio.
+- Confirmación de finalización.
+- Nueva reseña.
+- Verificación.
+
+Canales:
+- Notificaciones internas.
+- Push cuando sea compatible y autorizado.
+- Correo electrónico para comunicaciones importantes.
+
+Permite configurar preferencias.
+
+Las alertas de seguridad y cuenta no deben confundirse con notificaciones promocionales.
+
+# 23. PANEL ADMINISTRATIVO CENTRAL
+
+Debe tener una interfaz profesional, completa y protegida.
+
+No permitas que cualquier usuario se registre como administrador.
+
+No muestres el acceso administrativo como una opción pública de registro.
+
+El administrador tendrá un acceso separado y permisos comprobados en backend cuando exista la integración real.
+
+Dashboard:
+- Usuarios.
+- Clientes.
+- Profesionales.
+- Negocios.
+- Perfiles verificados.
+- Verificaciones pendientes.
+- Solicitudes.
+- Contrataciones.
+- Servicios completados.
+- Cancelaciones.
+- Reseñas.
+- Reportes.
+- Categorías.
+- Actividad reciente.
+
+Módulos:
+
+A. Usuarios:
+- Buscar.
+- Consultar perfil.
+- Historial.
+- Suspender.
+- Reactivar.
+- Moderar.
+
+B. Profesionales:
+- Revisar perfiles.
+- Verificar documentos.
+- Aprobar.
+- Rechazar.
+- Solicitar correcciones.
+- Pausar perfiles.
+
+C. Categorías:
+- Crear.
+- Editar.
+- Desactivar.
+- Ordenar.
+- Gestionar subcategorías.
+
+D. Moderación:
+- Revisar reportes.
+- Revisar reseñas.
+- Ocultar contenido.
+- Restaurar contenido.
+- Registrar razones.
+
+E. Solicitudes y contrataciones:
+- Consultar registros.
+- Revisar estados.
+- Investigar reportes.
+- Registrar acciones administrativas auditadas.
+
+F. Soporte:
+- Tickets.
+- Prioridades.
+- Estados.
+- Evidencias.
+- Historial.
+
+G. Seguridad:
+- Reportes.
+- Bloqueos.
+- Actividad sospechosa.
+- Registros de acceso.
+- Auditoría.
+
+H. Configuración:
+- Regiones.
+- Categorías.
+- Parámetros.
+- Notificaciones.
+- Políticas.
+
+La monetización queda fuera de la primera versión. No actives comisiones, suscripciones, publicidad ni perfiles patrocinados.
+
+# 24. ADMINISTRACIÓN REGIONAL
+
+La arquitectura debe permitir expansión territorial.
+
+Roles:
+- Administrador central.
+- Administrador regional.
+
+Administrador central:
+Acceso global.
+
+Administrador regional:
+Acceso únicamente a su región asignada.
+
+El administrador regional no podrá consultar libremente información privada de otras regiones.
+
+Cada usuario podrá utilizar su cuenta en distintas regiones.
+
+Un profesional podrá trabajar en varias regiones.
+
+Las solicitudes estarán vinculadas a su ubicación.
+
+La primera región activa será Cuautitlán Izcalli.
+
+# 25. AUTENTICACIÓN Y CUENTAS
+
+Diseña:
+- Registro.
+- Inicio de sesión.
+- Recuperación de contraseña.
+- Confirmación de correo.
+- Cierre de sesión.
+- Gestión de sesiones.
+- Perfil.
+- Configuración de seguridad.
+
+Un usuario puede actuar como cliente y profesional con la misma cuenta.
+
+No dupliques cuentas innecesariamente.
+
+Los roles deben estar definidos y validados en backend en producción.
+
+Nunca permitas que alguien se convierta en administrador cambiando datos del navegador, parámetros de URL o campos del formulario.
+
+# 26. PRIVACIDAD Y SEGURIDAD
+
+Diseña desde el principio separación entre datos públicos y privados.
+
+Implementa cuando corresponda:
+- Row Level Security.
+- Validación de permisos en backend.
+- Almacenamiento privado.
+- Protección de sesiones.
+- Auditoría.
+- Validación de archivos.
+- Límites de tamaño.
+- Protección contra spam.
+- Control de acceso.
+- Manejo seguro de errores.
+- Políticas de conservación.
+- Eliminación de cuentas.
+
+Los usuarios solo pueden consultar sus propios datos privados y las conversaciones y contrataciones donde participan.
+
+Los documentos personales no serán públicos.
+
+No almacenes contraseñas reales en localStorage.
+
+No simules que la seguridad del prototipo equivale a la seguridad de producción.
+
+# 27. MODELO DE NEGOCIO
+
+En la primera versión:
+- No cobrar comisiones.
+- No implementar suscripciones obligatorias.
+- No implementar publicidad.
+- No vender perfiles patrocinados.
+- No integrar pasarelas de pago.
+
+La plataforma permitirá que cliente y profesional acuerden el pago fuera de Hustly.
+
+Diseña la arquitectura de manera que futuras modalidades de monetización puedan añadirse sin reconstruir el producto, pero no actives funciones comerciales de cobro ahora.
+
+# 28. PROTOTIPO Y DATOS DE DEMOSTRACIÓN
+
+La primera entrega será un prototipo visual y funcional con datos locales de demostración.
+
+Debe incluir datos ficticios para:
+- Clientes.
+- Profesionales independientes.
+- Negocios.
+- Trabajadores.
+- Categorías.
+- Servicios.
+- Portafolios.
+- Solicitudes.
+- Cotizaciones.
+- Contrataciones.
+- Mensajes.
+- Reseñas.
+- Notificaciones.
+- Estadísticas.
+- Panel administrativo.
+
+Los datos deben parecer realistas y mostrar cómo funciona el producto, pero deben estar claramente identificados como demostración.
+
+No utilices personas reales ni información personal real.
+
+Incluye un mecanismo para restaurar los datos demo.
+
+Mantén completamente separados los datos de demostración y los datos de producción.
+
+Al conectar el entorno de producción:
+- No importes registros demo.
+- No mezcles cuentas ficticias.
+- No conserves conversaciones ficticias.
+- No subas fotografías demo como datos reales.
+- No permitas que los usuarios de demostración accedan a producción.
+
+# 29. MODO DE DESARROLLO Y PRUEBAS
+
+Durante el desarrollo, implementa dos mecanismos:
+
+A. Selector rápido de roles de demostración, visible exclusivamente en entorno de desarrollo.
+
+B. Cuentas ficticias independientes para probar autenticación y permisos.
+
+Roles de prueba:
+- Cliente.
+- Profesional independiente.
+- Propietario de negocio.
+- Administrador de negocio.
+- Trabajador.
+- Administrador regional.
+- Administrador central.
+
+Estos accesos son únicamente para pruebas.
+
+No deben funcionar como accesos administrativos reales en producción.
+
+En producción:
+- Desactivar selector rápido.
+- Eliminar cuentas ficticias.
+- No exponer credenciales de demostración.
+- No permitir elevación de privilegios desde el frontend.
+
+# 30. ARQUITECTURA TÉCNICA
+
+Tecnologías previstas:
+
+Frontend:
+- React.
+- TypeScript.
+- Vite.
+- CSS organizado o sistema de estilos consistente.
+- Componentes reutilizables.
+
+Backend futuro:
+- Supabase.
+- PostgreSQL.
+- Supabase Auth.
+- Supabase Storage.
+- Supabase Realtime.
+- Row Level Security.
+
+Mapas:
+- Google Maps Platform.
+
+Notificaciones:
+- Sistema interno.
+- Correo.
+- Push cuando sea compatible.
+
+## Arquitectura intercambiable de datos
+
+La primera versión utiliza datos locales de demostración.
+
+La segunda versión se conectará a Supabase.
+
+No escribas las pantallas directamente contra localStorage ni directamente contra Supabase.
+
+Crea servicios y adaptadores intercambiables.
+
+Estructura orientativa:
+
+src/
+  components/
+  pages/
+  layouts/
+  features/
+  hooks/
+  types/
+  services/
+    auth.service.ts
+    profiles.service.ts
+    services.service.ts
+    requests.service.ts
+    quotes.service.ts
+    bookings.service.ts
+    messages.service.ts
+    notifications.service.ts
+    reviews.service.ts
+    admin.service.ts
+  adapters/
+    local/
+    supabase/
+  lib/
+  utils/
+  styles/
+
+La interfaz debe consumir servicios independientes del proveedor de datos.
+
+El adaptador local será el predeterminado para el prototipo.
+
+El adaptador Supabase debe poder incorporarse sin reescribir las pantallas.
+
+No guardes información sensible ni contraseñas en localStorage.
+
+# 31. MODELO DE DATOS FUTURO
+
+Prepara una estructura relacional coherente para:
+
+- profiles
+- user_roles
+- regions
+- region_memberships
+- professional_profiles
+- businesses
+- business_members
+- categories
+- subcategories
+- services
+- service_photos
+- portfolios
+- portfolio_photos
+- service_areas
+- availability
+- availability_blocks
+- service_requests
+- request_recipients
+- quotes
+- quote_versions
+- bookings
+- booking_events
+- conversations
+- conversation_members
+- messages
+- message_attachments
+- reviews
+- review_responses
+- favorites
+- notifications
+- verification_requests
+- verification_documents
+- reports
+- support_tickets
+- audit_logs
+
+Define correctamente:
+- Identificadores.
+- Relaciones.
+- Claves foráneas.
+- Restricciones.
+- Estados.
+- Fechas.
+- Índices.
+- Permisos.
+
+No crees tablas duplicadas para representar la misma información.
+
+No inventes relaciones que permitan acceder a datos privados.
+
+El esquema definitivo de producción se desarrollará y validará antes de migrar información real.
+
+# 32. EXPERIENCIA PWA
+
+Hustly debe poder instalarse como aplicación.
+
+Implementa:
+- Manifest.
+- Iconos.
+- Nombre de aplicación.
+- Splash screen cuando sea compatible.
+- Service worker.
+- Caché de recursos estáticos.
+- Estado sin conexión.
+- Actualizaciones controladas.
+- Diseño responsive.
+- Navegación adaptada a móvil.
+
+La aplicación debe tener diseños específicos para:
+
+Desktop:
+- Sidebar.
+- Navegación completa.
+- Tablas.
+- Paneles.
+- Mapas amplios.
+
+Tablet:
+- Distribución adaptable.
+- Paneles compactos.
+
+Móvil:
+- Navegación inferior.
+- Controles táctiles.
+- Tarjetas adaptadas.
+- Formularios cómodos.
+- Menús compactos.
+- Acciones accesibles con una mano.
+
+No permitas que el contenido se desborde horizontalmente.
+
+El contenido estático previamente cargado podrá mostrarse sin conexión, pero las operaciones de contratación, mensajes, cotizaciones y acciones sensibles necesitarán conexión y confirmación del servidor.
+
+# 33. FLUJOS COMPLETOS QUE DEBEN FUNCIONAR
+
+Implementa y prueba estos escenarios:
+
+## Escenario 1: Cliente
+
+1. Entra a Hustly.
+2. Explora categorías.
+3. Busca un plomero.
+4. Consulta mapa y lista.
+5. Abre varios perfiles.
+6. Compara profesionales.
+7. Crea solicitud.
+8. Selecciona profesionales o recomendaciones.
+9. Revisa destinatarios.
+10. Confirma envío.
+11. Recibe respuestas.
+12. Recibe cotizaciones.
+13. Acepta una cotización.
+14. Agenda el servicio.
+15. Conversa por chat.
+16. Consulta seguimiento.
+17. Confirma finalización.
+18. Deja una reseña.
+
+## Escenario 2: Profesional independiente
+
+1. Se registra.
+2. Completa perfil.
+3. Configura especialidades.
+4. Define zonas.
+5. Publica servicios.
+6. Configura precios o cotizaciones.
+7. Define disponibilidad.
+8. Recibe solicitudes.
+9. Responde.
+10. Envía cotización.
+11. Agenda.
+12. Realiza el trabajo.
+13. Marca finalización.
+14. Recibe reseña.
+15. Consulta estadísticas.
+
+## Escenario 3: Negocio
+
+1. Crea perfil comercial.
+2. Configura catálogo.
+3. Invita trabajadores.
+4. Define permisos.
+5. Recibe solicitudes.
+6. Asigna trabajos.
+7. Gestiona agenda.
+8. Consulta resultados.
+
+## Escenario 4: Administrador
+
+1. Inicia sesión con cuenta autorizada.
+2. Consulta dashboard.
+3. Busca usuarios.
+4. Revisa profesionales.
+5. Modera reportes.
+6. Administra categorías.
+7. Consulta actividad.
+8. Revisa auditoría.
+
+## Escenario 5: Administrador regional
+
+1. Accede a su región.
+2. Consulta información permitida.
+3. Administra profesionales de su región.
+4. Gestiona reportes autorizados.
+5. No accede a datos privados de otras regiones.
+
+# 34. CALIDAD Y FUNCIONALIDAD
+
+No quiero botones decorativos.
+
+Cada botón, menú, formulario, filtro y acción debe tener un comportamiento definido.
+
+Implementa:
+- Validación de formularios.
+- Mensajes de éxito.
+- Mensajes de error.
+- Confirmación de acciones importantes.
+- Estados de carga.
+- Estados vacíos.
+- Paginación cuando corresponda.
+- Búsquedas funcionales.
+- Filtros funcionales.
+- Ordenamiento funcional.
+- Navegación completa.
+- Protección de rutas.
+- Control de permisos.
+- Componentes accesibles.
+
+Evita:
+- Enlaces rotos.
+- Formularios que no guardan.
+- Botones sin acción.
+- Datos que desaparecen inesperadamente.
+- Estados contradictorios.
+- Pantallas sin terminar.
+- Componentes duplicados.
+- Errores silenciosos.
+
+# 35. ORDEN DE DESARROLLO
+
+Trabaja en este orden:
+
+FASE 1 — ESTRUCTURA
+- Crear proyecto.
+- Organizar carpetas.
+- Configurar React y TypeScript.
+- Definir sistema visual.
+- Definir navegación.
+- Crear componentes comunes.
+
+FASE 2 — MARKETPLACE
+- Landing pública.
+- Categorías.
+- Búsqueda.
+- Mapa y lista.
+- Perfiles profesionales.
+- Servicios.
+- Portafolios.
+
+FASE 3 — CUENTAS Y PANELES
+- Autenticación de demostración.
+- Cliente.
+- Profesional.
+- Negocio.
+- Trabajadores.
+- Administrador central.
+- Administrador regional.
+
+FASE 4 — OPERACIONES
+- Solicitudes.
+- Distribución manual y automática.
+- Cotizaciones.
+- Contrataciones.
+- Disponibilidad.
+- Calendario.
+- Chat.
+- Notificaciones.
+- Reseñas.
+
+FASE 5 — ADMINISTRACIÓN
+- Usuarios.
+- Verificaciones.
+- Categorías.
+- Moderación.
+- Reportes.
+- Estadísticas.
+- Auditoría.
+
+FASE 6 — PWA Y CALIDAD
+- Diseño responsive.
+- Instalación.
+- Caché.
+- Offline.
+- Accesibilidad.
+- Validaciones.
+- Pruebas de flujos.
+
+# 36. INSTRUCCIONES IMPORTANTES DE EJECUCIÓN
+
+1. Antes de programar, revisa el entorno y los archivos existentes.
+2. No sobrescribas trabajo existente sin analizarlo.
+3. No elimines configuraciones funcionales.
+4. Construye una aplicación coherente, no pantallas independientes.
+5. Prioriza que todos los módulos compartan información y estados.
+6. Utiliza datos demo claramente identificados.
+7. No inventes que Supabase, Google Maps o servicios externos están conectados si no se han configurado.
+8. No expongas claves privadas.
+9. No agregues funciones de monetización no solicitadas.
+10. No añadas datos ficticios a producción.
+11. No permitas que un usuario común acceda al panel administrativo.
+12. No permitas que el usuario cambie sus permisos desde el frontend.
+13. Mantén el proyecto preparado para una integración posterior con Supabase.
+14. Si falta una API key, variable de entorno o servicio externo, crea una integración preparada y muestra claramente qué configuración falta.
+15. No entregues únicamente un diseño: implementa interacciones reales en el prototipo.
+16. No sustituyas módulos completos por placeholders cuando puedan implementarse con los datos de demostración.
+
+# 37. RESULTADO ESPERADO
+
+Quiero una aplicación llamada HUSTLY que parezca un producto comercial listo para presentarse a clientes e inversionistas.
+
+Debe incluir:
+- Marketplace público.
+- Búsqueda con mapa y lista.
+- Perfiles profesionales.
+- Servicios.
+- Portafolios.
+- Solicitudes.
+- Cotizaciones.
+- Contrataciones.
+- Chat.
+- Calendarios.
+- Reseñas.
+- Favoritos.
+- Panel de cliente.
+- Panel profesional.
+- Panel de negocios.
+- Panel administrativo.
+- Gestión regional.
+- Notificaciones.
+- Modo claro y oscuro.
+- PWA responsive.
+- Datos demo.
+- Arquitectura preparada para Supabase.
+
+El resultado debe ser visualmente sobresaliente, funcional, consistente y escalable.
+
+**No sacrifiques calidad visual por velocidad. No sacrifiques seguridad por comodidad. No sacrifiques arquitectura por terminar una pantalla rápidamente.**
+
+Primero construye una base sólida y después implementa los módulos conectados entre sí.
+
+Al terminar, revisa la aplicación completa, identifica errores, corrige problemas y presenta un resumen de:
+- Funcionalidades implementadas.
+- Módulos terminados.
+- Integraciones pendientes.
+- Variables de entorno necesarias.
+- Limitaciones actuales.
+- Pruebas realizadas.
+
+El objetivo es construir HUSTLY como un verdadero marketplace profesional, no como una simple maqueta.

@@ -1,0 +1,2020 @@
+# OFI CLICK — IMPLEMENTACIÓN COMPLETA DE SUPABASE, AUTENTICACIÓN, SEGURIDAD, CORREOS AUTOMÁTICOS Y SINCRONIZACIÓN REAL
+
+## PROYECTO: OFI CLICK
+
+Actúa como un arquitecto de software senior especializado en React, TypeScript, PostgreSQL, Supabase, Supabase Auth, Row Level Security (RLS), Supabase Storage, OAuth 2.0, Google Authentication, Edge Functions, sistemas de notificaciones, aplicaciones PWA, diseño de bases de datos relacionales y seguridad de aplicaciones web.
+
+Trabaja directamente sobre el código fuente EXISTENTE de Ofi Click.
+
+Nuestra aplicación visual y sus funcionalidades ya fueron construidas, revisadas y aprobadas.
+
+Ahora necesitamos transformar Ofi Click de un prototipo que utiliza datos locales o de demostración a una aplicación conectada a una infraestructura real de Supabase.
+
+Esta es una etapa de integración de infraestructura, persistencia, seguridad, autenticación, sincronización y funcionamiento real.
+
+No queremos otra maqueta.
+
+No queremos botones decorativos.
+
+No queremos funciones simuladas que aparenten conectarse a una base de datos.
+
+Queremos una integración funcional y verificable.
+
+---
+
+# 0. INSTRUCCIÓN CRÍTICA: PROTEGER EL PROYECTO EXISTENTE
+
+Antes de comenzar:
+
+1. Inspecciona el código completo de la aplicación.
+2. Identifica la arquitectura actual.
+3. Identifica todas las páginas.
+4. Identifica todos los roles.
+5. Identifica todos los módulos.
+6. Identifica todos los servicios de datos.
+7. Identifica los mecanismos de almacenamiento local.
+8. Identifica las relaciones existentes entre las funcionalidades.
+9. Identifica los archivos de configuración.
+10. Identifica todas las variables de entorno.
+11. Identifica los formularios.
+12. Identifica los procesos que actualmente utilizan datos ficticios.
+13. Identifica los procesos que ya tienen una estructura preparada para Supabase.
+14. Identifica los errores de integración existentes.
+15. Identifica las dependencias entre módulos.
+
+NO reconstruyas la aplicación desde cero.
+
+NO cambies el diseño aprobado.
+
+NO elimines las páginas existentes.
+
+NO elimines los paneles existentes.
+
+NO elimines funciones existentes.
+
+NO elimines el mapa.
+
+NO elimines las categorías.
+
+NO elimines el chat.
+
+NO elimines el portafolio.
+
+NO elimines las fotografías de trabajos.
+
+NO elimines los filtros.
+
+NO elimines las cotizaciones.
+
+NO elimines las contrataciones.
+
+NO elimines los servicios contratados.
+
+NO elimines las reseñas.
+
+NO elimines las notificaciones.
+
+NO elimines las verificaciones de profesionales.
+
+NO elimines el panel administrativo central.
+
+NO cambies la identidad visual de Ofi Click.
+
+NO vuelvas a implementar un inicio de sesión obligatorio para navegar por el marketplace público.
+
+NO reintroduzcas el rol de administrador regional.
+
+Los únicos roles principales de la aplicación son:
+
+- Cliente.
+- Freelancer / trabajador independiente.
+- Administrador central.
+
+La aplicación debe conservar el marketplace público.
+
+El cliente y el freelancer deberán utilizar sus paneles correspondientes.
+
+El freelancer debe permanecer en su panel de trabajo y no tener acceso a la navegación pública del marketplace desde su panel.
+
+El administrador central tendrá acceso a la administración global.
+
+La implementación debe preservar la funcionalidad y el diseño existentes.
+
+---
+
+# 1. OBJETIVO DE LA IMPLEMENTACIÓN
+
+Transformar Ofi Click en una aplicación con infraestructura real utilizando Supabase.
+
+Implementar:
+
+- Supabase Auth.
+- Registro real.
+- Inicio de sesión real.
+- OAuth con Google.
+- Gestión real de sesiones.
+- PostgreSQL.
+- Migraciones SQL.
+- Relaciones entre tablas.
+- Row Level Security.
+- Roles.
+- Permisos.
+- Supabase Storage.
+- Chat persistente.
+- Archivos adjuntos.
+- Solicitudes.
+- Cotizaciones.
+- Contrataciones.
+- Agenda.
+- Seguimiento.
+- Favoritos.
+- Reseñas.
+- Notificaciones.
+- Verificación de profesionales.
+- Panel administrativo.
+- Correos automáticos.
+- Sincronización de información.
+- Persistencia real.
+- Gestión de errores.
+- Seguridad.
+- Integración de mapas y datos de ubicación.
+- Preparación de arquitectura para futuras mejoras.
+
+Todas las funciones deberán utilizar una arquitectura de datos real.
+
+---
+
+# 2. ARQUITECTURA GENERAL
+
+Utiliza una arquitectura profesional y organizada.
+
+Tecnologías principales:
+
+- React.
+- TypeScript.
+- Supabase.
+- PostgreSQL.
+- Supabase Auth.
+- Supabase Storage.
+- Supabase Realtime.
+- Supabase Edge Functions cuando sean necesarias.
+- Google OAuth.
+- Google Maps Platform, si la integración actual lo utiliza.
+
+No sustituyas tecnologías existentes sin una razón técnica real.
+
+## 2.1 Arquitectura de servicios
+
+Organiza la aplicación para que las páginas no ejecuten consultas SQL ni dependan directamente de la implementación del almacenamiento.
+
+Utiliza servicios de datos centralizados.
+
+Una estructura de referencia puede ser:
+
+src/
+  components/
+  pages/
+  layouts/
+  features/
+  hooks/
+  lib/
+    supabase/
+  services/
+    auth/
+    profiles/
+    professionals/
+    services/
+    requests/
+    quotes/
+    bookings/
+    chat/
+    notifications/
+    reviews/
+    favorites/
+    admin/
+  repositories/
+  types/
+  utils/
+
+Supabase deberá ser el proveedor de datos real en producción.
+
+No permitas que cada página tenga implementaciones independientes de acceso a datos.
+
+Centraliza los servicios.
+
+## 2.2 Adaptador de datos
+
+Actualmente existe una arquitectura que ha utilizado o preparado datos locales.
+
+Revisa el sistema de adaptadores existente.
+
+Implementa una transición clara al adaptador Supabase.
+
+Cuando el modo de producción esté habilitado:
+
+- Todas las operaciones deberán utilizar Supabase.
+- No utilizar datos demo.
+- No utilizar localStorage como base de datos.
+- No utilizar datos ficticios para completar resultados.
+- No generar registros artificiales.
+- No utilizar cuentas demo.
+- No simular persistencia.
+
+No mezcles datos locales con datos reales.
+
+No permitas que una operación real se guarde localmente y otra en Supabase de manera inconsistente.
+
+Si existe un modo de demostración, deberá ser independiente y desactivado en producción.
+
+---
+
+# 3. SUPABASE: CONFIGURACIÓN E INTEGRACIÓN
+
+Integra Supabase correctamente en el proyecto.
+
+Utiliza las variables de entorno apropiadas:
+
+- VITE_SUPABASE_URL
+- VITE_SUPABASE_ANON_KEY
+
+Si el proyecto utiliza una nomenclatura diferente, verifica la configuración existente y evita duplicar innecesariamente las variables.
+
+La clave pública de Supabase que utiliza el cliente deberá ser la clave apropiada para el acceso público bajo RLS.
+
+NO expongas:
+
+- Service role key.
+- Secretos de Edge Functions.
+- Tokens privados.
+- Credenciales de proveedores.
+- Contraseñas.
+- Claves administrativas.
+- Secretos de correo.
+
+Las claves privilegiadas deberán permanecer exclusivamente en entornos seguros del servidor.
+
+## 3.1 Configuración del cliente
+
+Implementa un cliente Supabase centralizado.
+
+Configura correctamente:
+
+- URL.
+- Clave pública.
+- Sesiones.
+- Persistencia de sesión.
+- Renovación de tokens.
+- Manejo de errores.
+- Manejo de usuarios.
+- Estado de autenticación.
+- Cierre de sesión.
+
+Evita crear múltiples clientes Supabase innecesarios.
+
+## 3.2 Variables de entorno
+
+Revisa las variables existentes en Google AI Studio.
+
+Si existen variables de datos o adaptadores, revisa su significado antes de modificarlas.
+
+No elimines variables necesarias.
+
+No inventes valores.
+
+No insertes claves de prueba como si fueran reales.
+
+Genera o actualiza `.env.example` con nombres de variables, pero sin secretos.
+
+Explica claramente qué variables deberán configurarse.
+
+---
+
+# 4. DISEÑO DE BASE DE DATOS
+
+Diseña e implementa una base de datos relacional completa y consistente.
+
+No improvises tablas aisladas.
+
+La base de datos debe reflejar los módulos existentes en Ofi Click.
+
+Antes de crear las tablas, analiza las entidades actuales y sus relaciones.
+
+Implementa migraciones SQL organizadas y versionadas.
+
+No dependas de un bloque SQL pegado manualmente en una página de la aplicación.
+
+Las migraciones deben estar organizadas para que puedan revisarse, ejecutarse y mantenerse.
+
+## 4.1 Entidades principales
+
+La estructura deberá cubrir las siguientes entidades, adaptándolas a los modelos existentes y evitando duplicaciones.
+
+### Identidad y perfiles
+
+- profiles.
+- roles o mecanismo equivalente de asignación segura de roles.
+- account_preferences cuando corresponda.
+- user_locations cuando corresponda.
+- account_status.
+- profile_settings.
+
+### Profesionales
+
+- professional_profiles.
+- professional_categories.
+- professional_service_zones.
+- professional_verification.
+- verification_documents.
+- professional_availability.
+- professional_working_hours.
+- professional_blocked_dates.
+- professional_portfolio.
+- portfolio_images.
+
+### Catálogo
+
+- service_categories.
+- service_subcategories cuando sean necesarias.
+- services.
+- service_attributes cuando sean necesarias.
+
+### Solicitudes
+
+- service_requests.
+- request_recipients.
+- request_attachments.
+- request_status_history.
+
+### Cotizaciones
+
+- quotes.
+- quote_items.
+- quote_versions cuando sea necesario.
+- quote_status_history.
+
+### Contrataciones
+
+- bookings o tabla equivalente.
+- booking_status_history.
+- booking_reschedule_requests.
+- booking_attachments.
+- completion_records.
+
+### Chat
+
+- conversations.
+- conversation_participants.
+- messages.
+- message_attachments.
+- message_read_status cuando sea necesario.
+
+### Favoritos
+
+- favorites.
+
+### Reseñas
+
+- reviews.
+- review_replies cuando corresponda.
+- review_reports.
+
+### Notificaciones
+
+- notifications.
+- notification_preferences.
+
+### Administración
+
+- admin_audit_logs.
+- moderation_reports.
+- support_tickets.
+- support_ticket_messages cuando corresponda.
+- system_settings.
+- regional_expansion_configuration cuando corresponda, sin reinstaurar el rol de administrador regional.
+
+### Ubicación
+
+- Las ubicaciones deberán almacenarse utilizando una estructura adecuada.
+- Considera PostGIS cuando la integración de búsqueda geográfica lo requiera y pueda configurarse correctamente.
+- Evita almacenar direcciones particulares de profesionales en tablas públicas.
+- No expongas ubicaciones privadas de usuarios.
+
+No crees tablas innecesarias únicamente por seguir esta lista.
+
+Si una entidad ya existe, reutilízala y migra su estructura cuando sea necesario.
+
+## 4.2 Integridad relacional
+
+Implementa:
+
+- Primary keys.
+- Foreign keys.
+- Restricciones.
+- Unique constraints.
+- Índices.
+- Validaciones.
+- Campos timestamps.
+- Relaciones consistentes.
+- Eliminación controlada.
+- Historial cuando sea necesario.
+
+No permitas:
+
+- Solicitudes sin cliente.
+- Solicitudes sin servicio válido.
+- Cotizaciones sin solicitud correspondiente.
+- Contrataciones sin relación válida.
+- Mensajes sin conversación.
+- Archivos sin relación válida.
+- Reseñas sin una contratación elegible.
+- Favoritos duplicados.
+- Registros duplicados de contratación.
+- Estados incompatibles.
+
+## 4.3 Estados
+
+Define estados consistentes para cada módulo.
+
+Evita que una misma operación tenga estados contradictorios entre módulos.
+
+Implementa validación de transiciones.
+
+Una operación deberá rechazarse cuando la transición de estado no esté permitida.
+
+## 4.4 Índices
+
+Implementa índices apropiados para:
+
+- Usuarios.
+- Perfiles.
+- Categorías.
+- Servicios.
+- Solicitudes.
+- Cotizaciones.
+- Contrataciones.
+- Conversaciones.
+- Mensajes.
+- Notificaciones.
+- Reseñas.
+- Ubicaciones.
+
+Evita índices innecesarios.
+
+---
+
+# 5. AUTENTICACIÓN REAL
+
+Integra Supabase Auth.
+
+La aplicación deberá permitir:
+
+- Registro con correo.
+- Inicio de sesión con correo.
+- Cierre de sesión.
+- Recuperación de cuenta.
+- Restablecimiento de contraseña.
+- Confirmación de correo cuando corresponda.
+- Persistencia de sesión.
+- Renovación de sesión.
+- Protección de rutas privadas.
+- Manejo de errores.
+- Estado de usuario autenticado.
+
+Conserva el marketplace público.
+
+El usuario podrá navegar libremente antes de iniciar sesión.
+
+La autenticación será contextual.
+
+Cuando intente realizar una acción que requiera cuenta:
+
+1. Solicitar autenticación.
+2. Permitir registro o inicio de sesión.
+3. Completar la autenticación.
+4. Regresar a la acción que estaba realizando.
+5. Continuar con el flujo.
+
+No obligues a iniciar sesión para explorar.
+
+## 5.1 Registro de cliente
+
+El registro de cliente deberá conservar los campos existentes que sean necesarios.
+
+No solicites fotografía frontal obligatoria.
+
+No restaures la fotografía frontal obligatoria del cliente.
+
+No solicites documentos de identidad innecesarios al cliente.
+
+El cliente deberá poder:
+
+- Crear cuenta.
+- Confirmar correo cuando corresponda.
+- Completar perfil.
+- Guardar preferencias.
+- Buscar profesionales.
+- Solicitar servicios.
+- Contratar.
+- Consultar servicios contratados.
+- Comunicarse.
+- Adjuntar archivos permitidos.
+- Consultar notificaciones.
+- Dejar reseñas elegibles.
+
+## 5.2 Registro de freelancer
+
+El registro del freelancer deberá conservar el flujo existente.
+
+Utiliza los datos existentes en el formulario.
+
+Implementa almacenamiento real para:
+
+- Perfil profesional.
+- Especialidades.
+- Categorías.
+- Servicios.
+- Precios.
+- Zonas de trabajo.
+- Disponibilidad.
+- Portafolio.
+- Fotografías de trabajos.
+- Verificación.
+- Datos de contacto necesarios.
+
+No elimines el proceso de verificación actual.
+
+No otorgues verificación automática si el proceso requiere revisión.
+
+No inventes credenciales verificadas.
+
+Los documentos de verificación deberán almacenarse en espacios privados.
+
+No publiques documentos de identidad.
+
+No publiques números de documentos.
+
+No publiques imágenes de documentos.
+
+No expongas documentos en perfiles públicos.
+
+No utilices documentos reales de usuarios para la demostración académica.
+
+---
+
+# 6. ROLES Y SEGURIDAD
+
+Los roles definitivos son:
+
+- Cliente.
+- Freelancer.
+- Administrador central.
+
+No existe administrador regional.
+
+La asignación de roles debe ser segura.
+
+No permitas que un usuario se convierta en administrador modificando:
+
+- localStorage.
+- URL.
+- Código de cliente.
+- Formularios.
+- JSON.
+- Claims manipulables.
+- Datos de perfil.
+- Solicitudes de registro.
+- Variables de entorno públicas.
+
+Los permisos administrativos deberán verificarse desde el servidor y mediante políticas de base de datos.
+
+No utilices el cliente como autoridad de permisos.
+
+## 6.1 Administrador central
+
+Implementa un mecanismo seguro de aprovisionamiento inicial de administrador central.
+
+No permitas autoasignación pública de administrador.
+
+No permitas que el usuario seleccione Administrador central y obtenga permisos automáticamente.
+
+El primer administrador deberá ser provisionado mediante un mecanismo seguro que pueda ejecutarse desde un entorno autorizado.
+
+Si el proyecto no tiene un administrador inicial, implementa una función de bootstrap segura y documentada, que:
+
+- No permita acceso público indiscriminado.
+- No dependa de una solicitud de aprobación circular.
+- No pueda invocarse libremente desde un usuario no autorizado.
+- Utilice un secreto exclusivamente del servidor o un procedimiento seguro de instalación.
+- Sea idempotente.
+- Registre la operación.
+- Permita cerrar el mecanismo de bootstrap después de inicializar el administrador.
+
+No expongas una clave secreta dentro del frontend.
+
+No utilices una función pública que permita asignar el rol administrativo arbitrariamente.
+
+## 6.2 Permisos
+
+Implementa permisos específicos para:
+
+### Cliente
+
+- Su propio perfil.
+- Sus solicitudes.
+- Sus cotizaciones.
+- Sus contrataciones.
+- Sus conversaciones.
+- Sus mensajes.
+- Sus archivos.
+- Sus favoritos.
+- Sus reseñas.
+- Sus notificaciones.
+
+### Freelancer
+
+- Su propio perfil.
+- Sus servicios.
+- Sus solicitudes recibidas.
+- Sus cotizaciones.
+- Sus contrataciones.
+- Su agenda.
+- Sus conversaciones.
+- Sus mensajes.
+- Sus archivos.
+- Su portafolio.
+- Sus reseñas.
+- Sus notificaciones.
+- Su información privada.
+
+### Administrador central
+
+- Administración global autorizada.
+- Gestión de usuarios.
+- Gestión de profesionales.
+- Verificaciones.
+- Moderación.
+- Categorías.
+- Solicitudes.
+- Contrataciones.
+- Reportes.
+- Configuración.
+- Seguridad.
+- Auditoría.
+
+No otorgues acceso global por defecto.
+
+---
+
+# 7. ROW LEVEL SECURITY — RLS
+
+Implementa Row Level Security en todas las tablas que contienen información de usuarios o información privada.
+
+No dejes tablas sensibles sin políticas.
+
+No implementes RLS únicamente para aparentar seguridad.
+
+Revisa las relaciones entre las tablas.
+
+Implementa políticas de acceso basadas en la identidad autenticada y en relaciones reales.
+
+## 7.1 Cliente
+
+El cliente deberá consultar y modificar únicamente los registros que le correspondan y las operaciones que estén permitidas.
+
+## 7.2 Freelancer
+
+El freelancer deberá consultar y modificar únicamente los registros que le correspondan y las operaciones que estén permitidas.
+
+## 7.3 Conversaciones
+
+Solo los participantes autorizados podrán acceder a la conversación y sus mensajes.
+
+## 7.4 Archivos
+
+Solo usuarios autorizados podrán acceder a archivos privados relacionados con sus operaciones.
+
+## 7.5 Administrador central
+
+El administrador central tendrá permisos de administración únicamente mediante una asignación segura de rol.
+
+## 7.6 Público
+
+Permite consultar únicamente información pública.
+
+No expongas:
+
+- Correo privado.
+- Documentos.
+- Direcciones particulares.
+- Datos de verificación.
+- Conversaciones privadas.
+- Datos de contacto restringidos.
+- Información administrativa.
+- Datos sensibles.
+
+Implementa y prueba las políticas.
+
+---
+
+# 8. GOOGLE OAUTH
+
+Implementa el inicio de sesión y registro con Google utilizando Supabase Auth.
+
+El botón existente:
+
+Continuar con Google
+
+deberá utilizar la integración real.
+
+## 8.1 Flujo
+
+Cuando el usuario presione Continuar con Google:
+
+1. Iniciar OAuth.
+2. Redirigir al proveedor.
+3. Permitir autenticación con Google.
+4. Regresar a Ofi Click.
+5. Validar sesión.
+6. Recuperar el perfil.
+7. Identificar si la cuenta ya existe.
+8. Identificar si el rol ya está asignado.
+9. Completar el registro si es necesario.
+10. Dirigir al usuario al panel correspondiente o a la acción que intentaba realizar.
+
+No solicites una contraseña adicional de Ofi Click cuando el usuario se haya autenticado mediante Google.
+
+## 8.2 Usuarios nuevos
+
+Cuando una cuenta Google sea nueva:
+
+- Crear el perfil correspondiente.
+- Obtener el correo validado por el proveedor.
+- Evitar duplicar perfiles.
+- Permitir completar los datos adicionales necesarios.
+- Permitir seleccionar Cliente o Freelancer cuando corresponda.
+- No permitir que Google otorgue rol de administrador central.
+- Completar la creación del perfil.
+- Mostrar confirmación.
+
+## 8.3 Configuración OAuth
+
+Utiliza el flujo OAuth compatible con Supabase.
+
+Identifica exactamente los pasos que deberán configurarse en:
+
+- Google Cloud Console.
+- Supabase Authentication.
+- Redirect URLs.
+- OAuth Client ID.
+- OAuth Client Secret.
+
+No inventes credenciales.
+
+No expongas el OAuth Client Secret.
+
+No afirmes que Google OAuth funciona si las credenciales no se configuraron y el flujo no fue probado.
+
+Si faltan credenciales, implementa el código, explica qué falta y prepara la configuración para completar el proceso.
+
+---
+
+# 9. CORREOS AUTOMÁTICOS
+
+Quiero que Ofi Click envíe correos electrónicos automáticos reales.
+
+No quiero solamente notificaciones dentro de la aplicación.
+
+Implementa una arquitectura segura de envío de correos utilizando un proveedor compatible con Supabase Edge Functions.
+
+Puedes utilizar un proveedor como Resend si es apropiado para el proyecto.
+
+No expongas claves API en el frontend.
+
+Las claves del proveedor deberán permanecer en secretos del servidor.
+
+No simules envío real.
+
+## 9.1 Correo de registro
+
+Cuando una persona complete correctamente su registro, deberá recibir un correo de bienvenida.
+
+El correo deberá incluir:
+
+- Nombre de Ofi Click.
+- Confirmación de registro cuando el flujo permita confirmar el registro.
+- Mensaje de bienvenida.
+- Información general sobre la plataforma.
+- Indicación de que puede explorar los servicios.
+- Diseño profesional.
+- Adaptación para dispositivos móviles.
+
+Texto de referencia:
+
+"¡Te damos la bienvenida a Ofi Click!
+
+Tu cuenta se ha registrado correctamente.
+
+Ahora puedes explorar profesionales independientes, consultar servicios, solicitar cotizaciones y encontrar ayuda para lo que necesitas.
+
+Gracias por formar parte de Ofi Click.
+
+Encuentra talento. Haz que suceda."
+
+Puedes mejorar el texto sin perder su sentido.
+
+## 9.2 Correos de autenticación
+
+Implementa o configura los correos que correspondan para:
+
+- Confirmación de correo.
+- Recuperación de cuenta.
+- Restablecimiento de contraseña.
+- Otros eventos de autenticación compatibles.
+
+## 9.3 Correos transaccionales
+
+Implementa correos para eventos importantes, según corresponda:
+
+Cliente:
+
+- Solicitud enviada.
+- Cotización recibida.
+- Cotización modificada.
+- Cotización aceptada.
+- Servicio programado.
+- Reprogramación.
+- Cancelación.
+- Recordatorio.
+- Servicio finalizado.
+- Notificación de reseña cuando corresponda.
+
+Freelancer:
+
+- Nueva solicitud.
+- Nuevo mensaje.
+- Cotización aceptada.
+- Contratación confirmada.
+- Reprogramación.
+- Cancelación.
+- Servicio próximo.
+- Servicio finalizado.
+- Nueva reseña cuando corresponda.
+
+No envíes correos innecesarios.
+
+No envíes múltiples correos duplicados por el mismo evento.
+
+Implementa mecanismos de control para evitar duplicaciones.
+
+## 9.4 Plantillas
+
+Crea plantillas profesionales.
+
+Utiliza:
+
+- Logo cuando esté disponible.
+- Identidad visual de Ofi Click.
+- Colores de la aplicación.
+- Diseño responsive.
+- Texto claro.
+- Links válidos.
+- Footer.
+- Información de soporte cuando exista.
+
+No inventes una dirección de correo de soporte.
+
+## 9.5 Configuración del proveedor
+
+Si falta el proveedor:
+
+- Implementa la función de envío.
+- Documenta las variables necesarias.
+- Indica cómo configurar los secretos.
+- Indica cómo verificar el dominio cuando corresponda.
+- Indica qué falta para que el correo real funcione.
+
+No afirmes que los correos se envían si no existe un proveedor configurado.
+
+---
+
+# 10. SUPABASE STORAGE
+
+Implementa almacenamiento real para los archivos de Ofi Click.
+
+Utiliza buckets apropiados.
+
+Evita utilizar un único bucket público para todos los archivos.
+
+## 10.1 Archivos públicos
+
+Cuando corresponda:
+
+- Fotografías públicas del portafolio.
+- Imágenes públicas de servicios.
+- Imágenes públicas de perfiles.
+
+Implementa almacenamiento y acceso adecuados.
+
+## 10.2 Archivos privados
+
+Utiliza almacenamiento privado para:
+
+- Documentos de verificación.
+- Archivos privados.
+- Adjuntos de conversaciones cuando corresponda.
+- Evidencias relacionadas con solicitudes o contrataciones.
+- Otros documentos que no deban ser públicos.
+
+Implementa políticas de acceso.
+
+Utiliza URLs firmadas cuando sea apropiado.
+
+No expongas documentos privados mediante URLs públicas permanentes.
+
+## 10.3 Chat
+
+Implementa almacenamiento privado para los adjuntos del chat.
+
+Los archivos deberán ser accesibles únicamente por los participantes autorizados de la conversación.
+
+## 10.4 Portafolio
+
+Los trabajos del freelancer deberán permitir:
+
+- Subir imágenes.
+- Guardar imágenes.
+- Mostrar imágenes.
+- Editar.
+- Eliminar.
+- Relacionar imágenes con proyectos.
+- Relacionar proyectos con categorías.
+- Guardar información del proyecto.
+
+No confundir fotografías de portafolio con evidencia de trabajos contratados.
+
+## 10.5 Validaciones
+
+Implementa:
+
+- Tamaño máximo.
+- Tipos permitidos.
+- Validación de archivos.
+- Nombre seguro.
+- Restricciones.
+- Manejo de errores.
+
+No permitas cargas ilimitadas.
+
+---
+
+# 11. SOLICITUDES
+
+Conecta el módulo de solicitudes con Supabase.
+
+El cliente deberá poder crear solicitudes reales.
+
+La solicitud deberá relacionarse con:
+
+- Cliente.
+- Servicio.
+- Categoría.
+- Descripción.
+- Ubicación.
+- Fecha.
+- Horario.
+- Presupuesto cuando corresponda.
+- Fotografías.
+- Urgencia.
+- Estado.
+- Destinatarios.
+- Historial.
+
+## 11.1 Solicitud directa
+
+Permite enviar una solicitud a un profesional específico.
+
+## 11.2 Solicitud abierta
+
+Conserva las dos modalidades que ya fueron aprobadas:
+
+- Hustly / Ofi Click recomienda profesionales compatibles.
+- El cliente selecciona profesionales manualmente.
+
+La aplicación deberá permitir ambas modalidades.
+
+La distribución de solicitudes abiertas no tendrá un límite fijo de destinatarios.
+
+Sin embargo, implementa medidas de protección contra abuso, spam y exceso de solicitudes.
+
+No permitas que una solicitud se envíe a destinatarios duplicados.
+
+## 11.3 Filtros
+
+Utiliza los filtros existentes para determinar profesionales compatibles.
+
+## 11.4 Persistencia
+
+Las solicitudes deberán persistir correctamente.
+
+No depender de localStorage.
+
+---
+
+# 12. COTIZACIONES
+
+Implementa cotizaciones reales.
+
+Conecta el módulo con solicitudes y contrataciones.
+
+Cada cotización deberá incluir:
+
+- Solicitud.
+- Freelancer.
+- Cliente.
+- Descripción.
+- Conceptos.
+- Mano de obra.
+- Materiales cuando correspondan.
+- Cargos.
+- Precio.
+- Duración.
+- Fecha.
+- Vigencia.
+- Condiciones.
+- Estado.
+
+Implementa versiones cuando cambien las condiciones.
+
+Una cotización modificada deberá conservar el historial cuando sea necesario.
+
+No sobrescribas indiscriminadamente las condiciones de una cotización ya aceptada.
+
+## 12.1 Aceptación
+
+Cuando el cliente acepte una cotización válida:
+
+- Actualizar el estado.
+- Registrar la aceptación.
+- Crear la contratación correspondiente.
+- Relacionar la contratación con la solicitud.
+- Relacionar la contratación con la cotización.
+- Evitar duplicaciones.
+- Actualizar paneles.
+- Generar notificaciones.
+- Generar correos cuando estén configurados.
+
+Implementa esta operación de manera transaccional o mediante una estrategia equivalente que evite inconsistencias.
+
+---
+
+# 13. CONTRATACIONES Y SERVICIOS CONTRATADOS
+
+Implementa el módulo de contrataciones con persistencia real.
+
+La contratación deberá ser visible para:
+
+- Cliente.
+- Freelancer.
+- Administrador central, según permisos.
+
+Relaciona:
+
+- Solicitud.
+- Cotización.
+- Cliente.
+- Freelancer.
+- Servicio.
+- Precio.
+- Fecha.
+- Horario.
+- Ubicación.
+- Condiciones.
+- Estado.
+- Historial.
+
+## 13.1 Panel del cliente
+
+El cliente deberá poder consultar:
+
+- Servicios contratados.
+- Servicios próximos.
+- Servicios en progreso.
+- Servicios completados.
+- Servicios cancelados.
+- Seguimiento.
+- Cotización aceptada.
+- Precio acordado.
+- Ubicación.
+- Freelancer.
+- Conversación.
+
+## 13.2 Panel del freelancer
+
+El freelancer deberá poder consultar:
+
+- Contrataciones.
+- Agenda.
+- Servicios programados.
+- Servicios en progreso.
+- Servicios completados.
+- Información necesaria del cliente.
+- Información necesaria del servicio.
+- Conversación.
+
+## 13.3 Estados
+
+Conserva los estados existentes y sus transiciones.
+
+Implementa:
+
+- Confirmada.
+- Programada.
+- En camino cuando corresponda.
+- En progreso.
+- Finalización pendiente.
+- Completada.
+- Cancelada.
+- Reprogramada.
+
+No permitas transiciones arbitrarias.
+
+## 13.4 Reprogramaciones
+
+Las reprogramaciones deberán tener un flujo de solicitud y aceptación cuando corresponda.
+
+No modifiques unilateralmente una fecha confirmada sin el flujo correspondiente.
+
+## 13.5 Cancelaciones
+
+Implementa las reglas existentes.
+
+Conserva:
+
+- Motivo.
+- Usuario.
+- Fecha.
+- Estado.
+- Historial.
+
+No inventes penalizaciones automáticas.
+
+No implementes pagos ni reembolsos reales porque todavía no forman parte de la integración actual.
+
+---
+
+# 14. AGENDA Y DISPONIBILIDAD
+
+Conecta el calendario del freelancer con Supabase.
+
+Implementa:
+
+- Horarios laborales.
+- Días disponibles.
+- Bloqueos.
+- Descansos.
+- Duración estimada.
+- Disponibilidad general.
+- Trabajos programados.
+- Solicitudes pendientes cuando corresponda.
+
+Conserva los dos sistemas de disponibilidad existentes:
+
+- Estado general.
+- Calendario detallado.
+
+Las solicitudes de fecha no deberán convertirse automáticamente en reservas confirmadas.
+
+La fecha deberá confirmarse conforme al flujo actual.
+
+---
+
+# 15. CHAT INTERNO REAL
+
+Conecta el chat con Supabase.
+
+Implementa:
+
+- Conversaciones.
+- Participantes.
+- Mensajes.
+- Lectura.
+- Unread.
+- Notificaciones.
+- Archivos adjuntos.
+- Relación con solicitudes.
+- Relación con contrataciones cuando corresponda.
+
+Utiliza Supabase Realtime cuando sea apropiado.
+
+## 15.1 Mensajes
+
+Los mensajes deberán persistir.
+
+No utilizar localStorage como almacenamiento definitivo de mensajes.
+
+## 15.2 Realtime
+
+Implementa sincronización real de mensajes.
+
+Cuando un participante envíe un mensaje:
+
+- Guardarlo en Supabase.
+- Reflejarlo en la conversación.
+- Actualizar el estado correspondiente.
+- Notificar al otro participante cuando corresponda.
+
+## 15.3 Archivos
+
+Los archivos deberán relacionarse con el mensaje.
+
+El otro participante deberá poder visualizarlos.
+
+Implementa:
+
+- Vista previa de imágenes.
+- Tarjetas de documentos.
+- Acciones para abrir.
+- Descarga cuando corresponda.
+- Manejo de formatos no compatibles.
+
+## 15.4 Seguridad
+
+Solo los participantes autorizados podrán acceder a la conversación.
+
+No permitas consultar conversaciones de otros usuarios.
+
+No permitas descargar archivos privados mediante acceso público.
+
+---
+
+# 16. MAPA Y BÚSQUEDA
+
+Conecta la búsqueda y el mapa con los datos reales de profesionales.
+
+Conserva la experiencia actual.
+
+Implementa filtros funcionales:
+
+- Categoría.
+- Servicio.
+- Zona.
+- Colonia.
+- Disponibilidad.
+- Precio cuando corresponda.
+- Calificación.
+- Otros filtros existentes.
+
+Los resultados del mapa y la lista deberán sincronizarse.
+
+No inventes profesionales.
+
+No inventes ubicaciones.
+
+Utiliza las zonas de servicio declaradas por los profesionales.
+
+No publiques domicilios particulares.
+
+## 16.1 Ubicación
+
+Utiliza la infraestructura geográfica apropiada.
+
+Si la aplicación utiliza Google Maps:
+
+- Conserva la integración.
+- Utiliza la configuración existente.
+- Revisa las variables de entorno.
+- No expongas claves sin restricciones.
+- No inventes ubicaciones.
+- No inventes distancias.
+- No inventes rutas.
+
+## 16.2 Privacidad
+
+Las ubicaciones exactas de los servicios deberán compartirse únicamente con los participantes autorizados y conforme al flujo de contratación.
+
+---
+
+# 17. FAVORITOS
+
+Conecta favoritos con Supabase.
+
+El cliente deberá poder:
+
+- Agregar.
+- Eliminar.
+- Consultar.
+- Persistir.
+
+Evita duplicados.
+
+Conecta favoritos con el perfil del cliente.
+
+---
+
+# 18. RESEÑAS
+
+Conecta reseñas con Supabase.
+
+Permite reseñas únicamente cuando exista una contratación elegible conforme al flujo actual.
+
+Implementa:
+
+- Rating.
+- Comentario.
+- Fecha.
+- Cliente.
+- Freelancer.
+- Contratación.
+- Respuesta cuando corresponda.
+- Reporte.
+- Moderación.
+
+No permitas reseñas duplicadas de la misma contratación.
+
+No inventes reseñas.
+
+---
+
+# 19. NOTIFICACIONES
+
+Implementa notificaciones persistentes.
+
+Conecta los eventos importantes.
+
+Cliente:
+
+- Solicitudes.
+- Cotizaciones.
+- Contrataciones.
+- Mensajes.
+- Reprogramaciones.
+- Cancelaciones.
+- Seguimiento.
+- Finalización.
+- Reseñas.
+
+Freelancer:
+
+- Solicitudes.
+- Mensajes.
+- Cotizaciones.
+- Contrataciones.
+- Agenda.
+- Reprogramaciones.
+- Cancelaciones.
+- Seguimiento.
+- Reseñas.
+
+Administrador central:
+
+- Reportes.
+- Verificaciones.
+- Moderación.
+- Soporte.
+- Eventos administrativos relevantes.
+
+Implementa:
+
+- Leídas.
+- No leídas.
+- Fecha.
+- Tipo.
+- Relación.
+- Preferencias cuando corresponda.
+
+Utiliza Realtime cuando sea apropiado.
+
+No generes notificaciones duplicadas.
+
+---
+
+# 20. PANEL ADMINISTRATIVO CENTRAL
+
+Conecta el panel administrativo central con los datos reales.
+
+Conserva todas las funciones existentes.
+
+Implementa:
+
+- Dashboard.
+- Usuarios.
+- Profesionales.
+- Verificaciones.
+- Categorías.
+- Solicitudes.
+- Contrataciones.
+- Moderación.
+- Reportes.
+- Soporte.
+- Configuración.
+- Seguridad.
+- Auditoría.
+
+## 20.1 Estadísticas
+
+Las estadísticas deberán obtenerse de la base de datos.
+
+No utilices cifras ficticias.
+
+## 20.2 Usuarios
+
+Implementa:
+
+- Consultar.
+- Buscar.
+- Filtrar.
+- Suspender cuando corresponda.
+- Reactivar.
+- Consultar información permitida.
+- Gestionar estados.
+
+## 20.3 Verificaciones
+
+Implementa revisión de profesionales.
+
+El administrador podrá:
+
+- Consultar solicitudes de verificación.
+- Revisar documentación privada.
+- Aprobar.
+- Rechazar.
+- Solicitar correcciones.
+- Registrar motivo.
+- Consultar historial.
+
+La documentación deberá permanecer privada.
+
+## 20.4 Categorías
+
+Implementa gestión real de categorías y servicios.
+
+## 20.5 Moderación
+
+Conecta reportes y moderación.
+
+## 20.6 Auditoría
+
+Registra operaciones administrativas importantes.
+
+No permitas que los usuarios manipulen los registros de auditoría.
+
+---
+
+# 21. ELIMINACIÓN DE DATOS FICTICIOS
+
+Esta etapa es fundamental.
+
+Queremos pasar del prototipo de demostración a una aplicación real.
+
+Elimina los datos ficticios que actualmente se utilizan como si fueran registros reales.
+
+No quiero:
+
+- Clientes ficticios.
+- Profesionales ficticios.
+- Solicitudes ficticias.
+- Cotizaciones ficticias.
+- Contrataciones ficticias.
+- Mensajes ficticios.
+- Reseñas ficticias.
+- Notificaciones ficticias.
+- Estadísticas ficticias.
+- Documentos ficticios mezclados con producción.
+
+## 21.1 Limpieza
+
+Antes de eliminar datos:
+
+1. Identifica exactamente cuáles son los datos demo.
+2. Identifica los archivos demo.
+3. Identifica las cuentas demo.
+4. Identifica las relaciones demo.
+5. Identifica las dependencias.
+6. Identifica las tablas que contienen datos demo.
+7. Identifica los mecanismos de seed.
+8. Identifica los mecanismos de almacenamiento local.
+
+No elimines datos de usuarios reales.
+
+No elimines archivos reales.
+
+No elimines cuentas reales.
+
+No elimines información de producción.
+
+Si no puedes distinguir de forma segura los datos demo de los datos reales, no los elimines automáticamente.
+
+Implementa una limpieza segura de los datos demo claramente identificados.
+
+## 21.2 Producción
+
+En el modo real:
+
+- No ejecutar seeds demo automáticamente.
+- No generar cuentas demo.
+- No generar solicitudes demo.
+- No generar mensajes demo.
+- No generar estadísticas ficticias.
+- No generar reseñas ficticias.
+- No generar profesionales ficticios.
+
+## 21.3 Datos de prueba
+
+Si se necesitan pruebas:
+
+- Utilizar un entorno aislado.
+- Utilizar registros claramente identificados como pruebas.
+- No mezclarlos con producción.
+- No utilizar personas reales.
+- No utilizar documentos reales.
+
+---
+
+# 22. SINCRONIZACIÓN REAL
+
+Todos los módulos deberán utilizar los datos persistentes correspondientes.
+
+Quiero sincronización coherente entre:
+
+- Perfil.
+- Solicitudes.
+- Cotizaciones.
+- Contrataciones.
+- Agenda.
+- Chat.
+- Archivos.
+- Favoritos.
+- Reseñas.
+- Notificaciones.
+- Panel administrativo.
+
+Implementa la sincronización mediante consultas, actualizaciones, suscripciones y mecanismos apropiados.
+
+No dependas de que el usuario recargue la página para reflejar cambios cuando la arquitectura permita actualizar la información correctamente.
+
+Utiliza Supabase Realtime cuando sea útil.
+
+No habilites Realtime indiscriminadamente en todas las tablas.
+
+Utiliza las suscripciones necesarias.
+
+Implementa:
+
+- Actualización.
+- Desuscripción.
+- Manejo de errores.
+- Reconexión cuando corresponda.
+- Prevención de suscripciones duplicadas.
+- Estados de carga.
+- Estados vacíos.
+- Errores.
+
+---
+
+# 23. TRANSACCIONES Y CONSISTENCIA
+
+Implementa operaciones críticas de forma segura.
+
+Por ejemplo:
+
+Aceptar una cotización y crear contratación.
+
+Reprogramar una contratación.
+
+Completar una contratación.
+
+Crear una reseña elegible.
+
+Cambiar estados.
+
+Registrar operaciones administrativas.
+
+Utiliza transacciones, funciones RPC o estrategias apropiadas cuando se requieran múltiples operaciones relacionadas.
+
+No permitas que una operación parcialmente ejecutada deje los datos inconsistentes.
+
+Implementa restricciones y validaciones en la base de datos.
+
+No confíes exclusivamente en validaciones de React.
+
+---
+
+# 24. PRIVACIDAD Y SEGURIDAD DE DATOS
+
+Implementa una arquitectura segura.
+
+Protege:
+
+- Correos.
+- Documentos.
+- Ubicaciones.
+- Conversaciones.
+- Archivos.
+- Datos privados.
+- Información de verificación.
+
+No publiques datos sensibles.
+
+No almacenes secretos en frontend.
+
+No utilices localStorage para almacenar documentos sensibles.
+
+No permitas accesos administrativos no autorizados.
+
+No permitas acceso a archivos privados mediante rutas públicas.
+
+No permitas que un usuario cambie su rol desde el cliente.
+
+No permitas consultas arbitrarias a datos de otros usuarios.
+
+Implementa protección contra:
+
+- Acceso no autorizado.
+- Consultas indebidas.
+- Manipulación de roles.
+- Duplicación de registros.
+- Abuso de solicitudes.
+- Spam.
+- Archivos no permitidos.
+- Exposición de documentos.
+- Acceso a conversaciones ajenas.
+
+---
+
+# 25. MIGRACIONES Y DOCUMENTACIÓN
+
+Organiza las migraciones.
+
+No dejes toda la base de datos como un bloque desordenado.
+
+Utiliza archivos SQL versionados.
+
+Documenta:
+
+- Estructura.
+- Tablas.
+- Relaciones.
+- Políticas RLS.
+- Buckets.
+- Edge Functions.
+- OAuth.
+- Correos.
+- Variables de entorno.
+- Configuración.
+- Pruebas.
+- Mantenimiento.
+
+Crea documentación de instalación para Ofi Click.
+
+Si el entorno de Google AI Studio puede ejecutar migraciones de manera segura, hazlo utilizando el mecanismo disponible.
+
+Si no puede ejecutarlas directamente:
+
+- Genera los archivos necesarios.
+- Identifica exactamente cuáles deben ejecutarse.
+- Explica dónde.
+- Explica el orden.
+- No afirmes que ya fueron ejecutados.
+
+---
+
+# 26. PRUEBAS
+
+No quiero una implementación que solamente compile.
+
+Realiza pruebas.
+
+## 26.1 Autenticación
+
+Prueba:
+
+- Registro.
+- Inicio de sesión.
+- Cierre de sesión.
+- Recuperación.
+- Confirmación de correo.
+- Sesión persistente.
+- OAuth si está configurado.
+- Protección de rutas.
+
+## 26.2 Cliente
+
+Prueba:
+
+- Marketplace público.
+- Perfil.
+- Solicitud.
+- Cotización.
+- Contratación.
+- Servicios contratados.
+- Seguimiento.
+- Chat.
+- Archivos.
+- Favoritos.
+- Reseñas.
+- Notificaciones.
+
+## 26.3 Freelancer
+
+Prueba:
+
+- Perfil.
+- Servicios.
+- Solicitudes.
+- Cotizaciones.
+- Agenda.
+- Contrataciones.
+- Portafolio.
+- Fotografías.
+- Chat.
+- Archivos.
+- Seguimiento.
+- Reseñas.
+- Notificaciones.
+
+## 26.4 Administrador central
+
+Prueba:
+
+- Acceso.
+- Dashboard.
+- Usuarios.
+- Profesionales.
+- Verificaciones.
+- Categorías.
+- Solicitudes.
+- Contrataciones.
+- Moderación.
+- Reportes.
+- Soporte.
+- Configuración.
+- Auditoría.
+
+## 26.5 Seguridad
+
+Prueba:
+
+- RLS.
+- Acceso cruzado.
+- Acceso a perfiles privados.
+- Acceso a documentos.
+- Acceso a conversaciones.
+- Acceso a archivos.
+- Roles.
+- Permisos.
+
+## 26.6 Sincronización
+
+Prueba:
+
+- Solicitud.
+- Cotización.
+- Contratación.
+- Agenda.
+- Mensajes.
+- Archivos.
+- Notificaciones.
+- Reseñas.
+
+## 26.7 Integridad
+
+Prueba:
+
+- Duplicaciones.
+- Relaciones.
+- Estados.
+- Errores.
+- Transacciones.
+- Operaciones incompletas.
+
+No afirmes que se realizaron pruebas que no se ejecutaron.
+
+---
+
+# 27. CORRECCIÓN DE ERRORES
+
+Si encuentras errores:
+
+- Corrígelos.
+- Mantén la estructura existente.
+- Evita reconstrucciones innecesarias.
+- Evita eliminar funcionalidades.
+- Evita reemplazar código funcional sin razón.
+- Evita simular operaciones.
+- Evita ocultar errores.
+
+Si una función depende de una configuración externa que todavía no está disponible:
+
+- Implementa el código que pueda implementarse.
+- Documenta lo que falta.
+- No inventes credenciales.
+- No simules una integración real.
+
+---
+
+# 28. CONFIGURACIÓN QUE DEBERÁS EXPLICARME
+
+Al finalizar, quiero que me indiques exactamente qué necesito configurar manualmente.
+
+No quiero instrucciones vagas.
+
+Explícame paso por paso, en español y sin asumir que soy experto en bases de datos:
+
+## Supabase
+
+- Qué proyecto utilizar.
+- Qué configuración revisar.
+- Qué variables obtener.
+- Dónde colocarlas.
+- Qué migraciones se ejecutaron.
+- Qué migraciones quedan pendientes.
+
+## Google
+
+- Qué configuración se necesita.
+- Dónde obtener OAuth Client ID.
+- Dónde obtener OAuth Client Secret.
+- Dónde colocar cada valor.
+- Qué URLs configurar.
+- Qué URLs de retorno configurar.
+- Cómo probar.
+
+## Correo
+
+- Qué proveedor utilizar.
+- Qué cuenta necesito.
+- Qué variables necesito.
+- Qué secretos debo configurar.
+- Qué dominio debe verificarse cuando corresponda.
+- Cómo probar el correo de registro.
+- Cómo probar los correos transaccionales.
+
+## Storage
+
+- Qué buckets se crearon.
+- Qué buckets son públicos.
+- Qué buckets son privados.
+- Qué políticas se configuraron.
+
+## Administrador central
+
+- Cómo se inicializa el primer administrador.
+- Qué procedimiento seguro se utiliza.
+- Qué protección tiene.
+- Cómo se verifica.
+
+## Seguridad
+
+- Qué políticas RLS se implementaron.
+- Qué tablas están protegidas.
+- Qué pruebas se realizaron.
+
+No me pidas copiar secretos dentro de mensajes de chat.
+
+No me pidas publicar claves privadas.
+
+---
+
+# 29. INFORME FINAL
+
+Cuando termines, genera un informe profesional que incluya:
+
+## A. Arquitectura implementada
+
+Describe cómo quedó Ofi Click.
+
+## B. Base de datos
+
+- Tablas.
+- Relaciones.
+- Índices.
+- Restricciones.
+- Migraciones.
+
+## C. Autenticación
+
+- Registro.
+- Inicio de sesión.
+- Google.
+- Recuperación.
+- Sesiones.
+
+## D. Roles
+
+- Cliente.
+- Freelancer.
+- Administrador central.
+
+## E. Seguridad
+
+- RLS.
+- Storage.
+- Roles.
+- Protección.
+- Auditoría.
+
+## F. Correos
+
+- Correos implementados.
+- Correos configurados.
+- Correos probados.
+- Configuración pendiente.
+
+## G. Funciones conectadas
+
+Lista todos los módulos conectados.
+
+## H. Datos demo
+
+Explica qué se eliminó, qué se conservó y cómo se aseguró que no se mezclaran con producción.
+
+## I. Pruebas
+
+Indica las pruebas realizadas y sus resultados.
+
+## J. Pendientes
+
+Indica exactamente qué falta.
+
+## K. Instrucciones
+
+Proporciona instrucciones claras para completar las configuraciones que requieran intervención manual.
+
+---
+
+# 30. CRITERIO DE ÉXITO
+
+La implementación se considerará correctamente realizada cuando:
+
+- Ofi Click utilice Supabase real.
+- La base de datos tenga estructura consistente.
+- Las migraciones estén organizadas.
+- Los datos persistan.
+- Los usuarios puedan registrarse.
+- Los usuarios puedan iniciar sesión.
+- Google OAuth funcione cuando esté configurado.
+- El cliente no tenga que subir fotografía frontal obligatoria.
+- El freelancer conserve su verificación.
+- Los documentos privados estén protegidos.
+- Los roles estén correctamente controlados.
+- No exista administrador regional.
+- El administrador central tenga acceso seguro.
+- El marketplace siga siendo público.
+- Las solicitudes funcionen.
+- Las cotizaciones funcionen.
+- Las contrataciones funcionen.
+- Los servicios contratados funcionen.
+- El chat funcione.
+- Los archivos funcionen.
+- La agenda funcione.
+- Los favoritos funcionen.
+- Las reseñas funcionen.
+- Las notificaciones funcionen.
+- Los correos estén implementados y configurados cuando se proporcionen las credenciales.
+- Los datos demo no se mezclen con producción.
+- La sincronización funcione.
+- RLS esté implementado.
+- Los errores estén documentados.
+- La aplicación conserve su diseño aprobado.
+
+---
+
+# INSTRUCCIÓN FINAL
+
+No te limites a darme instrucciones o explicarme cómo hacerlo.
+
+Trabaja directamente sobre los archivos del proyecto.
+
+Implementa las migraciones.
+
+Implementa los servicios.
+
+Implementa las conexiones.
+
+Implementa las políticas.
+
+Implementa las funciones.
+
+Implementa la integración.
+
+Corrige los errores.
+
+Prueba todo lo que el entorno permita.
+
+No reconstruyas Ofi Click.
+
+No cambies su diseño aprobado.
+
+No elimines funciones existentes.
+
+No inventes integraciones.
+
+No inventes resultados de pruebas.
+
+Si el proyecto necesita credenciales, configura la estructura y explícame exactamente cómo obtenerlas y dónde colocarlas.
+
+Trabaja de forma ordenada, profesional y completa.
+
+El objetivo es convertir Ofi Click en una aplicación real, persistente, segura y funcional, preparada para su uso y para continuar su desarrollo.
+
+Comienza auditando el proyecto completo y después implementa la integración de manera progresiva, manteniendo todos los módulos existentes y verificando cada etapa antes de continuar.
