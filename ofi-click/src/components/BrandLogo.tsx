@@ -1,11 +1,12 @@
 import React from 'react';
+import officialLogo from '../assets/ofi-click-logo.jpg';
 
 export type BrandLogoVariant = 'horizontal' | 'compact' | 'mono' | 'icon';
 
 interface BrandLogoProps {
   variant?: BrandLogoVariant;
   className?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
 export const BrandLogo: React.FC<BrandLogoProps> = ({
@@ -14,38 +15,50 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   size = 'md',
 }) => {
   const slotDims =
-    size === 'sm' ? 'w-7 h-7' : size === 'lg' ? 'w-11 h-11' : 'w-8 h-8';
+    size === 'sm'
+      ? 'w-9 h-9 rounded-lg'
+      : size === 'lg'
+      ? 'w-14 h-14 rounded-xl'
+      : size === 'xl'
+      ? 'w-20 h-20 rounded-2xl'
+      : 'w-11 h-11 rounded-xl';
+
   const textSize =
-    size === 'sm' ? 'text-base' : size === 'lg' ? 'text-2xl' : 'text-lg';
-  const slotLabelSize = size === 'sm' ? 'text-[8px]' : size === 'lg' ? 'text-[10px]' : 'text-[9px]';
+    size === 'sm'
+      ? 'text-base'
+      : size === 'lg'
+      ? 'text-2xl'
+      : size === 'xl'
+      ? 'text-2xl'
+      : 'text-lg';
 
-  const isMono = variant === 'mono';
-
-  // Espacio neutro reservado para insertar el logotipo definitivo de OFI CLICK (SVG/PNG)
-  const logoSlot = (
+  const logoMark = (
     <span
-      data-logo-slot="ofi-click-official"
-      title="Espacio reservado para el logo oficial de OFI CLICK"
-      aria-hidden="true"
-      className={`${slotDims} shrink-0 rounded-lg border border-dashed flex items-center justify-center font-mono-num font-bold tracking-tighter select-none transition-colors ${
-        isMono
-          ? 'border-current/40 bg-current/5 text-current'
-          : 'border-[#B96F50]/75 bg-[#304B3E]/8 dark:bg-white/5 text-[#304B3E] dark:text-[#EAE3D6]'
-      }`}
+      data-logo="ofi-click-official"
+      className={`${slotDims} aspect-square shrink-0 bg-[#1D252C] overflow-hidden inline-flex items-center justify-center ring-1 ring-[#2C3640]/25 dark:ring-white/15 shadow-xs`}
     >
-      <span className={slotLabelSize}>LOGO</span>
+      <img
+        src={officialLogo}
+        alt={variant === 'icon' ? 'OFI CLICK — Portafolio de oficios' : ''}
+        aria-hidden={variant !== 'icon'}
+        className="w-full h-full object-contain block select-none"
+      />
     </span>
   );
 
   if (variant === 'icon') {
-    return <span className={`inline-flex items-center ${className}`}>{logoSlot}</span>;
+    return (
+      <span className={`inline-flex items-center shrink-0 ${className}`}>
+        {logoMark}
+      </span>
+    );
   }
 
   return (
     <span
       className={`inline-flex items-center gap-2.5 whitespace-nowrap shrink-0 ${className}`}
     >
-      {logoSlot}
+      {logoMark}
       <span
         className={`font-display font-bold tracking-tight ${textSize} text-[#252A27] dark:text-[#F5F1E8]`}
       >

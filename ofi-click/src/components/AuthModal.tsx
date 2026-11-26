@@ -16,6 +16,7 @@ import { useOfiClick } from '../context/OfiClickContext';
 import { authService } from '../services/auth.service';
 import { INITIAL_REGIONS } from '../adapters/local/seed-data';
 import { GoogleAuthButton } from './GoogleAuthButton';
+import { BrandLogo } from './BrandLogo';
 import type { AdminAccessRequest, PreparedEmailRecord } from '../types/oficlick';
 
 type RegisterRoleChoice = 'client' | 'independent_pro' | 'admin_request';
@@ -286,30 +287,33 @@ export const AuthModal: React.FC = () => {
     >
       <div className="w-full max-w-lg rounded-2xl bg-[#FFFCF7] dark:bg-[#222825] border border-[#DDD5C8] dark:border-white/10 shadow-2xl p-6 my-8 max-h-[92vh] overflow-y-auto">
         <div className="flex items-start justify-between gap-4">
-          <div>
-            <h2
-              id="auth-modal-title"
-              className="font-display text-xl font-bold text-[#252A27] dark:text-[#F5F1E8]"
-            >
-              {authModalMode === 'register'
-                ? 'Crear cuenta en OFI CLICK'
-                : authModalMode === 'recovery'
-                ? 'Recuperar acceso'
-                : authModalMode === 'admin'
-                ? 'Acceso administrativo autorizado'
-                : 'Iniciar sesión en OFI CLICK'}
-            </h2>
-            {pendingActionLabel && (
-              <p className="mt-1 text-xs text-[#304B3E] dark:text-[#75836A] font-medium">
-                Inicia sesión o regístrate para {pendingActionLabel}. Al entrar continuarás automáticamente.
-              </p>
-            )}
+          <div className="flex items-center gap-3.5 min-w-0">
+            <BrandLogo variant="icon" size="lg" />
+            <div className="min-w-0">
+              <h2
+                id="auth-modal-title"
+                className="font-display text-xl font-bold text-[#252A27] dark:text-[#F5F1E8]"
+              >
+                {authModalMode === 'register'
+                  ? 'Crear cuenta en OFI CLICK'
+                  : authModalMode === 'recovery'
+                  ? 'Recuperar acceso'
+                  : authModalMode === 'admin'
+                  ? 'Acceso administrativo autorizado'
+                  : 'Iniciar sesión en OFI CLICK'}
+              </h2>
+              {pendingActionLabel && (
+                <p className="mt-1 text-xs text-[#304B3E] dark:text-[#75836A] font-medium">
+                  Inicia sesión o regístrate para {pendingActionLabel}. Al entrar continuarás automáticamente.
+                </p>
+              )}
+            </div>
           </div>
           <button
             type="button"
             onClick={closeAuthModal}
             aria-label="Cerrar ventana de acceso"
-            className="p-2 rounded-lg text-[#73766F] hover:bg-black/5 dark:hover:bg-white/10"
+            className="p-2 rounded-lg text-[#73766F] hover:bg-black/5 dark:hover:bg-white/10 shrink-0"
           >
             <X className="w-4 h-4" />
           </button>

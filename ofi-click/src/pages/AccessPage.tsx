@@ -299,9 +299,12 @@ export const AccessPage: React.FC = () => {
         <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* Left Identity Column */}
           <section className="lg:col-span-5 space-y-6 lg:pt-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#304B3E]/10 dark:bg-[#75836A]/20 text-[#304B3E] dark:text-[#A8B89A] text-xs font-semibold">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Cuautitlán Izcalli · Acceso oficial</span>
+            <div className="flex items-center gap-4">
+              <BrandLogo variant="icon" size="xl" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#304B3E]/10 dark:bg-[#75836A]/20 text-[#304B3E] dark:text-[#A8B89A] text-xs font-semibold">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                <span>Cuautitlán Izcalli · Acceso oficial</span>
+              </div>
             </div>
 
             <div className="space-y-3">
